@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "vinho-de-origem",
-    "slug": "snack-3bc1aab7-83d1-4872-ab63-2b19f0d4291d",
+    "name": "loja-de-vinho",
+    "slug": "snack-48960f71-d54f-48e5-b60f-eb3c8099aff4",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.snack48960f71d54f48e5b60feb3c8099aff4"
     },
     "web": {
       "favicon": "./assets/favicon.png"
