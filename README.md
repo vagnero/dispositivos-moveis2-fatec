@@ -15,6 +15,7 @@ Instalar a extensão react native tools e a extensão code runner
 
 npm i
 npm install -g expo-cli 
+npx expo install react-dom
 npx expo install react-native-web @expo/metro-runtime ***(caso queira rodar no navegador)**
 npx expo start **após esse comando, aperte a letra "a" para rodar o app no android ou w para rodar na web. Precisa ter o android studio e um emulador configurado e aberto!**
 
