@@ -13,42 +13,42 @@ const Avaliacoes = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
         
           <Comentario
-            nome='Johnny'
-            data='25/06/2023'
+            nome='Audrey'
+            data='25/08/2024'
             texto='Um vinho robusto com notas de frutas vermelhas e um toque de especiarias. Excelente para acompanhar carnes vermelhas e queijos maturados. Um verdadeiro achado!'
           />
           <Comentario
-            nome='Livia M'
-            data='22/06/2023'
+            nome='José Leandro'
+            data='22/08/2024'
             texto='Fresco e vibrante, com aromas de maçã verde e limão. Perfeito para uma tarde de verão ou para acompanhar pratos leves como saladas e frutos do mar.'
           />
           <Comentario
-            nome='Luana R'
-            data='21/01/2024'
+            nome='Vagner'
+            data='01/08/2024'
             texto='Um rosé elegante, com sabor suave de morango e um final refrescante. Ideal para um brunch ou para uma tarde relaxante com amigos.'
           />
           <Comentario
-            nome='Pablo H'
-            data='20/06/2023'
+            nome='Wesley Paulo'
+            data='20/06/2024'
             texto='Bolhas finas e persistentes com um sabor refrescante de pêssego e maçã. Uma escolha excelente para celebrações e ocasiões especiais.'
           />
           <Comentario
-            nome='Ygor B'
-            data='20/06/2022'
+            nome='Aldo Rosa'
+            data='20/05/2024'
             texto='Encorpado e complexo, com notas de cereja preta e baunilha. Um vinho sofisticado que envelhece bem e é perfeito para jantares formais.'
           />
           <Comentario
-            nome='Thomás'
-            data='05/05/2023'
+            nome='João'
+            data='05/05/2024'
             texto='Leve e agradável, com toques de pêra e mel. Bom para aperitivos e pratos de peixe, mas pode faltar um pouco de corpo para quem prefere vinhos mais robustos.'
           />
           <Comentario
-            nome='Margarete'
+            nome='Maria'
             data='10/02/2024'
             texto='Aromas intensos de ameixa e tabaco, com um paladar rico e bem equilibrado. Excelente para acompanhar pratos de carne e massas com molhos robustos.'
           />
           <Comentario
-            nome='Márcia'
+            nome='Luis'
             data='12/04/2024'
             texto='Um vinho leve e refrescante com notas de framboesa e melancia. Perfeito para um dia quente, mas pode ser um pouco simples para paladares mais exigentes.'
           />

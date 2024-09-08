@@ -11,23 +11,23 @@ const Carrinho = () => {
   const [total, setTotal] = useState(0.0);
 
   const calculateTotal = () => {
-    console.log('Calculating total...');
+    console.log('Total Calculado...');
     let total = 0;
     cartItems.forEach((item) => {
       // Remover caracteres não numéricos, exceto o ponto decimal
       const priceString = item.winePrice.replace(/[^\d.,-]/g, '').replace(',', '.');
       const price = parseFloat(priceString);
       const quantity = item.quantity;
-      console.log(`Item: ${item.wineName}, Price: ${price}, Quantity: ${quantity}`);
+      console.log(`Item: ${item.wineName}, Preço: ${price}, Quantidade: ${quantity}`);
 
       if (isNaN(price) || isNaN(quantity)) {
-        console.error(`Invalid value detected - Price: ${price}, Quantity: ${quantity}`);
+        console.error(`Valor inválido detectado - Preço: ${price}, Quantidade: ${quantity}`);
         return;
       }
 
       total += price * quantity;
     });
-    console.log('Total calculated:', total);
+    console.log('Total calculado:', total);
     setTotal(total);
   };
 

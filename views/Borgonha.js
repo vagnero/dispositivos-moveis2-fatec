@@ -7,12 +7,12 @@ import WineItem from '../components/WineItem';
 const borgonhaWines = [
   {
     wineName: 'Borgonha Blanc',
-    winePrice: 'R$ 328',
+    winePrice: 'R$ 328,00',
     ml: '750ml',
   },
   {
     wineName: 'Borgonha Chablis',
-    winePrice: 'R$ 541',
+    winePrice: 'R$ 540,00',
     ml: '750ml',
   },
 ];

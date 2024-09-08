@@ -7,12 +7,12 @@ import WineItem from '../components/WineItem';
 const tintoWines = [
   {
     wineName: 'Tinto Paulo Laureano',
-    winePrice: 'R$ 88',
+    winePrice: 'R$ 88,00',
     ml: '750ml',
   },
   {
     wineName: 'Tinto Quinta do Noval',
-    winePrice: 'R$ 298',
+    winePrice: 'R$ 298,00',
     ml: '750ml',
   },
 ];

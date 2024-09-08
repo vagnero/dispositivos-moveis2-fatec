@@ -48,7 +48,7 @@ const Cadastrar = () => {
           <Text style={styles.label}>E-mail</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={text => setEmail(text)}
+            onChangeText={text => setEmail(text.toLowerCase())}
             value={email}
           />
         </View>

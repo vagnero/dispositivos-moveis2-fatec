@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const updateCartItems = (items) => {
-    console.log('Updating cart items:', items);
+    console.log('Atualizando itens do Carrinho:', items);
     const updatedItems = items.map((item) => {
       const existingItem = cartItems.find((i) => i.wineName === item.wineName);
       if (existingItem) {
@@ -28,7 +28,7 @@ export const UserProvider = ({ children }) => {
       return item;
     });
     setCartItems(updatedItems);
-    console.log('Updated cart items:', updatedItems);
+    console.log('Atualizado itens do Carrinho:', updatedItems);
   };
 
   const addToCart = (item) => {

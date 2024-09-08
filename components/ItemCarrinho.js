@@ -3,11 +3,11 @@ import { Text, View, Image, TouchableOpacity } from 'react-native';
 const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, updateCartItems, cartItems, calculateTotal }) => {
 
   const handleAddQuantity = () => {
-  console.log('Adding quantity for:', wineName);
+  console.log('Adicionando quantidade para:', wineName);
   updateCartItems(cartItems.map((item) => {
     if (item.wineName === wineName) {
       const newQuantity = item.quantity + 1;
-      console.log(`New Quantity for ${wineName}: ${newQuantity}`);
+      console.log(`Nova quantidade ${wineName}: ${newQuantity}`);
       return { ...item, quantity: newQuantity };
     }
     return item;
@@ -17,11 +17,11 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
 
 const handleRemoveQuantity = () => {
   if (quantity > 1) {
-    console.log('Removing quantity for:', wineName);
+    console.log('Removendo quantidade:', wineName);
     updateCartItems(cartItems.map((item) => {
       if (item.wineName === wineName) {
         const newQuantity = item.quantity - 1;
-        console.log(`New Quantity for ${wineName}: ${newQuantity}`);
+        console.log(`Nova quantidade ${wineName}: ${newQuantity}`);
         return { ...item, quantity: newQuantity };
       }
       return item;
@@ -32,7 +32,7 @@ const handleRemoveQuantity = () => {
 
 
   const handleRemoveFromCart = () => {
-    console.log('Removing item from cart:', wineName);
+    console.log('Removendo item do carrinho:', wineName);
     removeFromCart(wineName);
     calculateTotal(); // Recalcula o total
   };

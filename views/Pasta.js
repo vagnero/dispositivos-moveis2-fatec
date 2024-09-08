@@ -7,12 +7,12 @@ import WineItem from '../components/WineItem';
 const pastaWines = [
   {
     wineName: 'Pasta Zentas Chardonnay',
-    winePrice: 'R$ 65',
+    winePrice: 'R$ 65,00',
     ml: '750ml',
   },
   {
     wineName: 'Pasta Villa Antinori Rosso',
-    winePrice: 'R$ 270',
+    winePrice: 'R$ 270,00',
     ml: '750ml',
   },
 ];

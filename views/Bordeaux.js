@@ -7,14 +7,14 @@ import WineItem from '../components/WineItem';
 const bordeauxWines = [
   {
     wineName: 'Les Légends Bordeaux Rouge',
-    winePrice: 'R$ 260',
+    winePrice: 'R$ 260,00',
     wineSigns: '4.5',
     wineDescription: 'Descrição do vinho 1...',
     imageSource: require('../assets/bordeaux/vinho1.png'),
   },
   {
     wineName: 'Cazauvielho Bordeaux',
-    winePrice: 'R$ 109',
+    winePrice: 'R$ 109,00',
     wineSigns: '5.0',
     wineDescription: 'Descrição do vinho 2...',
     imageSource: require('../assets/bordeaux/vinho2.png'),
