@@ -13,12 +13,20 @@ Snack is Open Source. You can find the code on the [GitHub repo](https://github.
 # TUTORIAL PARA USAR O APP NO VSCODE
 Instalar a extensão react native tools e a extensão code runner
 
-npm i
-npm install -g expo-cli 
-npx expo install react-dom
-npx expo install react-native-web @expo/metro-runtime ***(caso queira rodar no navegador)**
-npx expo start **após esse comando, aperte a letra "a" para rodar o app no android, w para rodar na web ou escaneie o código qr com o expo do seu celular físico. Precisa ter o android studio e um emulador configurado e aberto!**
+npm i  
+npm install -g expo-cli   
+npx expo install react-dom  
+npx expo install react-native-web @expo/metro-runtime ***(caso queira rodar no navegador)**  
+npx expo start  
+**após esse comando, aperte a letra "a" para rodar o app no android, w para rodar na web ou escaneie o código qr com o expo do seu celular físico. Precisa ter o android studio e um emulador configurado e aberto!**
 
-Esse comando npx expo start, criará um qr code, possibilitando também o uso no seu app expo do celular. Caso queira criar a pasta android, para trabalhar com código nativo use o comando:
+Esse comando npx expo start, criará um qr code, possibilitando também o uso no seu app expo do celular. Caso queira criar a pasta android, para trabalhar com código nativo use o comando:  
 npx expo prebuild
 Mas acredito que não precisa, pois já criei
+
+Para gerar o app:  
+  
+npm install -g eas-cli  
+eas build:configure  
+eas build -p android --profile preview  
+
