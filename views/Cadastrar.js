@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useUser } from './UserContext';
 
 const Cadastrar = () => {
+  const [formData, setFormData] = useState({ nome: '' });
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -12,19 +13,62 @@ const Cadastrar = () => {
   const navigation = useNavigation();
   const { registerUser } = useUser();
 
-  const handleRegister = () => {
-    if (nome === '' || email === '' || senha === '') { // Verifica se algum campo está vazio
-      setMensagemErro('Por favor, preencha todos os campos.'); // Define a mensagem de erro
-      setMensagemSucesso(''); // Limpa a mensagem de sucesso
-    } else {
-      registerUser({ nome, email, senha });
-      setMensagemSucesso('Cadastro realizado com sucesso!'); // Define a mensagem de sucesso
-      setMensagemErro(''); // Limpa a mensagem de erro
-      setTimeout(() => {
-        navigation.navigate('Login');
-      }, 2000); // Redireciona para a página de login após 2 segundos
+  const formatValue = (value) => {
+    return value.toLowerCase()
+      .replace(/( de | da | do | das | dos )/g, (match) => match.toLowerCase())
+      .replace(/\b(?!de |da |do |das |dos )\w/g, (char) => char.toUpperCase())
+      .replace(/(à|á|â|ã|ä|å|æ|ç|è|é|ê|ë|ì|í|î|ï|ñ|ò|ó|ô|õ|ö|ø|ù|ú|û|ü|ý|ÿ)\w/g, (match) => match.toLowerCase());
+  };
+
+  const handleChangeNome = (nome) => {
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(nome)) {
+      const formattedNome = formatValue(nome);
+      setNome(formattedNome); // Atualiza o estado nome
     }
   };
+
+  const handleRegister = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email
+
+    // Verificar se os campos estão vazios após remover espaços em branco
+    if (!nome || !email || !senha) {
+      setMensagemSucesso('');
+      setMensagemErro('Por favor, preencha todos os campos.');
+      setTimeout(() => {
+        setMensagemSucesso('');
+      }, 2000);
+      return;
+    }
+
+    if (nome.length < 3) {
+      setMensagemErro('O nome deve ter no mínimo 3 letras.');
+      setMensagemSucesso('');
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      setMensagemErro('Por favor, insira um email válido.');
+      setMensagemSucesso('');
+      return;
+    }
+
+    if (senha.length < 6) {
+      setMensagemErro('A senha deve ter no mínimo 6 caracteres.');
+      setMensagemSucesso('');
+      return;
+    }
+
+    // Se todas as validações passarem, realiza o cadastro
+    registerUser({ nome, email, senha });
+    setMensagemSucesso('Cadastro realizado com sucesso!');
+    setMensagemErro('');
+
+    // Redireciona para a tela de login após 2 segundos
+    setTimeout(() => {
+      navigation.navigate('Login');
+    }, 2000);
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,8 +84,8 @@ const Cadastrar = () => {
           <Text style={styles.label}>Nome Completo</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={text => setNome(text)}
             value={nome}
+            onChangeText={handleChangeNome}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -80,8 +124,8 @@ const styles = {
     backgroundColor: '#F6F5F5'
   },
 
-  headerText: { 
-    fontSize: 35, 
+  headerText: {
+    fontSize: 35,
     fontWeight: 'bold',
     marginTop: 30,
     marginLeft: 33,
@@ -106,7 +150,7 @@ const styles = {
     backgroundColor: "white",
     borderRadius: 10,
     borderColor: "#D9D0E3",
-    borderWidth: 1, 
+    borderWidth: 1,
     paddingLeft: 10
   },
 
@@ -127,20 +171,20 @@ const styles = {
   },
 
   buttonLogin: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     marginTop: 30
   },
 
   textLogin1: {
-    fontSize: 14, 
-    fontWeight: 'bold', 
-    color: '#5B5B5E', 
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#5B5B5E',
     marginRight: 5
   },
 
   textLogin2: {
-    fontSize: 14, 
-    fontWeight: 'bold', 
+    fontSize: 14,
+    fontWeight: 'bold',
     color: '#2D0C57'
   },
 
