@@ -9,6 +9,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loginSucesso, setLoginSucesso] = useState(false);
+  const [mensagemErro, setMensagemErro] = useState(''); // Estado para armazenar a mensagem de erro
+  const [mensagemSucesso, setMensagemSucesso] = useState(''); // Estado para armazenar a mensagem de sucesso
   const navigation = useNavigation();
   const { findUser, setCurrentUser } = useUser(); // Remova registerUser do destructuring
 
