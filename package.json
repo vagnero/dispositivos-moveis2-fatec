@@ -22,9 +22,9 @@
     "react-native-web": "~0.19.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.24.0"
   },
   "private": true,
-  "name": "loja-de-vinho",
+  "name": "Vinoteca",
   "version": "1.0.0"
 }

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "loja-de-vinho",
+    "name": "Vinoteca",
     "slug": "snack-48960f71-d54f-48e5-b60f-eb3c8099aff4",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,6 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "bundleIdentifier": "com.protoon.vinoteca",
       "supportsTablet": true
     },
     "android": {
@@ -19,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.snack48960f71d54f48e5b60feb3c8099aff4"
+      "package": "com.protoon.vinoteca"
     },
     "web": {
       "favicon": "./assets/favicon.png"
