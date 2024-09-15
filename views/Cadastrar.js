@@ -32,43 +32,34 @@ const Cadastrar = () => {
     // Verificar se os campos estão vazios após remover espaços em branco
     if (!nome || !email || !senha) {
       setMensagemErro('Por favor, preencha todos os campos.');
-      setTimeout(() => {
-        setMensagemErro('');
-      }, 2000);
       return;
     }
 
     if (nome.length < 3) {
       setMensagemErro('O nome deve ter no mínimo 3 letras.');
-      setTimeout(() => {
-        setMensagemErro('');
-      }, 2000);
       return;
     }
 
     if (!emailRegex.test(email)) {
       setMensagemErro('Por favor, insira um email válido.');
-      setTimeout(() => {
-        setMensagemErro('');
-      }, 2000);
       return;
     }
 
     if (senha.length < 6) {
       setMensagemErro('A senha deve ter no mínimo 6 caracteres.');
-      setTimeout(() => {
-        setMensagemErro('');
-      }, 2000);
       return;
     }
 
     // Se todas as validações passarem, realiza o cadastro
     registerUser({ nome, email, senha });
-    setMensagemSucesso('Cadastro realizado com sucesso!');    
+    setMensagemSucesso('Cadastro realizado com sucesso!');
 
     // Redireciona para a tela de login após 2 segundos
     setTimeout(() => {
       navigation.navigate('Login');
+      setNome('');
+      setEmail('');
+      setSenha('');
       setMensagemSucesso('');
     }, 2000);
   };
