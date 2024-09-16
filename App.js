@@ -28,7 +28,7 @@ function App() {
     // Simula um delay para exibir a tela de splash
     const timer = setTimeout(() => {
       setSplashReady(true);
-    }, 5000); // Tempo de splash (3 segundos)
+    }, 1000); // Tempo de splash 
 
     return () => clearTimeout(timer);
   }, []);

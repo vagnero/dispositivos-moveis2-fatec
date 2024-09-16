@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
+import { useUser } from './UserContext';
+
 
 const Splash = () => {
+  const [nome, setNome] = useState('Dev');
+  const [email, setEmail] = useState('dev');
+  const [senha, setSenha] = useState('');
+  const { registerUser } = useUser();
+
+  useEffect(() => {
+    if (registerUser) {
+      registerUser({ nome, email, senha }); // Registro do usuário ao carregar o componente
+    }
+  }, [registerUser]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Os Melhores Vinhos!</Text>
