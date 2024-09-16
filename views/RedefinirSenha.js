@@ -1,17 +1,48 @@
+import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const RedefinirSenha = () => {
+  const [email, setEmail] = useState('');
+  const [mensagemErro, setMensagemErro] = useState(''); // Estado para armazenar a mensagem de erro
+  const [mensagemSucesso, setMensagemSucesso] = useState(''); // Estado para armazenar a mensagem de sucesso
+  const navigation = useNavigation();
+
+  const handleMessage = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email
+
+    if (!emailRegex.test(email)) {
+      setMensagemErro('Por favor, insira um email válido.');
+      return;
+    }
+    setMensagemErro('')
+    setMensagemSucesso('Instruções foram enviadas para o seu email!')
+    setTimeout(() => {
+      navigation.navigate('Login');
+      setMensagemSucesso('');
+    }, 3000);
+  }
 
   return (
     <View style={styles.div_container}>
       <Text style={styles.text_title}>Redefinir Senha</Text>
+      {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
+        <Text style={styles.mensagemErro}>{mensagemErro}</Text>
+      )}
+      {mensagemSucesso !== '' && ( // Renderiza a mensagem de sucesso apenas se houver uma mensagem
+        <Text style={styles.mensagemSucesso}>{mensagemSucesso}</Text>
+      )}
       <Text style={styles.text_subtitle}>Digite seu e-mail para receber instruções
-  sobre como redefini-lo</Text>
+        sobre como redefini-lo</Text>
 
       <Text style={styles.text_email}>E-mail</Text>
-      <TextInput style={styles.textinput_email}/>
+      <TextInput
+            style={styles.textInput}
+            onChangeText={text => setEmail(text.toLowerCase())}
+            value={email}
+          />
 
-      <TouchableOpacity style={styles.button_senha}>
+      <TouchableOpacity style={styles.button_senha} onPress={handleMessage}>
         <Text style={styles.text_senha}>ENVIAR NOVA SENHA</Text>
       </TouchableOpacity>
     </View>
@@ -49,13 +80,13 @@ const styles = {
     textAlign: 'start'
   },
 
-  textinput_email: {
-    width: '85%',
+  textInput: {
+    width: "100%",
     height: 50,
     backgroundColor: "white",
     borderRadius: 10,
     borderColor: "#D9D0E3",
-    borderWidth: 1, 
+    borderWidth: 1,
     paddingLeft: 10
   },
 
@@ -73,6 +104,22 @@ const styles = {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold'
+  },
+
+  mensagemErro: {
+    marginTop: 10,
+    marginBottom: 25,
+    color: 'red',
+    fontWeight: 'bold'
+  },
+
+  mensagemSucesso: {
+    marginTop: 20,
+    fontSize: 16,
+    color: 'green',
+    fontWeight: 'bold',
+    marginTop: '100',
+    marginBottom: '20'
   }
 };
 
