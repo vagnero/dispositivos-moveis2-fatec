@@ -62,13 +62,18 @@ const Login = () => {
         </View>
 
         <View style={styles.checkboxContainer}>
-          <View style={{ marginBottom: 10 }}>
-            <Checkbox
-              status={salvarEmail ? 'checked' : 'unchecked'}
-              onPress={() => setSalvarEmail(!salvarEmail)}
-            />
-          </View>
-          <Text style={styles.label}>Salvar Login</Text>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => setSalvarEmail(!salvarEmail)} // Clique no texto também altera o checkbox
+          >
+            <View style={{ marginBottom: 10 }}>
+              <Checkbox
+                status={salvarEmail ? 'checked' : 'unchecked'}
+                onPress={() => setSalvarEmail(!salvarEmail)}
+              />
+            </View>
+            <Text style={styles.label}>Salvar Login</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={() => navigation.navigate('RedefinirSenha')}>
@@ -88,7 +93,7 @@ const Login = () => {
           <Text style={styles.textLogin2}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
