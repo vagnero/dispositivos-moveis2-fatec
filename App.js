@@ -36,7 +36,7 @@ function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Login">
           {isSplashReady ? (
             <>
               <Stack.Screen name="Login" component={Login} />
