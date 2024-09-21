@@ -8,11 +8,13 @@ const pastaWines = [
   {
     wineName: 'Pasta Zentas Chardonnay',
     winePrice: 'R$ 65,00',
+    imageSource: require('../assets/home/pasta_zentas_chardonnay.png'),
     ml: '750ml',
   },
   {
     wineName: 'Pasta Villa Antinori Rosso',
     winePrice: 'R$ 270,00',
+    imageSource: require('../assets/home/villa_antinori_rosso.png'),
     ml: '750ml',
   },
 ];
@@ -51,6 +53,7 @@ const Pasta = () => {
               <WineItem
                 key={index}
                 wineName={wine.wineName}
+                imageSource={wine.imageSource}
                 price={wine.winePrice}
                 ml={wine.ml}
               />

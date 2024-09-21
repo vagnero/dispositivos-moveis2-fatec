@@ -8,11 +8,13 @@ const tintoWines = [
   {
     wineName: 'Tinto Paulo Laureano',
     winePrice: 'R$ 88,00',
+    imageSource: require('../assets/home/tinto_paulo_laureano.png'),
     ml: '750ml',
   },
   {
     wineName: 'Tinto Quinta do Noval',
     winePrice: 'R$ 298,00',
+    imageSource: require('../assets/home/tinto_quinta_do_noval.png'),
     ml: '750ml',
   },
 ];
@@ -51,6 +53,7 @@ const Tinto = () => {
               <WineItem
                 key={index}
                 wineName={wine.wineName}
+                imageSource={wine.imageSource}
                 price={wine.winePrice}
                 ml={wine.ml}
               />

@@ -53,7 +53,7 @@ const wines = [
     winePrice: 'R$ 328,00',
     wineSigns: '5.0',
     wineDescription: 'Elegante e refrescante, com toques de frutas cítricas.',
-    imageSource: require('../assets/home/vinho.png'),
+    imageSource: require('../assets/home/borgonha_blanc.png'),
   },
   {
     wineName: 'Borgonha Chablis',
@@ -61,7 +61,7 @@ const wines = [
     winePrice: 'R$ 540,00',
     wineSigns: '4.8',
     wineDescription: 'Mineralidade marcante e acidez vibrante, perfeito para frutos do mar.',
-    imageSource: require('../assets/home/vinho.png'),
+    imageSource: require('../assets/home/borgonha_chablis.png'),
   },
   {
     wineName: 'Tinto Paulo Laureano',
@@ -69,7 +69,7 @@ const wines = [
     winePrice: 'R$ 88,00',
     wineSigns: '5.0',
     wineDescription: 'Vinho português com notas de ameixa e especiarias, fácil de beber.',
-    imageSource: require('../assets/home/vinho.png'),
+    imageSource: require('../assets/home/tinto_paulo_laureano.png'),
   },
   {
     wineName: 'Tinto Quinta do Noval',
@@ -77,23 +77,23 @@ const wines = [
     winePrice: 'R$ 298,00',
     wineSigns: '4.6',
     wineDescription: 'Complexo e encorpado, com taninos robustos e um final longo.',
-    imageSource: require('../assets/home/vinho.png'),
+    imageSource: require('../assets/home/tinto_quinta_do_noval.png'),
   },
   {
-    wineName: 'Pasta Zentas Chardonnay',
+    wineName: 'Zentas Chardonnay',
     // wineCategory: 'Chardonnay',
     winePrice: 'R$ 65,00',
     wineSigns: '5.0',
     wineDescription: 'Leve e frutado, com notas de pêssego e um toque amanteigado.',
-    imageSource: require('../assets/home/vinho.png'),
+    imageSource: require('../assets/home/pasta_zentas_chardonnay.png'),
   },
   {
-    wineName: 'Pasta Villa Antinori Rosso',
+    wineName: 'Villa Antinori Rosso',
     // wineCategory: 'Rosso Italiano',
     winePrice: 'R$ 270,00',
     wineSigns: '4.9',
     wineDescription: 'Vinho italiano rico, com notas de frutas maduras e um final suave.',
-    imageSource: require('../assets/home/vinho.png'),
+    imageSource: require('../assets/home/villa_antinori_rosso.png'),
   }
 ];
 

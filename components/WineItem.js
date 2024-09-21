@@ -33,7 +33,8 @@ const styles = {
   },
 
   image_vinho: {
-    width: '50%',
+    width: '30%',
+    height: '100%',
     borderRadius: 10
   },
 

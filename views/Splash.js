@@ -13,7 +13,7 @@ const Splash = () => {
     if (registerUser) {
       registerUser({ nome, email, senha }); // Registro do usuário ao carregar o componente
     }
-  }, [registerUser]);
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -8,11 +8,13 @@ const borgonhaWines = [
   {
     wineName: 'Borgonha Blanc',
     winePrice: 'R$ 328,00',
+    imageSource: require('../assets/home/borgonha_blanc.png'),
     ml: '750ml',
   },
   {
     wineName: 'Borgonha Chablis',
     winePrice: 'R$ 540,00',
+    imageSource: require('../assets/home/borgonha_chablis.png'),
     ml: '750ml',
   },
 ];
@@ -51,6 +53,7 @@ const Borgonha = () => {
               <WineItem
                 key={index}
                 wineName={wine.wineName}
+                imageSource={wine.imageSource}
                 price={wine.winePrice}
                 ml={wine.ml}
               />
