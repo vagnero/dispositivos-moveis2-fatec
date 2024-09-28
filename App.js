@@ -28,7 +28,7 @@ function App() {
     // Simula um delay para exibir a tela de splash
     const timer = setTimeout(() => {
       setSplashReady(true);
-    }, 1000); // Tempo de splash 
+    }, 5000); // Tempo de splash 
 
     return () => clearTimeout(timer);
   }, []);
@@ -36,7 +36,7 @@ function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Home">
           {isSplashReady ? (
             <>
               <Stack.Screen name="Login" component={Login} />
