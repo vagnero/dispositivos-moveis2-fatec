@@ -170,9 +170,9 @@ const Home = () => {
         <View style={styles.div_saudacao_pesquisar}>
           <View style={{ flexDirection: 'row' }}>
             {currentUser && <Greeting name={currentUser.nome} />}
-            <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
-              <Icon name="bell" size={20} color="#fff" />
-              <Icon name="heart" size={20} color="#fff" />
+            <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>              
+              <Image source={require('../assets/info/heart.png')} style={{ tintColor: '#fff' }} />
+              <Image source={require('../assets/user/sino.png')} style={{ tintColor: '#fff' }} />
             </View>
           </View>
           <Pesquisar onSearch={handleSearch} />
