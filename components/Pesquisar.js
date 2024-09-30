@@ -16,6 +16,7 @@ const Pesquisar = ({ onSearch }) => {
       <TextInput
         style={styles.textinput_pesquisar}
         placeholder="Pesquisar"
+        placeholderTextColor="#fff"
         onChangeText={setSearchText}
         value={searchText}
       />
@@ -31,21 +32,22 @@ const styles = {
     marginTop: 10,
     marginBottom: 30,
     borderWidth: 1,
-    borderColor: '#D9D0E3',
-    borderRadius: 27,
-    backgroundColor: '#FFFFFF'
+    borderColor: '#fff',
+    borderRadius: 15,
+    backgroundColor: 'transparent',
   },
 
   image_pesquisar: {
     width: 20, 
-    height: 20, 
-    marginHorizontal: 15
+    height: 20,
+    tintColor: '#fff',
+    marginHorizontal: 15,
   },
 
   textinput_pesquisar: {
     flex: 1, 
     paddingVertical: 10,
-    color: '#9586A8'
+    color: '#fff',
   }
 };
 

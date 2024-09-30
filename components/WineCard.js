@@ -9,10 +9,10 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
   return (
     <View style={styles.div_vinho}>
       <View style={styles.div_image_text_vinho}>
+        <Text style={styles.div_text_vinho}>{wine.wineName}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Sobre', wine)}>
           <Image source={wine.imageSource} style={styles.div_image_vinho} />
         </TouchableOpacity>
-        <Text style={styles.div_text_vinho}>{wine.wineName}</Text>
       </View>
       <View style={styles.div_text_button_vinho}>
         <Text style={styles.div_text_preco}>{wine.winePrice}</Text>

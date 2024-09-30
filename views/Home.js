@@ -13,6 +13,9 @@ import Pesquisar from '../components/Pesquisar';
 import Greeting from '../components/Greeting';
 import WineCard from '../components/WineCard';
 import { useUser } from './UserContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const wines = [
   {
@@ -110,7 +113,7 @@ const Home = () => {
 
   console.log('Cart items:', cartItems);
 
- useEffect(() => {
+  useEffect(() => {
     const filtered = wines.filter((wine) => {
       return (
         wine.wineName.toLowerCase().includes(searchText.toLowerCase()) &&
@@ -152,83 +155,99 @@ const Home = () => {
   const navigation = useNavigation();
 
   return (
-    
+
     <View style={styles.container}>
-     {cartSuccessMessage && (
-        <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
-      )}
-      <View style={styles.div_saudacao_pesquisar}>
-        {currentUser && <Greeting name={currentUser.nome} />}
-        <Pesquisar onSearch={handleSearch} />
-      </View>
+      <LinearGradient
+        colors={['#BA22FB', '#381CDE']}
+        style={styles.header}
+        start={{ x: 0, y: 0 }} // Início do degradê (cima)
+        end={{ x: 0, y: 1 }} // Fim do degradê (baixo)
+      >
 
-      {/* Filtro */}
-      <View style={styles.div_categorias}>
-        <Text style={styles.text_categorias}>Categorias</Text>
-      </View>
-
-      <View style={styles.div_categorias_opcoes}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 5 }}>
-          <TouchableOpacity
-            onPress={handlePressButton1}
-            style={[
-              styles.button_categorias,
-              isPressedButton1 && styles.buttonPressed,
-            ]}>
-            <View style={styles.div_categorias_image_text}>
-              <Image
-                source={require('../assets/home/Bordeaux.png')}
-                style={styles.image_bordeaux}
-              />
-              <Text style={styles.text_categorias_v2}>Bordeaux</Text>
+        {cartSuccessMessage && (
+          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+        )}
+        <View style={styles.div_saudacao_pesquisar}>
+          <View style={{ flexDirection: 'row' }}>
+            {currentUser && <Greeting name={currentUser.nome} />}
+            <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
+              <Icon name="bell" size={20} color="#fff" />
+              <Icon name="heart" size={20} color="#fff" />
             </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handlePressButton2}
-            style={[
-              styles.button_categorias,
-              isPressedButton2 && styles.buttonPressed,
-            ]}>
-            <View style={styles.div_categorias_image_text}>
-              <Image
-                source={require('../assets/home/Borgonha.png')}
-                style={styles.image_borgonha}
-              />
-              <Text style={styles.text_categorias_v2}>Borgonha</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Categorias')}
-            style={styles.button_categorias}>
-            <View style={styles.div_categorias_image_text}>
-              <Text style={styles.text_categorias_v2}>Veja Tudo</Text>
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-
-      {/* Mosaico de vinhos */}
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={styles.div_mosaico_vinhos}>
-          {filteredWines.length === 0 ? (
-            <Text style={styles.noResultsText}>
-              Nenhum resultado encontrado
-            </Text>
-          ) : (
-            filteredWines.map((wine, index) => (
-              <WineCard key={index} wine={wine} onPressAddToCart={addToCart} />
-            ))
-          )}
+          </View>
+          <Pesquisar onSearch={handleSearch} />
         </View>
-      </ScrollView>
+      </LinearGradient>
+      <View style={styles.body}>
+        {/* Filtro */}
 
-      {/* Menu */}
-      <Menu />
+
+        <View style={styles.div_categorias_opcoes}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 5 }}>
+            <TouchableOpacity
+              onPress={handlePressButton1}
+              style={[
+                styles.button_categorias,
+                isPressedButton1 && styles.buttonPressed,
+              ]}>
+              <View style={styles.div_categorias_image_text}>
+                {/* <Image
+                  source={require('../assets/home/Bordeaux.png')}
+                  style={styles.image_bordeaux}
+                /> */}
+                <Text style={styles.text_categorias_v2}>Melhor Avaliados</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handlePressButton2}
+              style={[
+                styles.button_categorias,
+                isPressedButton2 && styles.buttonPressed,
+              ]}>
+              <View style={styles.div_categorias_image_text}>
+                {/* <Image
+                  source={require('../assets/home/Borgonha.png')}
+                  style={styles.image_borgonha}
+                /> */}
+                <Text style={styles.text_categorias_v2}>Melhores Preços</Text>
+              </View>
+            </TouchableOpacity>
+
+            {/* <TouchableOpacity
+              onPress={() => navigation.navigate('Categorias')}
+              style={styles.button_categorias}>
+              <View style={styles.div_categorias_image_text}>
+                <Text style={styles.text_categorias_v2}>Veja Tudo</Text>
+              </View>
+            </TouchableOpacity> */}
+          </ScrollView>
+        </View>
+        <View style={styles.div_categorias}>
+          <Text style={styles.text_categorias}>Mais Vendidos</Text>
+        </View>
+
+        {/* Mosaico de vinhos */}
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <View style={styles.div_mosaico_vinhos}>
+            {filteredWines.length === 0 ? (
+              <Text style={styles.noResultsText}>
+                Nenhum resultado encontrado
+              </Text>
+            ) : (
+              filteredWines.map((wine, index) => (
+                <WineCard key={index} wine={wine} onPressAddToCart={addToCart} />
+              ))
+            )}
+          </View>
+        </ScrollView>
+
+        {/* Menu */}
+        <Menu />
+      </View>
     </View>
   );
 };
@@ -236,8 +255,20 @@ const Home = () => {
 const styles = {
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#201830',
+    padding: 0,
+    backgroundColor: '#322A4D',
+  },
+
+  header: {
+    with: '100%',
+    backgroundColor: '#BA22FB',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+
+  body: {
+    flex: 1,
+    padding: 20
   },
 
   div_saudacao_pesquisar: {
@@ -262,13 +293,13 @@ const styles = {
   },
 
   button_categorias: {
-    width: 130,
+    width: 150,
     height: 60,
     marginTop: 5,
     marginLeft: 10,
     marginBottom: 25,
-    borderRadius: 40,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    backgroundColor: '#0E0323',
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
@@ -294,7 +325,7 @@ const styles = {
   },
 
   text_categorias_v2: {
-    color: '#32343E',
+    color: '#fff',
     fontWeight: 'bold',
     marginLeft: 5,
   },

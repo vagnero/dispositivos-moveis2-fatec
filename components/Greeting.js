@@ -24,11 +24,12 @@ const Greeting = ({ name }) => {
 const styles = {
   text_saudacao: {
     fontSize: 16, 
-    marginBottom: 10
+    marginBottom: 10,
+    color: 'white',
   },
 
   text_get_greeting: {
-    color: '#2D0C57', 
+    color: 'white', 
     fontWeight: 'bold'
   }
 };
