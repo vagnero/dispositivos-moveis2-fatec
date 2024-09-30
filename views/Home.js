@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
-  Image,
   TouchableOpacity,
   ScrollView,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Menu from '../components/Menu';
-import Pesquisar from '../components/Pesquisar';
-import Greeting from '../components/Greeting';
+import Header from '../components/Header';
+import Body from '../components/Body';
 import WineCard from '../components/WineCard';
 import { useUser } from './UserContext';
-import { LinearGradient } from 'expo-linear-gradient';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import colors from '../Themes/dark';
 
 
 const wines = [
@@ -106,10 +105,9 @@ const Home = () => {
   const [isPressedButton2, setIsPressedButton2] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchText, setSearchText] = useState('');
-  const { currentUser, cartItems, updateCartItems } = useUser();
+  const { cartItems, updateCartItems } = useUser();
   const [filteredWines, setFilteredWines] = useState(wines);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [cartSuccessMessage, setCartSuccessMessage] = useState('');
 
   console.log('Cart items:', cartItems);
 
@@ -156,29 +154,9 @@ const Home = () => {
 
   return (
 
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#BA22FB', '#381CDE']}
-        style={styles.header}
-        start={{ x: 0, y: 0 }} // Início do degradê (cima)
-        end={{ x: 0, y: 1 }} // Fim do degradê (baixo)
-      >
-
-        {cartSuccessMessage && (
-          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
-        )}
-        <View style={styles.div_saudacao_pesquisar}>
-          <View style={{ flexDirection: 'row' }}>
-            {currentUser && <Greeting name={currentUser.nome} />}
-            <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>              
-              <Image source={require('../assets/info/heart.png')} style={{ tintColor: '#fff' }} />
-              <Image source={require('../assets/user/sino.png')} style={{ tintColor: '#fff' }} />
-            </View>
-          </View>
-          <Pesquisar onSearch={handleSearch} />
-        </View>
-      </LinearGradient>
-      <View style={styles.body}>
+    <View style={styles.container}>      
+      <Header />
+      <Body >
         {/* Filtro */}
 
 
@@ -247,33 +225,16 @@ const Home = () => {
 
         {/* Menu */}
         <Menu />
-      </View>
+      </Body>
     </View>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 0,
-    backgroundColor: '#322A4D',
-  },
-
-  header: {
-    with: '100%',
-    backgroundColor: '#BA22FB',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-
-  body: {
-    flex: 1,
-    padding: 20
-  },
-
-  div_saudacao_pesquisar: {
-    alignItems: 'center',
-    marginTop: 15,
+    backgroundColor: colors.background,
   },
 
   div_categorias: {
@@ -357,6 +318,6 @@ const styles = {
     color: 'green',
     fontWeight: 'bold'
   },
-};
+});
 
 export default Home;
