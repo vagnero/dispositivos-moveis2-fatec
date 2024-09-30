@@ -10,10 +10,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Menu from '../components/Menu';
 import Header from '../components/Header';
-import Body from '../components/Body';
+import Content from '../components/Content';
 import WineCard from '../components/WineCard';
 import { useUser } from './UserContext';
-import colors from '../Themes/dark';
 
 
 const wines = [
@@ -154,9 +153,9 @@ const Home = () => {
 
   return (
 
-    <View style={styles.container}>      
-      <Header />
-      <Body >
+    <Content >
+        <Header />
+      <View style={styles.container}>
         {/* Filtro */}
 
 
@@ -225,16 +224,15 @@ const Home = () => {
 
         {/* Menu */}
         <Menu />
-      </Body>
-    </View>
+      </View>
+    </Content>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 0,
-    backgroundColor: colors.background,
+    padding: 20,
   },
 
   div_categorias: {
