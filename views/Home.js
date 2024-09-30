@@ -237,7 +237,7 @@ const styles = {
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F6F5F5',
+    backgroundColor: '#201830',
   },
 
   div_saudacao_pesquisar: {
@@ -252,7 +252,7 @@ const styles = {
   text_categorias: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2D0C57',
+    color: '#fff',
     marginLeft: 10,
   },
 
