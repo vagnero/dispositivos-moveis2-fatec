@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ThemeProvider } from './context/ThemeContext';
 
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';
@@ -18,6 +19,7 @@ import Sobre from './views/Sobre';
 import Tinto from './views/Tinto';
 import User from './views/User';
 import { UserProvider } from './views/UserContext';
+import { ThemeContext } from './context/ThemeContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,33 +36,53 @@ function App() {
   }, []);
 
   return (
-    <UserProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          {isSplashReady ? (
-            <>
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
-              <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
-              <Stack.Screen name="Bordeaux" component={Bordeaux} />
-              <Stack.Screen name="Borgonha" component={Borgonha} />
-              <Stack.Screen name="Cadastrar" component={Cadastrar} />
-              <Stack.Screen name="Carrinho" component={Carrinho} />
-              <Stack.Screen name="Categorias" component={Categorias} />
-              <Stack.Screen name="Pasta" component={Pasta} />
-              <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
-              <Stack.Screen name="Tinto" component={Tinto} />
-              <Stack.Screen name="Sobre" component={Sobre} />
-              <Stack.Screen name="User" component={User} />
-            </>
-          ) : (
-            <Stack.Screen name="Splash" component={Splash} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+    <UserProvider >
+      <ThemeProvider>
+        <NavigationContainer>
+          <MainNavigator isSplashReady={isSplashReady} />
+        </NavigationContainer>
+      </ThemeProvider>
     </UserProvider>
   );
 }
+
+const MainNavigator = ({ isSplashReady }) => {
+  const { colors } = useContext(ThemeContext); // Aqui você pode usar o useContext
+
+  return (
+    <Stack.Navigator initialRouteName="Home"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.primary, // Cor de fundo da barra
+        },
+        headerTintColor: 'white', // Cor do texto (e ícones) na barra
+        headerTitleStyle: {
+          fontWeight: 'bold', // Estilos adicionais para o título
+        },
+      }}>
+
+      {isSplashReady ? (
+        <>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Home" component={Home} options={{ title: 'Página Inicial' }} />
+          <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
+          <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
+          <Stack.Screen name="Bordeaux" component={Bordeaux} />
+          <Stack.Screen name="Borgonha" component={Borgonha} />
+          <Stack.Screen name="Cadastrar" component={Cadastrar} />
+          <Stack.Screen name="Carrinho" component={Carrinho} />
+          <Stack.Screen name="Categorias" component={Categorias} />
+          <Stack.Screen name="Pasta" component={Pasta} />
+          <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+          <Stack.Screen name="Tinto" component={Tinto} />
+          <Stack.Screen name="Sobre" component={Sobre} />
+          <Stack.Screen name="User" component={User} />
+        </>
+      ) : (
+        <Stack.Screen name="Splash" component={Splash} />
+      )}
+    </Stack.Navigator>
+  );
+};
 
 export default App;

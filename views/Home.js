@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Text,
   View,
@@ -13,7 +13,7 @@ import Header from '../components/Header';
 import Content from '../components/Content';
 import WineCard from '../components/WineCard';
 import { useUser } from './UserContext';
-
+import { ThemeContext } from '../context/ThemeContext';
 
 const wines = [
   {
@@ -100,13 +100,16 @@ const wines = [
 
 
 const Home = () => {
+  const { colors } = useContext(ThemeContext);
+  const [cartSuccessMessage, setCartSuccessMessage] = useState('');
   const [isPressedButton1, setIsPressedButton1] = useState(false);
   const [isPressedButton2, setIsPressedButton2] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchText, setSearchText] = useState('');
-  const { cartItems, updateCartItems } = useUser();
   const [filteredWines, setFilteredWines] = useState(wines);
+  const { currentUser, cartItems, updateCartItems } = useUser();
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const navigation = useNavigation();
 
   console.log('Cart items:', cartItems);
 
@@ -141,6 +144,99 @@ const Home = () => {
     setSearchText(text);
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 20,
+    },
+  
+    div_categorias: {
+      marginBottom: 15,
+    },
+  
+    text_categorias: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#fff',
+      marginLeft: 10,
+    },
+  
+    div_categorias_opcoes: {
+      flexDirection: 'row',
+      flexWrap: 'nowrap',
+    },
+  
+    button_categorias: {
+      width: 150,
+      height: 60,
+      marginTop: 5,
+      marginLeft: 10,
+      marginBottom: 25,
+      borderRadius: 15,
+      backgroundColor: colors.secondary,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
+        },
+        android: {
+          elevation: 4,
+        },
+      }),
+    },
+  
+    buttonPressed: {
+      backgroundColor: colors.primary,
+    },
+    
+    buttonPressed: {
+      backgroundColor: colors.primary,
+    },
+  
+    div_categorias_image_text: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+  
+    text_categorias_v2: {
+      color: colors.textColor,
+      fontWeight: 'bold',
+      marginLeft: 5,
+    },
+  
+    image_todos: {
+      width: 52,
+      height: 46,
+    },
+  
+    image_bordeaux: {
+      width: 49,
+      height: 46,
+    },
+  
+    image_borgonha: {
+      width: 46,
+      height: 46,
+    },
+  
+    div_mosaico_vinhos: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      marginBottom: 50,
+    },
+    successMessage: {
+      // marginTop: 5,
+      fontSize: 14,
+      color: 'green',
+      fontWeight: 'bold'
+    },
+  });
+
   const addToCart = (wine) => {
     console.log('Adding wine to cart:', wine);
     updateCartItems([...cartItems, wine]);
@@ -149,16 +245,12 @@ const Home = () => {
       setCartSuccessMessage(''); // Limpa a mensagem após alguns segundos
     }, 2000);
   };
-  const navigation = useNavigation();
 
   return (
-
     <Content >
-        <Header />
+      <Header />
       <View style={styles.container}>
         {/* Filtro */}
-
-
         <View style={styles.div_categorias_opcoes}>
           <ScrollView
             horizontal
@@ -194,18 +286,21 @@ const Home = () => {
               </View>
             </TouchableOpacity>
 
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => navigation.navigate('Categorias')}
               style={styles.button_categorias}>
               <View style={styles.div_categorias_image_text}>
                 <Text style={styles.text_categorias_v2}>Veja Tudo</Text>
               </View>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </ScrollView>
         </View>
         <View style={styles.div_categorias}>
           <Text style={styles.text_categorias}>Mais Vendidos</Text>
         </View>
+        {cartSuccessMessage && (
+          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+        )}
 
         {/* Mosaico de vinhos */}
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
@@ -228,94 +323,5 @@ const Home = () => {
     </Content>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-
-  div_categorias: {
-    marginBottom: 15,
-  },
-
-  text_categorias: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginLeft: 10,
-  },
-
-  div_categorias_opcoes: {
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-  },
-
-  button_categorias: {
-    width: 150,
-    height: 60,
-    marginTop: 5,
-    marginLeft: 10,
-    marginBottom: 25,
-    borderRadius: 15,
-    backgroundColor: '#0E0323',
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-
-  buttonPressed: {
-    backgroundColor: '#A37BF8',
-  },
-
-  div_categorias_image_text: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  text_categorias_v2: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginLeft: 5,
-  },
-
-  image_todos: {
-    width: 52,
-    height: 46,
-  },
-
-  image_bordeaux: {
-    width: 49,
-    height: 46,
-  },
-
-  image_borgonha: {
-    width: 46,
-    height: 46,
-  },
-
-  div_mosaico_vinhos: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 50,
-  },
-  successMessage: {
-    marginTop: 20,
-    fontSize: 14,
-    color: 'green',
-    fontWeight: 'bold'
-  },
-});
 
 export default Home;
