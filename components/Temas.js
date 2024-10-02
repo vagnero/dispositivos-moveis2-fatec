@@ -8,6 +8,8 @@ const dark = {
     border: '#FFFFFF',
     topHeaderGradient: '#381CDE',
     bottomHeaderGradient: '#BA22FB',
+    wineCardBackgraund: '#CDC5D7',
+    search: '#fff',
   };
   
   const light = {
@@ -15,10 +17,12 @@ const dark = {
     textColor: '#000',
     iconColor: '#000000',
     primary: '#2D0C57',
-    secondary: '#FFFFFF',
+    secondary: '#CDC5D7',
     border: '#D9D0E3',
     topHeaderGradient: '#fff',
     bottomHeaderGradient: '#2D0C57',
+    wineCardBackgraund: '#CDC5D7',
+    search: '#2D0C57',
   };
   
   export default { dark, light };

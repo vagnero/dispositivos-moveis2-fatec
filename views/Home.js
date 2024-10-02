@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import {
   Text,
   View,
@@ -13,7 +14,6 @@ import Header from '../components/Header';
 import Content from '../components/Content';
 import WineCard from '../components/WineCard';
 import { useUser } from './UserContext';
-import { ThemeContext } from '../context/ThemeContext';
 
 const wines = [
   {
@@ -157,7 +157,7 @@ const Home = () => {
     text_categorias: {
       fontSize: 20,
       fontWeight: 'bold',
-      color: '#fff',
+      color: colors.textColor,
       marginLeft: 10,
     },
   
@@ -188,15 +188,15 @@ const Home = () => {
         },
       }),
     },
-  
-    buttonPressed: {
-      backgroundColor: colors.primary,
-    },
     
     buttonPressed: {
       backgroundColor: colors.primary,
     },
-  
+
+    textButtonPressed: {
+      color: colors.secondary,
+    },
+    
     div_categorias_image_text: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -267,7 +267,9 @@ const Home = () => {
                   source={require('../assets/home/Bordeaux.png')}
                   style={styles.image_bordeaux}
                 /> */}
-                <Text style={styles.text_categorias_v2}>Melhor Avaliados</Text>
+                
+                
+                <Text style={[styles.text_categorias_v2, isPressedButton1 && styles.textButtonPressed ]}>Melhor Avaliados</Text>
               </View>
             </TouchableOpacity>
 
@@ -282,7 +284,7 @@ const Home = () => {
                   source={require('../assets/home/Borgonha.png')}
                   style={styles.image_borgonha}
                 /> */}
-                <Text style={styles.text_categorias_v2}>Melhores Preços</Text>
+                <Text style={[styles.text_categorias_v2, isPressedButton2 && styles.textButtonPressed ]}>Melhores Preços</Text>
               </View>
             </TouchableOpacity>
 

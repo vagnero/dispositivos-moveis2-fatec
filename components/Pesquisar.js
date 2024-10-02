@@ -1,11 +1,40 @@
+import React, { useContext, useState } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import {View, TextInput, Image, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
 
 const Pesquisar = ({ onSearch }) => {
+  const { colors } = useContext(ThemeContext);
   const [searchText, setSearchText] = useState('');
 
   const handleSearch = () => {
     onSearch(searchText);
+  };
+
+  const styles = {
+    div_pesquisar: {
+      width: 320,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 10,
+      marginBottom: 30,
+      borderWidth: 1,
+      borderColor: colors.search,
+      borderRadius: 15,
+      backgroundColor: 'transparent',
+    },
+  
+    image_pesquisar: {
+      width: 20, 
+      height: 20,
+      tintColor: colors.search,
+      marginHorizontal: 15,
+    },
+  
+    textinput_pesquisar: {
+      flex: 1, 
+      paddingVertical: 10,
+      color: colors.search,
+    }
   };
 
  return (
@@ -16,39 +45,12 @@ const Pesquisar = ({ onSearch }) => {
       <TextInput
         style={styles.textinput_pesquisar}
         placeholder="Pesquisar"
-        placeholderTextColor="#fff"
+        placeholderTextColor= {colors.search}
         onChangeText={setSearchText}
         value={searchText}
       />
     </View>
   );
-};
-
-const styles = {
-  div_pesquisar: {
-    width: 320,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 15,
-    backgroundColor: 'transparent',
-  },
-
-  image_pesquisar: {
-    width: 20, 
-    height: 20,
-    tintColor: '#fff',
-    marginHorizontal: 15,
-  },
-
-  textinput_pesquisar: {
-    flex: 1, 
-    paddingVertical: 10,
-    color: '#fff',
-  }
 };
 
 export default Pesquisar;

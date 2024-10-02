@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import colors from '../Themes/dark';
-import { ThemeContext } from '../context/ThemeContext';
 
 const Menu = () => {
   const navigation = useNavigation();
-  const { theme, toggleTheme, colors } = useContext(ThemeContext);
+  const { colors } = useContext(ThemeContext);
 
   const styles = {
     div_menu: {

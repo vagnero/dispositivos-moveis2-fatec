@@ -36,7 +36,7 @@ const Header = () => {
 
     const styles = StyleSheet.create({
         header: {
-            with: '100%',
+            width: '100%',
             backgroundColor: colors.background,
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
@@ -77,16 +77,20 @@ const Header = () => {
                     <View style={{ flexDirection: 'row' }}>
                         {currentUser && <Greeting name={currentUser.nome} />}
                         <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
-                            <Image source={require('../assets/info/heart.png')} style={{ tintColor: colors.iconColor }} />
-                            <Image source={require('../assets/user/sino.png')} style={{ tintColor: colors.iconColor }} />
-                        </View>
-                            <TouchableOpacity onPress={toggleTheme}>
-                                {theme === 'light' ? (
-                                    <FontAwesome name="moon-o" size={30} style={styles.icon} /> // Ícone da lua
-                                ) : (
-                                    <FontAwesome name="sun-o" size={30} style={styles.icon} /> // Ícone do sol
-                                )}
+                            <TouchableOpacity>
+                                <Image source={require('../assets/info/heart.png')} style={{ tintColor: colors.iconColor }} />
                             </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Image source={require('../assets/user/sino.png')} style={{ tintColor: colors.iconColor }} />
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={toggleTheme}>
+                            {theme === 'light' ? (
+                                <FontAwesome name="moon-o" size={30} style={styles.icon} /> // Ícone da lua
+                            ) : (
+                                <FontAwesome name="sun-o" size={30} style={styles.icon} /> // Ícone do sol
+                            )}
+                        </TouchableOpacity>
                     </View>
                     <Pesquisar onSearch={handleSearch} />
                 </View>

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import { Text, View, ScrollView } from 'react-native';
 import Menu from '../components/Menu';
 import Pesquisar from '../components/Pesquisar';
@@ -36,6 +37,7 @@ const bordeauxWines = [
 ];
 
 const Bordeaux = () => {
+  const { colors } = useContext(ThemeContext);
   const [searchText, setSearchText] = useState('');
   const [filteredWines, setFilteredWines] = useState(bordeauxWines);
 
@@ -48,6 +50,32 @@ const Bordeaux = () => {
 
   const handleSearch = (text) => {
     setSearchText(text);
+  };
+
+  const styles = {
+    container: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: colors.background,
+    },
+    div_bordeaux: {
+      marginBottom: 15,
+    },
+    text_bordeaux: {
+      marginTop: 15,
+      fontSize: 34,
+      fontWeight: 'bold',
+      color: colors.primary,
+    },
+    container_vinhos: {
+      marginBottom: 50,
+    },
+    noResultsText: {
+      fontSize: 18,
+      color: '#2D0C57',
+      textAlign: 'center',
+      marginTop: 20,
+    },
   };
 
   return (

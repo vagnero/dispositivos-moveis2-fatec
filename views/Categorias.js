@@ -1,10 +1,98 @@
+import React, { useContext, useState } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import { Text, View, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Menu from '../components/Menu';
 
 const Categorias = () => {
-
+  const { colors } = useContext(ThemeContext);
   const navigation = useNavigation();
+
+  const styles = {
+    container: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: colors.background
+    },
+  
+    div_pesquisar: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 20,
+      borderWidth: 1,
+      borderColor: '#D9D0E3',
+      borderRadius: 27,
+      paddingHorizontal: 15,
+      backgroundColor: '#FFFFFF'
+    },
+  
+    image_pesquisar: {
+      width: 20,
+      height: 20,
+      marginRight: 10
+    },
+  
+    textinput_pesquisar: {
+      flex: 1,
+      paddingVertical: Platform.OS === 'ios' ? 15 : 10,
+      color: '#9586A8'
+    },
+  
+    div_categorias: {
+      marginBottom: 15
+    },
+  
+    text_categorias: {
+      marginTop: 15,
+      fontSize: 34,
+      fontWeight: 'bold',
+      color: '#2D0C57'
+    },
+  
+    div_mosaico_vinhos: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      marginBottom: 50
+    },
+  
+    div_vinho: {
+      width: 150,
+      height: 215, 
+      backgroundColor: '#FFFFFF',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      borderRadius: 10,
+      marginBottom: 20
+    },
+  
+    div_image_text_vinho: {
+      alignItems: 'center'
+    },
+  
+    div_image_vinho: {
+      width: 150,
+      height: 140,
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10,
+      marginBottom: 5,
+      alignItems: 'flex-start'
+    },
+  
+    div_text_subtitle: {
+      fontSize: 15,
+      color: '#2D0C57',
+      fontWeight: 'bold',
+      marginTop: 10
+    },
+  
+    div_text_count: {
+      fontSize: 12,
+      color: '#9586A8',
+      marginTop: 5
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -67,92 +155,6 @@ const Categorias = () => {
 
     </View>
   );
-};
-
-const styles = {
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#F6F5F5'
-  },
-
-  div_pesquisar: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#D9D0E3',
-    borderRadius: 27,
-    paddingHorizontal: 15,
-    backgroundColor: '#FFFFFF'
-  },
-
-  image_pesquisar: {
-    width: 20,
-    height: 20,
-    marginRight: 10
-  },
-
-  textinput_pesquisar: {
-    flex: 1,
-    paddingVertical: Platform.OS === 'ios' ? 15 : 10,
-    color: '#9586A8'
-  },
-
-  div_categorias: {
-    marginBottom: 15
-  },
-
-  text_categorias: {
-    marginTop: 15,
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#2D0C57'
-  },
-
-  div_mosaico_vinhos: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 50
-  },
-
-  div_vinho: {
-    width: 150,
-    height: 215, 
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    borderRadius: 10,
-    marginBottom: 20
-  },
-
-  div_image_text_vinho: {
-    alignItems: 'center'
-  },
-
-  div_image_vinho: {
-    width: 150,
-    height: 140,
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
-    marginBottom: 5,
-    alignItems: 'flex-start'
-  },
-
-  div_text_subtitle: {
-    fontSize: 15,
-    color: '#2D0C57',
-    fontWeight: 'bold',
-    marginTop: 10
-  },
-
-  div_text_count: {
-    fontSize: 12,
-    color: '#9586A8',
-    marginTop: 5
-  }
 };
 
 export default Categorias;
