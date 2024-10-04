@@ -4,7 +4,7 @@ import { View, Text, Image, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
-  console.log('WineCard rendered with wine:', wine);
+  // console.log('WineCard rendered with wine:', wine);
   const navigation = useNavigation();
   const { colors } = useContext(ThemeContext);
 

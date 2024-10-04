@@ -18,7 +18,7 @@ import Splash from './views/Splash';
 import Sobre from './views/Sobre';
 import Tinto from './views/Tinto';
 import User from './views/User';
-import { UserProvider } from './views/UserContext';
+import { UserProvider } from './context/UserContext';
 import { ThemeContext } from './context/ThemeContext';
 
 const Stack = createNativeStackNavigator();

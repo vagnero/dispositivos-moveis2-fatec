@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text } from 'react-native';
+import { ThemeContext } from '../context/ThemeContext';
+import { useUser } from '../context/UserContext';
 
 const Greeting = ({ name }) => {
+  const { theme, toggleTheme, colors } = useContext(ThemeContext);
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) {
@@ -13,25 +17,25 @@ const Greeting = ({ name }) => {
     }
   };
 
+  const styles = {
+    text_saudacao: {
+      fontSize: 16, 
+      marginBottom: 10,
+      color: colors.textColor,
+    },
+  
+    text_get_greeting: {
+      color: 'white', 
+      fontWeight: 'bold'
+    }
+  };
+
   return (
     <Text style={styles.text_saudacao}>
-        Olá {name || 'Carla'},
+        Olá {name || ''},
         <Text style={styles.text_get_greeting}> {getGreeting()}! </Text>
     </Text>
   );
-};
-
-const styles = {
-  text_saudacao: {
-    fontSize: 16, 
-    marginBottom: 10,
-    color: 'white',
-  },
-
-  text_get_greeting: {
-    color: 'white', 
-    fontWeight: 'bold'
-  }
 };
 
 export default Greeting;

@@ -13,105 +13,22 @@ import Menu from '../components/Menu';
 import Header from '../components/Header';
 import Content from '../components/Content';
 import WineCard from '../components/WineCard';
-import { useUser } from './UserContext';
-
-const wines = [
-  {
-    wineName: 'Les Légends Bordeaux Rouge',
-    // wineCategory: 'Bordeaux Tinto',
-    winePrice: 'R$ 260,00',
-    wineSigns: '4.5',
-    wineDescription: 'Um vinho equilibrado e robusto, com notas de frutas vermelhas.',
-    imageSource: require('../assets/home/vinho1.png'),
-  },
-  {
-    wineName: 'Cazauvielho Bordeaux',
-    // wineCategory: 'Bordeaux Tinto',
-    winePrice: 'R$ 109,00',
-    wineSigns: '5.0',
-    wineDescription: 'Vinho jovem e frutado, ideal para refeições leves.',
-    imageSource: require('../assets/home/vinho2.png'),
-  },
-  {
-    wineName: 'Château Pitron Bordeaux',
-    // wineCategory: 'Bordeaux Tinto',
-    winePrice: 'R$ 155,00',
-    wineSigns: '4.3',
-    wineDescription: 'Corpo médio com taninos macios e um final suave.',
-    imageSource: require('../assets/home/vinho3.png'),
-  },
-  {
-    wineName: 'Château Margaux Bordeaux',
-    // wineCategory: 'Bordeaux Tinto',
-    winePrice: 'R$ 2200,00',
-    wineSigns: '4.0',
-    wineDescription: 'Vinho icônico, de complexidade impressionante e notas florais.',
-    imageSource: require('../assets/home/vinho4.png'),
-  },
-  {
-    wineName: 'Borgonha Blanc',
-    // wineCategory: 'Borgonha Branco',
-    winePrice: 'R$ 328,00',
-    wineSigns: '5.0',
-    wineDescription: 'Elegante e refrescante, com toques de frutas cítricas.',
-    imageSource: require('../assets/home/borgonha_blanc.png'),
-  },
-  {
-    wineName: 'Borgonha Chablis',
-    // wineCategory: 'Borgonha Branco',
-    winePrice: 'R$ 540,00',
-    wineSigns: '4.8',
-    wineDescription: 'Mineralidade marcante e acidez vibrante, perfeito para frutos do mar.',
-    imageSource: require('../assets/home/borgonha_chablis.png'),
-  },
-  {
-    wineName: 'Tinto Paulo Laureano',
-    // wineCategory: 'Tinto Português',
-    winePrice: 'R$ 88,00',
-    wineSigns: '5.0',
-    wineDescription: 'Vinho português com notas de ameixa e especiarias, fácil de beber.',
-    imageSource: require('../assets/home/tinto_paulo_laureano.png'),
-  },
-  {
-    wineName: 'Tinto Quinta do Noval',
-    // wineCategory: 'Tinto Português',
-    winePrice: 'R$ 298,00',
-    wineSigns: '4.6',
-    wineDescription: 'Complexo e encorpado, com taninos robustos e um final longo.',
-    imageSource: require('../assets/home/tinto_quinta_do_noval.png'),
-  },
-  {
-    wineName: 'Zentas Chardonnay',
-    // wineCategory: 'Chardonnay',
-    winePrice: 'R$ 65,00',
-    wineSigns: '5.0',
-    wineDescription: 'Leve e frutado, com notas de pêssego e um toque amanteigado.',
-    imageSource: require('../assets/home/pasta_zentas_chardonnay.png'),
-  },
-  {
-    wineName: 'Villa Antinori Rosso',
-    // wineCategory: 'Rosso Italiano',
-    winePrice: 'R$ 270,00',
-    wineSigns: '4.9',
-    wineDescription: 'Vinho italiano rico, com notas de frutas maduras e um final suave.',
-    imageSource: require('../assets/home/villa_antinori_rosso.png'),
-  }
-];
-
+import { useUser, addToCart } from '../context/UserContext';
+import wines from '../components/Wines';
 
 const Home = () => {
   const { colors } = useContext(ThemeContext);
-  const [cartSuccessMessage, setCartSuccessMessage] = useState('');
+  // const [cartSuccessMessage, setCartSuccessMessage] = useState('');
   const [isPressedButton1, setIsPressedButton1] = useState(false);
   const [isPressedButton2, setIsPressedButton2] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchText, setSearchText] = useState('');
   const [filteredWines, setFilteredWines] = useState(wines);
-  const { currentUser, cartItems, updateCartItems } = useUser();
+  const { currentUser, cartItems, updateCartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage} = useUser();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const navigation = useNavigation();
 
-  console.log('Cart items:', cartItems);
+  // console.log('Cart items:', cartItems);
 
   useEffect(() => {
     const filtered = wines.filter((wine) => {
@@ -142,6 +59,30 @@ const Home = () => {
 
   const handleSearch = (text) => {
     setSearchText(text);
+  };  
+
+  const handleAddToCart = (item) => {
+    const existingItem = cartItems.find((i) => i.wineName === item.wineName);
+    if (existingItem) {
+      // Se o vinho já existe, atualiza a quantidade
+      const updatedItems = cartItems.map((i) =>
+        i.wineName === item.wineName
+          ? { ...i, quantity: i.quantity + 1 } // Incrementa a quantidade
+          : i
+      );
+      setCartItems(updatedItems);
+      setCartSuccessMessage('Quantidade do produto atualizada no carrinho!');
+      setTimeout(() => {
+        setCartSuccessMessage('');
+      }, 2000);
+    } else {
+      // Se o vinho não existe, adiciona ao carrinho
+      setCartItems([...cartItems, { ...item, quantity: 1 }]);
+      setCartSuccessMessage('Produto adicionado ao carrinho com sucesso!');
+      setTimeout(() => {
+        setCartSuccessMessage('');
+      }, 2000);
+    }
   };
 
   const styles = StyleSheet.create({
@@ -235,16 +176,7 @@ const Home = () => {
       color: 'green',
       fontWeight: 'bold'
     },
-  });
-
-  const addToCart = (wine) => {
-    console.log('Adding wine to cart:', wine);
-    updateCartItems([...cartItems, wine]);
-    setCartSuccessMessage('Produto adicionado ao carrinho com sucesso!'); // Definindo a mensagem de sucesso
-    setTimeout(() => {
-      setCartSuccessMessage(''); // Limpa a mensagem após alguns segundos
-    }, 2000);
-  };
+  });  
 
   return (
     <Content >
@@ -313,7 +245,7 @@ const Home = () => {
               </Text>
             ) : (
               filteredWines.map((wine, index) => (
-                <WineCard key={index} wine={wine} onPressAddToCart={addToCart} />
+                <WineCard key={index} wine={wine} onPressAddToCart={handleAddToCart} />
               ))
             )}
           </View>

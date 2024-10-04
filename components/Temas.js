@@ -8,7 +8,7 @@ const dark = {
     border: '#FFFFFF',
     topHeaderGradient: '#381CDE',
     bottomHeaderGradient: '#BA22FB',
-    wineCardBackgraund: '#CDC5D7',
+    wineCardBackground: '#CDC5D7',
     search: '#fff',
   };
   
@@ -21,7 +21,7 @@ const dark = {
     border: '#D9D0E3',
     topHeaderGradient: '#fff',
     bottomHeaderGradient: '#2D0C57',
-    wineCardBackgraund: '#CDC5D7',
+    wineCardBackground: '#CDC5D7',
     search: '#2D0C57',
   };
   

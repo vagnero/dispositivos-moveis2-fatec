@@ -1,9 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { useUser, addToCart } from '../context/UserContext';
+import { handleAddToCart } from '../utils/cartUtils';
+import wines from '../components/Wines';
 
-const WineItem = ({ imageSource, wineName, price, ml }) => {
+const WineItem = ({ imageSource, wineName, price, ml, handleAddToCart  }) => {
   const { colors } = useContext(ThemeContext);
+  const { currentUser, cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
 
   const styles = {
     div_vinho: {
@@ -87,7 +91,7 @@ const WineItem = ({ imageSource, wineName, price, ml }) => {
           <TouchableOpacity style={styles.button_favorite}>
             <Image source={require('../assets/bordeaux/heart.png')} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button_carrinho}>
+          <TouchableOpacity style={styles.button_carrinho} onPress={handleAddToCart}>
             <Image source={require('../assets/bordeaux/shopping-cart-v2.png')} />
           </TouchableOpacity>
         </View>

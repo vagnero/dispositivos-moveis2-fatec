@@ -19,27 +19,27 @@ export const UserProvider = ({ children }) => {
   };
 
   const updateCartItems = (items) => {
-    console.log('Atualizando itens do Carrinho:', items);
+    const wineNames = items.map(item => item.wineName);
+    console.log('Atualizando itens do Carrinho:', wineNames);
     const updatedItems = items.map((item) => {
-      const existingItem = cartItems.find((i) => i.wineName === item.wineName);
+      const existingItem = cartItems.find((i) => {
+        console.log('iName: ', i.wineName);
+        console.log('itemName: ', item.wineName);
+        return i.wineName === item.wineName;
+      });
       if (existingItem) {
         return { ...existingItem, quantity: item.quantity };
       }
       return item;
     });
     setCartItems(updatedItems);
-    console.log('Atualizado itens do Carrinho:', updatedItems);
+    // console.log('Atualizado itens do Carrinho:', updatedItems);
   };
 
   const addToCart = (item) => {
     const existingItem = cartItems.find((i) => i.wineName === item.wineName);
     if (existingItem) {
-      const updatedItems = cartItems.map((i) =>
-        i.wineName === item.wineName
-          ? { ...i, quantity: i.quantity + item.quantity }
-          : i
-      );
-      setCartItems(updatedItems);
+      updateCartItems()
     } else {
       setCartItems([...cartItems, item]);
       setCartSuccessMessage('Produto adicionado ao carrinho com sucesso!');
@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
       registerUser,
       findUser,
       cartItems,
-      updateCartItems,
+      setCartItems,
       cartSuccessMessage,
       setCartSuccessMessage,
       addToCart,

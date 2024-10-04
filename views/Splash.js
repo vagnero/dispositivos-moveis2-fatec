@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
-import { useUser } from './UserContext';
+import { useUser } from '../context/UserContext';
 import Content from '../components/Content';
 import colors from '../Themes/dark';
 

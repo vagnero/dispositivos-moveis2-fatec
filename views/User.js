@@ -1,21 +1,69 @@
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, Image } from 'react-native';
 import Menu from '../components/Menu';
 import PrefItem from '../components/PrefItem';
-import Greeting from '../components/Greeting';
-import { useUser } from './UserContext';
+import { useUser } from '../context/UserContext';
+import { ThemeContext } from '../context/ThemeContext';
 
 const User = () => {
-  const { currentUser } = useUser(); 
+  const { theme, toggleTheme, colors } = useContext(ThemeContext);
+  const { currentUser } = useUser();
+
+  const styles = {
+    container: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: '#F6F5F5'
+    },
+  
+    div_perfil: {
+      width: '100%',
+      height: '25%',
+      backgroundColor: '#F6F5F5',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly'
+    },
+  
+    image_perfil: {
+      width: 100,
+      height: 100
+    },
+  
+    text_perfil: {
+      color: colors.textColor,
+      textAlign: 'left',
+      fontSize: 25,
+      width: 250,
+    },
+  
+    text_nome: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#2D0C57'
+    },
+  
+    text_desc: {
+      marginTop: 10,
+      fontSize: 14,
+      color: '#A0A5BA'
+    },
+  
+    div_conteudo_pref: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: '#FFFFFF',
+      borderRadius: 25
+    }
+  };
 
   return (
     <View style={styles.container}>
 
       <View style={styles.div_perfil}>
-        <Image style={styles.image_perfil} source={require('../assets/user/woman.png')}/>
-       <View style={styles.div_saudacao_pesquisar}>
-        {currentUser && <Greeting name={currentUser.nome} />}
-        
-      </View>
+        <Image style={styles.image_perfil} source={require('../assets/user/woman.png')} />
+        {currentUser &&
+        <Text style={styles.text_perfil}>{currentUser.nome}</Text>}
       </View>
 
       <View style={styles.div_conteudo_pref}>
@@ -60,51 +108,9 @@ const User = () => {
           view="Login"
         />
       </View>
-
-      <Menu/>
+      <Menu />
     </View>
   );
-};
-
-const styles = {
-  container: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#F6F5F5'
-  },
-
-  div_perfil: {
-    width: '100%',
-    height: '25%',
-    backgroundColor: '#F6F5F5',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly'
-  },
-
-  image_perfil: {
-    width: 100,
-    height: 100
-  },
-
-  text_nome: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2D0C57'
-  },
-
-  text_desc: {
-    marginTop: 10,
-    fontSize: 14,
-    color: '#A0A5BA'
-  },
-  
-  div_conteudo_pref: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 25
-  }
 };
 
 export default User;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, SafeAreaView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useUser } from './UserContext';
+import { useUser } from '../context/UserContext';
 
 const Cadastrar = () => {
   const [nome, setNome] = useState('');

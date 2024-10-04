@@ -3,7 +3,7 @@ import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Greeting from '../components/Greeting';
 import Pesquisar from '../components/Pesquisar';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useUser } from '../views/UserContext';
+import { useUser } from '../context/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { ThemeContext } from '../context/ThemeContext';
@@ -26,7 +26,7 @@ const Header = () => {
     };
 
     const addToCart = (wine) => {
-        console.log('Adding wine to cart:', wine);
+        // console.log('Adding wine to cart:', wine);
         updateCartItems([...cartItems, wine]);
         setCartSuccessMessage('Produto adicionado ao carrinho com sucesso!'); // Definindo a mensagem de sucesso
         setTimeout(() => {

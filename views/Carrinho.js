@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ItemCarrinho from '../components/ItemCarrinho';
-import { useUser } from './UserContext';
+import { useUser } from '../context/UserContext';
 
 const Carrinho = () => {
   const navigation = useNavigation();
-  const { cartItems, removeFromCart, cartSuccessMessage } = useUser();
-  const { updateCartItems } = useUser();
+  const { cartItems, setCartItems, removeFromCart, cartSuccessMessage } = useUser();
   const [total, setTotal] = useState(0.0);
 
   const calculateTotal = () => {
@@ -52,7 +51,9 @@ const Carrinho = () => {
         <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
       )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {cartItems.map((item, index) => (
+        {cartItems.filter((item, index, self) => 
+          index === self.findIndex((i) => i.wineName === item.wineName))
+        .map((item, index) => (
           <ItemCarrinho
             key={index}
             wineName={item.wineName}
@@ -60,8 +61,8 @@ const Carrinho = () => {
             imageSource={item.imageSource}
             quantity={item.quantity}
             removeFromCart={removeFromCart}
-            updateCartItems={updateCartItems}
             cartItems={cartItems}
+            setCartItems={setCartItems}
             calculateTotal={calculateTotal}
           />
         ))}

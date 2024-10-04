@@ -1,15 +1,16 @@
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 
-const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, updateCartItems, cartItems, calculateTotal }) => {
+const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, setCartItems, cartItems, calculateTotal }) => {
 
   const handleAddQuantity = () => {
-  console.log('Adicionando quantidade para:', wineName);
-  updateCartItems(cartItems.map((item) => {
+  // console.log('Adicionando quantidade para:', wineName);
+  setCartItems(cartItems.map((item) => {
     if (item.wineName === wineName) {
       const newQuantity = item.quantity + 1;
       console.log(`Nova quantidade ${wineName}: ${newQuantity}`);
       return { ...item, quantity: newQuantity };
     }
+    // console.log(`Nova quantidade ${wineName}: ${newQuantity}`);
     return item;
   }));
   calculateTotal(); // Recalcula o total
@@ -17,11 +18,11 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
 
 const handleRemoveQuantity = () => {
   if (quantity > 1) {
-    console.log('Removendo quantidade:', wineName);
-    updateCartItems(cartItems.map((item) => {
+    // console.log('Removendo quantidade:', wineName);
+    setCartItems(cartItems.map((item) => {
       if (item.wineName === wineName) {
         const newQuantity = item.quantity - 1;
-        console.log(`Nova quantidade ${wineName}: ${newQuantity}`);
+        // console.log(`Nova quantidade ${wineName}: ${newQuantity}`);
         return { ...item, quantity: newQuantity };
       }
       return item;
@@ -32,7 +33,7 @@ const handleRemoveQuantity = () => {
 
 
   const handleRemoveFromCart = () => {
-    console.log('Removendo item do carrinho:', wineName);
+    // console.log('Removendo item do carrinho:', wineName);
     removeFromCart(wineName);
     calculateTotal(); // Recalcula o total
   };
