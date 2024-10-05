@@ -131,7 +131,7 @@ const Home = () => {
     },
     
     buttonPressed: {
-      backgroundColor: colors.primary,
+      backgroundColor: colors.wineCardBackground, 
     },
 
     textButtonPressed: {
