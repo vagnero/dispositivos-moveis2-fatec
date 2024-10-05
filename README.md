@@ -26,7 +26,7 @@ Mas acredito que não precisa, pois já criei
 
 Para gerar o app:  
   
-npm install -g eas-cli  
-eas build:configure  
-eas build -p android --profile preview  
+npm install -g eas-cli
+eas build:configure
+eas build -p android --profile preview
 

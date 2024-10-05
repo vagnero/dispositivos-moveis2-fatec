@@ -1,3 +1,6 @@
+// Adiciona o arquivo init.gradle
+apply from: file('gradle/init.gradle')
+
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
@@ -130,14 +133,16 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
-            shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
-        }
+        // Caution! In production, you need to generate your own keystore file.
+        // see https://reactnative.dev/docs/signed-apk-android.
+        signingConfig signingConfigs.debug
+        minifyEnabled false
+        shrinkResources false
+        // shrinkResources findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false
+        // minifyEnabled enableProguardInReleaseBuilds
+        proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        crunchPngs findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true
+    }
     }
     packagingOptions {
         jniLibs {

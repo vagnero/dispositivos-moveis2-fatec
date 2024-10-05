@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
 import { useUser } from '../context/UserContext';
 import Content from '../components/Content';
-import colors from '../Themes/dark';
-
 
 const Splash = () => {
+  const { colors } = useContext(ThemeContext);
   const [nome, setNome] = useState('Dev');
   const [email, setEmail] = useState('dev');
   const [senha, setSenha] = useState('');
@@ -16,6 +16,24 @@ const Splash = () => {
       registerUser({ nome, email, senha }); // Registro do usuário ao carregar o componente
     }
   }, []);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    text: {
+      fontSize: 24,
+      marginBottom: 20,
+      color: colors.primary,
+    },
+    logo: {
+      width: 200,
+      height: 250,
+      marginBottom: 50,
+    },
+  });
 
   return (
     <Content>
@@ -30,23 +48,5 @@ const Splash = () => {
     </Content>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    marginBottom: 20,
-    color: colors.primary,
-  },
-  logo: {
-    width: 200,
-    height: 250,
-    marginBottom: 50,
-  },
-});
 
 export default Splash;
