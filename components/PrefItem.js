@@ -8,9 +8,11 @@ const PrefItem = ({ iconSource, text, view }) => {
   return (
     <View style={styles.div_button_pref}>
       <TouchableOpacity style={styles.button_pref} onPress={() => navigation.navigate(view)}>
-        <Image style={styles.icon_pref} source={iconSource}/>
-        <Text style={styles.text_pref}>{text}</Text>
-        <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')}/>
+        <View style={{ flexDirection: 'row', }}>
+          <Image style={styles.icon_pref} source={iconSource} />
+          <Text style={styles.text_pref}>{text}</Text>
+        </View>
+        <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')} />
       </TouchableOpacity>
     </View>
   );
@@ -31,17 +33,19 @@ const styles = {
   },
 
   icon_pref: {
-    marginLeft: 30
+    marginLeft: 30,
   },
 
   text_pref: {
     fontSize: 16,
-    color: '#2D0C57'
+    color: '#2D0C57',
+    marginLeft: 20,
   },
 
   icon_v2_pref: {
     width: 6,
     height: 10,
+    textAlign: 'right',
     marginRight: 30
   },
 };

@@ -12,11 +12,11 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
     div_vinho: {
       width: 150,
       height: 210,
-      backgroundColor: '#CDC5D7',
+      backgroundColor: colors.wineCardBackground,
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 10,
-      marginLeft: 5,
+      marginLeft: 15,
       marginRight: 5,
       marginTop: 5,
       marginBottom: 10,
@@ -36,8 +36,8 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
       alignItems: 'center',
     },
     div_image_vinho: {
-      width: 120,
-      height: 100,
+      width: 50,
+      height: 120,
     },
     div_text_vinho: {
       width: 120,
@@ -74,7 +74,7 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
       <View style={styles.div_text_button_vinho}>
         <Text style={styles.div_text_preco}>{wine.winePrice}</Text>
         <TouchableOpacity onPress={() => onPressAddToCart({...wine, imageSource: wine.imageSource, quantity: 1 }, updateCartItems)} style={styles.addButton}>
-          <Image source={require('../assets/home/plus.png')} />
+          <Image source={require('../assets/home/plus.png')} style={{ marginBottom: 10 }} />
         </TouchableOpacity>
       </View>
     </View>

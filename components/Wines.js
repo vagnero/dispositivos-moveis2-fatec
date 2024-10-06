@@ -73,7 +73,7 @@ const Wines = [
     },
     {
       wineName: 'Zentas Chardonnay',
-      wineCategory: 'Chardonnay',
+      wineCategory: 'Pasta',
       winePrice: 'R$ 65,00',
       wineSigns: '5.0',
       ml: '750ml',
@@ -82,7 +82,7 @@ const Wines = [
     },
     {
       wineName: 'Villa Antinori Rosso',
-      wineCategory: 'Rosso Italiano',
+      wineCategory: 'Pasta',
       winePrice: 'R$ 270,00',
       wineSigns: '4.9',
       ml: '750ml',

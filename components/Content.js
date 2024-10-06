@@ -8,6 +8,7 @@ const Content = ({ children }) => {
     const styles = StyleSheet.create({
         body: {
             flex: 1,
+            height: '100%',
             backgroundColor: colors.background,
         },
         icons: {

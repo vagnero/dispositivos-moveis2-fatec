@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ItemCarrinho from '../components/ItemCarrinho';
 import { useUser } from '../context/UserContext';
+import { ThemeContext } from '../context/ThemeContext';
+import Content from '../components/Content';
 
 const Carrinho = () => {
   const navigation = useNavigation();
   const { cartItems, setCartItems, removeFromCart, cartSuccessMessage } = useUser();
   const [total, setTotal] = useState(0.0);
+  const { colors } = useContext(ThemeContext);
 
   const calculateTotal = () => {
     console.log('Total Calculado...');
@@ -44,8 +47,79 @@ const Carrinho = () => {
     }
   }, [cartSuccessMessage]);
 
+  const styles = {
+    container: {
+      flex: 1,
+      backgroundColor: '#F6F5F5',
+      alignItems: 'center'
+    },
+    text_title: {
+      fontSize: 30,
+      fontWeight: 'bold',
+      color: colors.textColor,
+      textAlign: 'center',
+      marginTop: 10,
+      marginBottom: 10
+    },
+    scrollViewContent: {
+      flexDirection: 'column',
+      padding: 10,
+      width: '100%'
+    },
+    div_conteudo_price: {
+      width: '90%',
+      height: '15%',
+      margin: 'auto',
+      marginBottom: 10,
+      backgroundColor: colors.wineCardBackground,
+      borderRadius: 25,
+      padding: 30,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    div_text_price_total: {
+      flexDirection: 'row',
+      alignItems: 'center', // Garantir que o texto e o valor estejam alinhados verticalmente
+      justifyContent: 'center', // Adiciona alinhamento horizontal para o centro
+      marginBottom: 10,
+    },
+    text_total: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#000',
+      marginRight: 5 // Reduzir a margem entre o texto e o valor
+    },
+    text_price: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#000'
+    },
+    button_finalizar_pedido: {
+      width: 180,
+      height: 56,
+      backgroundColor: colors.button,
+      borderWidth: 1,
+      borderColor: '#D9D0E3',
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    text_pedido: {
+      fontSize: 15,
+      color: '#FFFFFF',
+      fontWeight: 'bold',
+      marginLeft: 5
+    },
+    successMessage: {
+      fontSize: 16,
+      color: 'green',
+      marginBottom: 10,
+      textAlign: 'center'
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <Content>
       <Text style={styles.text_title}>Carrinho</Text>
       {cartSuccessMessage && (
         <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
@@ -76,74 +150,8 @@ const Carrinho = () => {
           <Text style={styles.text_pedido}>FINALIZAR PEDIDO</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Content>
   );
-};
-
-const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: '#F6F5F5',
-    alignItems: 'center'
-  },
-  text_title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2D0C57',
-    marginTop: '5%',
-    marginBottom: '5%'
-  },
-  scrollViewContent: {
-    flexDirection: 'column',
-    width: '100%'
-  },
-  div_conteudo_price: {
-    width: '100%',
-    height: '30%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  div_text_price_total: {
-    flexDirection: 'row',
-    alignItems: 'center', // Garantir que o texto e o valor estejam alinhados verticalmente
-    justifyContent: 'center', // Adiciona alinhamento horizontal para o centro
-    marginBottom: '10%'
-  },
-  text_total: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-    marginRight: 5 // Reduzir a margem entre o texto e o valor
-  },
-  text_price: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000'
-  },
-  button_finalizar_pedido: {
-    width: 180,
-    height: 56,
-    backgroundColor: '#6C30EB',
-    borderWidth: 1,
-    borderColor: '#D9D0E3',
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  text_pedido: {
-    fontSize: 15,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    marginLeft: 5
-  },
-  successMessage: {
-    fontSize: 16,
-    color: 'green',
-    marginBottom: 10,
-    textAlign: 'center'
-  }
 };
 
 export default Carrinho;

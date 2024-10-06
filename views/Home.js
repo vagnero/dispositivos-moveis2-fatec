@@ -131,7 +131,7 @@ const Home = () => {
     },
     
     buttonPressed: {
-      backgroundColor: colors.wineCardBackground, 
+      backgroundColor: colors.buttonPressed, 
     },
 
     textButtonPressed: {
@@ -167,7 +167,8 @@ const Home = () => {
     div_mosaico_vinhos: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      justifyContent: 'space-between',
+      alignItems: 'center',
+      justifyContent: 'center',
       marginBottom: 50,
     },
     successMessage: {

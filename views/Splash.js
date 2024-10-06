@@ -40,7 +40,7 @@ const Splash = () => {
       <View style={styles.container}>
         <Text style={styles.text}>Os Melhores Vinhos!</Text>
         <Image
-          source={require('../assets/splash.png')} // Coloque a imagem de splash aqui
+          source={require('../assets/splash/IlustracaoSplash.png')} // Coloque a imagem de splash aqui
           style={styles.logo}
         />
         <ActivityIndicator size="large" color="#0000ff" />

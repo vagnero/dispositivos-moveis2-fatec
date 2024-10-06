@@ -100,30 +100,4 @@ const Bordeaux = () => {
   );
 };
 
-const styles = {
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#F6F5F5',
-  },
-  div_bordeaux: {
-    marginBottom: 15,
-  },
-  text_bordeaux: {
-    marginTop: 15,
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#2D0C57',
-  },
-  container_vinhos: {
-    marginBottom: 50,
-  },
-  noResultsText: {
-    fontSize: 18,
-    color: '#2D0C57',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-};
-
 export default Bordeaux;

@@ -47,7 +47,7 @@ const Categorias = () => {
       marginTop: 15,
       fontSize: 34,
       fontWeight: 'bold',
-      color: '#2D0C57'
+      color: colors.textColor,
     },
   
     div_mosaico_vinhos: {
@@ -60,7 +60,7 @@ const Categorias = () => {
     div_vinho: {
       width: 150,
       height: 215, 
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.wineCardBackground,
       alignItems: 'center',
       justifyContent: 'flex-start',
       borderRadius: 10,
@@ -89,7 +89,7 @@ const Categorias = () => {
   
     div_text_count: {
       fontSize: 12,
-      color: '#9586A8',
+      color: colors.secondary,
       marginTop: 5
     }
   };
