@@ -4,7 +4,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { useUser } from '../context/UserContext';
 
 const Greeting = ({ name }) => {
-  const { theme, toggleTheme, colors } = useContext(ThemeContext);
+  const { colors } = useContext(ThemeContext);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -25,7 +25,7 @@ const Greeting = ({ name }) => {
     },
   
     text_get_greeting: {
-      color: 'white', 
+      color: colors.textColor,
       fontWeight: 'bold'
     }
   };

@@ -1,12 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
   // console.log('WineCard rendered with wine:', wine);
   const navigation = useNavigation();
   const { colors } = useContext(ThemeContext);
+  const [soldCount, setSoldCount] = useState(wine.wineSold);
+
+  useEffect(() => {
+    const fetchWines = async () => {
+      try {
+        const winesString = await AsyncStorage.getItem('wines');
+        const winesArray = winesString ? JSON.parse(winesString) : [];
+        const updatedWine = winesArray.find(item => item.wineName === wine.wineName);
+        if (updatedWine) {
+          setSoldCount(updatedWine.wineSold);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar os vinhos:', error);
+      }
+    };
+
+    fetchWines();
+  }, [wine.wineName]);
 
   const styles = {
     div_vinho: {
@@ -34,13 +53,15 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
     },
     div_image_text_vinho: {
       alignItems: 'center',
+      flexDirection: 'row',
     },
     div_image_vinho: {
       width: 50,
       height: 120,
     },
     div_text_vinho: {
-      width: 120,
+      width: '90%',
+      textAlign: 'center',
       fontSize: 15,
       color: '#2D0C57',
       fontWeight: 'bold',
@@ -65,15 +86,21 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
 
   return (
     <View style={styles.div_vinho}>
-      <View style={styles.div_image_text_vinho}>
-        <Text style={styles.div_text_vinho}>{wine.wineName}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Sobre', wine)}>
+      <Text style={styles.div_text_vinho} onPress={() => navigation.navigate('Sobre', wine)}>{wine.wineName}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Sobre', wine)}>
+        <View style={styles.div_image_text_vinho}>
           <Image source={wine.imageSource} style={styles.div_image_vinho} />
-        </TouchableOpacity>
-      </View>
+          <View>
+            <Text>Vendidos: {soldCount}</Text>
+            <Text>Rate: {wine.wineSigns}
+              <Image source={require('../assets/info/signs.png')} style={styles.image_signs} />
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
       <View style={styles.div_text_button_vinho}>
         <Text style={styles.div_text_preco}>{wine.winePrice}</Text>
-        <TouchableOpacity onPress={() => onPressAddToCart({...wine, imageSource: wine.imageSource, quantity: 1 }, updateCartItems)} style={styles.addButton}>
+        <TouchableOpacity onPress={() => onPressAddToCart({ ...wine, imageSource: wine.imageSource, quantity: 1 }, updateCartItems)} style={styles.addButton}>
           <Image source={require('../assets/home/plus.png')} style={{ marginBottom: 10 }} />
         </TouchableOpacity>
       </View>

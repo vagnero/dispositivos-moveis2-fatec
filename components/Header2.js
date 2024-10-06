@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
-import Greeting from '../components/Greeting';
-import Pesquisar from '../components/Pesquisar';
+import Greeting from './Greeting';
+import Pesquisar from './Pesquisar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUser } from '../context/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -43,20 +43,10 @@ const Header = () => {
                 end={{ x: 0, y: 1 }} // Fim do degradê (baixo)
             >
                 <View style={styles.div_saudacao_pesquisar}>
-                    <View style={{ flexDirection: 'row' }}>
-                        {currentUser ? <Greeting name={currentUser.nome} /> :
-                        <Greeting name={''}/>}
+                    <View style={{ flexDirection: 'row' }}>                        
+                        <Greeting name={''}/>
                         <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Favoritos')}>
-                                <Image
-                                    source={require('../assets/info/heart.png')}
-                                    style={{ tintColor: colors.iconColor }}
-                                />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
-                                <Image source={require('../assets/user/sino.png')} style={{ tintColor: colors.iconColor }} />
-                            </TouchableOpacity>
+                            
                         </View>
                         <TouchableOpacity onPress={toggleTheme}>
                             {theme === 'light' ? (

@@ -15,8 +15,8 @@ const Pesquisar = ({ onSearch }) => {
       width: 320,
       flexDirection: 'row',
       alignItems: 'center',
+      margin: 'auto',
       marginTop: 10,
-      marginBottom: 30,
       borderWidth: 1,
       borderColor: colors.search,
       borderRadius: 15,
@@ -32,7 +32,7 @@ const Pesquisar = ({ onSearch }) => {
   
     textinput_pesquisar: {
       flex: 1, 
-      paddingVertical: 10,
+      paddingVertical: 5,
       color: colors.search,
     }
   };

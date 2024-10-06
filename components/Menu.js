@@ -24,7 +24,7 @@ const Menu = () => {
   return (
     <View style={styles.div_menu}>
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <Image source={require('../assets/home/grid.png')} tintColor={ colors.icon }/>
+        <Image source={require('../assets/home/grid.png')} tintColor={ colors.iconColor }/>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Carrinho')}>
         <Image source={require('../assets/home/shopping-cart.png')} tintColor={ colors.iconColor }/>

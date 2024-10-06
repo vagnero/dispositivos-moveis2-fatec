@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from './context/ThemeContext';
+import { StatusBar } from 'react-native';
 
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';
@@ -10,6 +11,8 @@ import Borgonha from './views/Borgonha';
 import Cadastrar from './views/Cadastrar';
 import Carrinho from './views/Carrinho';
 import Categorias from './views/Categorias';
+import Favoritos from './views/Favoritos';
+import Notificacoes from './views/Notificacoes';
 import Home from './views/Home';
 import Login from './views/Login';
 import Pasta from './views/Pasta';
@@ -59,12 +62,13 @@ const MainNavigator = ({ isSplashReady }) => {
         headerTitleStyle: {
           fontWeight: 'bold', // Estilos adicionais para o título
         },
+        headerShown: false,
       }}>
 
       {isSplashReady ? (
-        <>
+        <>        
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} options={{ title: 'Página Inicial' }} />
+          <Stack.Screen name="Home" component={Home} options={{ header: ({ route }) => <Header route={route} /> }} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
           <Stack.Screen name="Bordeaux" component={Bordeaux} />
@@ -72,6 +76,8 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Categorias" component={Categorias} />
+          <Stack.Screen name="Favoritos" component={Favoritos} />
+          <Stack.Screen name="Notificacoes" component={Notificacoes} />
           <Stack.Screen name="Pasta" component={Pasta} />
           <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
           <Stack.Screen name="Tinto" component={Tinto} />

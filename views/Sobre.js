@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
-import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, Image, Icon, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser, addToCart } from '../context/UserContext';
@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { handleAddToCart } from '../utils/cartUtils';
 import wines from '../components/Wines';
 import Content from '../components/Content';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Sobre = () => {
   const { colors } = useContext(ThemeContext);
@@ -16,10 +17,61 @@ const Sobre = () => {
   const navigation = useNavigation();
   const { currentUser, cartItems, updateCartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
+  const [favoriteWines, setFavoriteWines] = useState([]);
 
-  const toggleHeart = () => {
-    setIsHeartFilled(!isHeartFilled);
+
+  const toggleHeart = (wine) => {
+    if (isWineFavorite(wine)) {
+      // Remove o vinho dos favoritos
+      setFavoriteWines(favoriteWines.filter((favWine) => favWine.wineName !== wine.wineName));
+    } else {
+      // Adiciona o vinho aos favoritos
+      setFavoriteWines([...favoriteWines, wine]);
+    }
+
+    setIsHeartFilled(!isHeartFilled); // Alterna o ícone do coração
   };
+
+  // Verifica se o vinho já é favorito
+  const isWineFavorite = (wine) => {
+    return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
+  };
+
+  // Salva os vinhos favoritos no armazenamento local
+  const saveFavoriteWines = async (wines) => {
+    try {
+      const jsonValue = JSON.stringify(wines);
+      await AsyncStorage.setItem('@favorite_wines', jsonValue);
+    } catch (e) {
+      console.error('Erro ao salvar favoritos:', e);
+    }
+  };
+
+  // Carrega os vinhos favoritos do armazenamento local
+  const loadFavoriteWines = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@favorite_wines');
+      return jsonValue != null ? JSON.parse(jsonValue) : [];
+    } catch (e) {
+      console.error('Erro ao carregar favoritos:', e);
+      return [];
+    }
+  };
+
+  // Use o efeito para carregar os favoritos ao iniciar
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const storedFavorites = await loadFavoriteWines();
+      setFavoriteWines(storedFavorites);
+    };
+
+    fetchFavorites();
+  }, []);
+
+  // Atualize os favoritos sempre que houver uma mudança
+  useEffect(() => {
+    saveFavoriteWines(favoriteWines);
+  }, [favoriteWines]);
 
   const styles = {
     div_image: {
@@ -97,7 +149,7 @@ const Sobre = () => {
     div_buttons: {
       marginTop: '5%',
       marginLeft: '7%',
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
 
     button_favorite: {
@@ -185,9 +237,15 @@ const Sobre = () => {
               <Text style={styles.text_sobre_2}>{wineDescription}</Text>
             </View>
             <View style={styles.div_buttons}>
-              <TouchableOpacity style={styles.button_favorite} onPress={toggleHeart}>
-                <FontAwesome name={isHeartFilled ? "heart" : "heart-o"} size={30} style={{ color: 'red' }} />
-              </TouchableOpacity>
+              <View style={{ marginRight: 40, marginTop: 10, marginLeft: 20 }}>
+                <FontAwesome
+                  name={isWineFavorite(route.params) ? 'heart' : 'heart-o'}
+                  size={32}
+                  color='red'
+                  onPress={() => toggleHeart(route.params)} // Passando o objeto wine corretamente
+                />
+              </View>
+
               {/* Adicione um onPress ao botão "ADICIONAR AO CARRINHO" */}
               <TouchableOpacity style={styles.button_carrinho}
                 onPress={() => {

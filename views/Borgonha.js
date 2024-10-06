@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { Text, View, ScrollView } from 'react-native';
-import Menu from '../components/Menu';
+import Content from '../components/Content';
 import Pesquisar from '../components/Pesquisar';
 import WineItem from '../components/WineItem';
 import Wines  from '../components/Wines';
@@ -47,6 +47,7 @@ const Borgonha = () => {
     text_bordeaux: {
       fontSize: 34,
       fontWeight: 'bold',
+      textAlign: 'center',
       color: colors.primary,
     },
 
@@ -63,6 +64,7 @@ const Borgonha = () => {
   };
 
   return (
+    <Content>
     <View style={styles.container}>
       <View style={styles.div_bordeaux}>
         <Text style={styles.text_bordeaux}>Borgonha</Text>
@@ -72,7 +74,7 @@ const Borgonha = () => {
         <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
       )}
       {/* Barra de pesquisar */}
-      <Pesquisar onSearch={handleSearch} />
+      {/* <Pesquisar onSearch={handleSearch} /> */}
 
       {/* Vinhos */}
       <ScrollView vertical showsVerticalScrollIndicator={false}>
@@ -93,10 +95,8 @@ const Borgonha = () => {
           )}
         </View>
       </ScrollView>
-
-      {/* Menu */}
-      <Menu />
     </View>
+    </Content>
   );
 };
 
