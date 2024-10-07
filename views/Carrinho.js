@@ -12,7 +12,7 @@ const Carrinho = () => {
   const [total, setTotal] = useState(0.0);
   const { colors } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
-  const { findUser, currentUser, setCurrentUser } = useUser();
+  const { currentUser } = useUser();
 
   const calculateTotal = () => {
     console.log('Total Calculado...');

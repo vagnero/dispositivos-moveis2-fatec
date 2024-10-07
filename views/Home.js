@@ -13,7 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
 import WineCard from '../components/WineCard';
-import { useUser, addToCart } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 import winesData from '../components/Wines';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -23,11 +23,10 @@ const Home = () => {
   const [isPressedButton2, setIsPressedButton2] = useState(false);
   const [isPressedButton3, setIsPressedButton3] = useState(false);
   const [wines, setWines] = useState([]); // Estado para os vinhos
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [searchText, setSearchText] = useState('');
   const [filteredWines, setFilteredWines] = useState(wines);
-  const { currentUser, cartItems, updateCartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
+  const [selectedCategories] = useState([]);
   const [isSortedByPrice, setIsSortedByPrice] = useState(false);
   const [isSortedByRating, setIsSortedByRating] = useState(false);
   const [isSortedBySold, setIsSortedBySold] = useState(false);

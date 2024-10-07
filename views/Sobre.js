@@ -3,7 +3,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { ScrollView, Text, View, Image, Icon, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import { useUser, addToCart } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { handleAddToCart } from '../utils/cartUtils';
 import wines from '../components/Wines';
@@ -15,7 +15,7 @@ const Sobre = () => {
   const route = useRoute();
   const { wineName, winePrice, wineSigns, wineDescription, imageSource } = route.params;
   const navigation = useNavigation();
-  const { currentUser, cartItems, updateCartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
+  const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [favoriteWines, setFavoriteWines] = useState([]);
 

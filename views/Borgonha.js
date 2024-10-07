@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { Text, View, ScrollView } from 'react-native';
 import Content from '../components/Content';
-import Pesquisar from '../components/Pesquisar';
 import WineItem from '../components/WineItem';
 import Wines  from '../components/Wines';
 import { handleAddToCart } from '../utils/cartUtils';
@@ -73,8 +72,6 @@ const Borgonha = () => {
       {cartSuccessMessage && (
         <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
       )}
-      {/* Barra de pesquisar */}
-      {/* <Pesquisar onSearch={handleSearch} /> */}
 
       {/* Vinhos */}
       <ScrollView vertical showsVerticalScrollIndicator={false}>

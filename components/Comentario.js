@@ -1,6 +1,40 @@
+import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
+import { ThemeContext } from '../context/ThemeContext';
 
 const Comentario = ({ nome, data, texto }) => {
+  const { colors } = useContext(ThemeContext);
+
+  const styles = {
+    div_comentario: {
+      marginBottom: '1%',
+      marginTop: 20,
+    },
+  
+    div_text_comentario: {
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+  
+    text_nome: {
+      fontSize: 15,
+      color: 'black',
+      fontWeight: 'bold',
+      marginBottom: '2%',
+      
+    },
+  
+    text_data: {
+      fontSize: 13,
+      color: colors.textColor,
+      
+    },
+  
+    text_coment: {
+      fontSize: 13,
+      textAlign: 'justify'
+    }
+  };
 
   return (
     <View style={styles.div_comentario}>
@@ -11,40 +45,6 @@ const Comentario = ({ nome, data, texto }) => {
       <Text style={styles.text_coment}>{texto}</Text>
     </View>
   );
-};
-
-const styles = {
-  div_comentario: {
-    width: 330,
-    height: 100,
-    marginBottom: '1%'
-  },
-
-  div_text_comentario: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-
-  text_nome: {
-    fontSize: 15,
-    color: 'black',
-    fontWeight: 'bold',
-    marginLeft: '5%',
-    marginBottom: '2%'
-  },
-
-  text_data: {
-    fontSize: 13,
-    color: '#B3B3B3',
-    marginRight: '10%'
-  },
-
-  text_coment: {
-    width: 300,
-    marginLeft: '5%',
-    fontSize: 13,
-    textAlign: 'justify'
-  }
 };
 
 export default Comentario;

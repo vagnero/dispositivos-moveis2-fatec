@@ -1,13 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { useUser, addToCart } from '../context/UserContext';
-import { handleAddToCart } from '../utils/cartUtils';
-import wines from '../components/Wines';
 
 const WineItem = ({ imageSource, wineName, price, ml, handleAddToCart  }) => {
   const { colors } = useContext(ThemeContext);
-  const { currentUser, cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
 
   const styles = {
     div_vinho: {

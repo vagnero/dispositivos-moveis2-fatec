@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
-  // console.log('WineCard rendered with wine:', wine);
   const navigation = useNavigation();
   const { colors } = useContext(ThemeContext);
   const [soldCount, setSoldCount] = useState(wine.wineSold);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
-import { useUser } from '../context/UserContext';
 
 const Greeting = ({ name }) => {
   const { colors } = useContext(ThemeContext);

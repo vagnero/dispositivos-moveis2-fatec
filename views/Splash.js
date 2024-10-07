@@ -2,22 +2,22 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
 import { useUser } from '../context/UserContext';
-import { ProgressBar, Colors } from 'react-native-paper';
 import LoadingBar from '../components/LoadingBar';
 
 const Splash = () => {
   const { colors } = useContext(ThemeContext);
-  const [nome, setNome] = useState('Dev');
-  const [email, setEmail] = useState('dev');
-  const [senha, setSenha] = useState('');
-  const { registerUser } = useUser();
-  const [progress, setProgress] = useState(0);
+  const [nome] = useState('Dev');
+  const [email] = useState('dev');
+  const [senha] = useState('');
+  const { registerUser, setCurrentUser } = useUser();
 
   useEffect(() => {
     if (registerUser) {
       registerUser({ nome, email, senha });
     }
-  }, []);  
+    setCurrentUser(null)
+  }, []);
+
 
   const styles = StyleSheet.create({
     container: {

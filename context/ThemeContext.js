@@ -3,7 +3,6 @@ import React, { createContext, useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Temas from '../components/Temas'; // Ajuste o caminho conforme necessário
-import Header from '../components/Header';
 
 export const ThemeContext = createContext();
 
@@ -31,7 +30,6 @@ export const ThemeProvider = ({ children }) => {
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme, colors }}>
             <StatusBar backgroundColor={statusBarColor} barStyle={barStyle} />
-            {/* <Header /> */}
             {children}
         </ThemeContext.Provider>
     );

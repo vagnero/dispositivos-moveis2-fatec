@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Greeting from '../components/Greeting';
-import Pesquisar from '../components/Pesquisar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUser } from '../context/UserContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { ThemeContext } from '../context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
@@ -18,8 +16,6 @@ const Header = () => {
         header: {
             width: '100%',
             backgroundColor: colors.background,
-            // borderBottomLeftRadius: 10,
-            // borderBottomRightRadius: 10,
         },
 
         div_saudacao_pesquisar: {
@@ -66,7 +62,6 @@ const Header = () => {
                             )}
                         </TouchableOpacity>
                     </View>
-                    {/* <Pesquisar onSearch={handleSearch} /> */}
                 </View>
             </LinearGradient>
         </View>

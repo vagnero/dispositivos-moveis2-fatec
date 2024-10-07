@@ -12,9 +12,7 @@ const User = () => {
 
   const styles = {
     container: {
-      width: '100%',
-      height: '100%',
-      // backgroundColor: '#F6F5F5'
+      flex: 1,
     },
 
     div_perfil: {

@@ -21,7 +21,7 @@ const AvaliacaoFinal = () => {
     setTimeout(() => {
       setModalVisible(false);
       navigation.navigate('Home');
-    }, 2000);
+    }, 4000);
   };
 
   const styles = {
@@ -83,8 +83,7 @@ const AvaliacaoFinal = () => {
       backgroundColor: 'rgba(0,0,0,0.5)'
     },
     modalContent: {
-      width: 200,
-      height: 100,
+      padding: 10,
       backgroundColor: 'white',
       borderRadius: 10,
       justifyContent: 'center',
@@ -139,7 +138,7 @@ const AvaliacaoFinal = () => {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Sucesso</Text>
+              <Text style={styles.modalText}>Obrigado por sua Avaliação, sua opnião é muito importante para nos!</Text>
             </View>
           </View>
         </Modal>

@@ -1,5 +1,3 @@
-// Login.js
-
 import React, { useState, useContext } from 'react';
 import { Text, View, SafeAreaView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Checkbox } from 'react-native-paper';
@@ -40,7 +38,7 @@ const Login = () => {
   const styles = StyleSheet.create({
     container: {
       width: '100%',
-      height: '95%',
+      height: '100%',
       backgroundColor: colors.background,
     },
 

@@ -9,8 +9,8 @@ const Avaliacoes = () => {
 
   const styles = {
     container: {
-      width: '100%',
-      height: '100%',
+      flex: 1,
+      padding: 10,
       backgroundColor: colors.wineCardBackground,
     },
 
@@ -89,11 +89,9 @@ const Avaliacoes = () => {
   return (
     <Content>
       <View style={styles.container}>
-
-        <Text style={styles.text_title}> Avaliações </Text>
-
-        <View style={{ flexDirection: 'column', flexWrap: 'wrap', alignItems: 'center', marginBottom: '45%' }}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={styles.text_title}>  Avaliações</Text>        
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}  
+          style={{ flex: 1, marginBottom: 50 }}>
 
             <Comentario
               nome='Audrey'
@@ -135,9 +133,7 @@ const Avaliacoes = () => {
               data='12/04/2024'
               texto='Um vinho leve e refrescante com notas de framboesa e melancia. Perfeito para um dia quente, mas pode ser um pouco simples para paladares mais exigentes.'
             />
-
-          </ScrollView>
-        </View>
+          </ScrollView>        
       </View>
     </Content>
   );

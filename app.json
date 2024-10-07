@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Vinoteca",
+    "name": "vinoteca",
     "slug": "snack-48960f71-d54f-48e5-b60f-eb3c8099aff4",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.protoon.vinoteca"
+      "package": "com.wesleypauloti.snack48960f71d54f48e5b60feb3c8099aff4"
     },
     "web": {
       "favicon": "./assets/favicon.png"
