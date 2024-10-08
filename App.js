@@ -68,7 +68,7 @@ const MainNavigator = ({ isSplashReady }) => {
       {isSplashReady ? (
         <>        
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} options={{ header: ({ route }) => <Header route={route} /> }} />
+          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
           <Stack.Screen name="Bordeaux" component={Bordeaux} />
