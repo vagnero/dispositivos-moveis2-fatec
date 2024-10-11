@@ -5,6 +5,8 @@ import ItemCarrinho from '../components/ItemCarrinho';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
+import AlertModal from '../components/AlertModal';
+import * as SecureStore from 'expo-secure-store';
 
 const Carrinho = () => {
   const navigation = useNavigation();
@@ -12,17 +14,16 @@ const Carrinho = () => {
   const [total, setTotal] = useState(0.0);
   const { colors } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const { currentUser } = useUser();
 
   const calculateTotal = () => {
-    console.log('Total Calculado...');
     let total = 0;
     cartItems.forEach((item) => {
       // Remover caracteres não numéricos, exceto o ponto decimal
       const priceString = item.winePrice.replace(/[^\d.,-]/g, '').replace(',', '.');
       const price = parseFloat(priceString);
       const quantity = item.quantity;
-      console.log(`Item: ${item.wineName}, Preço: ${price}, Quantidade: ${quantity}`);
 
       if (isNaN(price) || isNaN(quantity)) {
         console.error(`Valor inválido detectado - Preço: ${price}, Quantidade: ${quantity}`);
@@ -31,7 +32,6 @@ const Carrinho = () => {
 
       total += price * quantity;
     });
-    console.log('Total calculado:', total);
     setTotal(total);
   };
 
@@ -49,12 +49,37 @@ const Carrinho = () => {
     }
   }, [cartSuccessMessage]);
 
-  const handleFinalizeOrder = () => {
+  const handleFinalizeOrder = async () => {
     if (cartItems.length === 0 || total === 0) {
-      Alert.alert("Carrinho Vazio", "Seu carrinho está vazio. Adicione itens antes de prosseguir.");
+      // Alert.alert("Carrinho Vazio", "Seu carrinho está vazio. Adicione itens antes de prosseguir.");
+      handleOpenModal()
     } else if (currentUser) {
-      setCartItems([]);
-      navigation.navigate('AvaliacaoFinal'); // Usuário logado
+      // Atualizar o wineSold no SecureStore
+      try {
+        const winesString = await SecureStore.getItemAsync('wines');
+        const winesArray = winesString ? JSON.parse(winesString) : [];
+
+        // Atualiza o wineSold para cada item no carrinho
+        cartItems.forEach(item => {
+          const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
+          if (storedWine) {
+            // Incrementa a quantidade vendida
+            console.log('Quantidade vendida de ', storedWine.wineName, ': ', storedWine.wineSold)
+            console.log('Quantidade incrementada: ', item.quantity)
+            storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
+          }
+        });
+
+        // Salva os vinhos atualizados de volta ao SecureStore
+        await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
+
+        // Limpa o carrinho
+        setCartItems([]);
+        navigation.navigate('AvaliacaoFinal'); // Usuário logado
+      } catch (error) {
+        console.error('Erro ao atualizar o carrinho:', error);
+        Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
+      }
     } else {
       setModalVisible(true); // Usuário não logado, abre o modal
     }
@@ -68,6 +93,14 @@ const Carrinho = () => {
 
   const handleCancel = () => {
     setModalVisible(false); // Fecha o modal
+  };
+
+  const handleOpenModal = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible2(false);
   };
 
   const styles = {
@@ -151,24 +184,24 @@ const Carrinho = () => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fundo do modal
-    },    modalContent: {
+    }, modalContent: {
       width: 300,
       padding: 20,
       backgroundColor: 'white',
       borderRadius: 10,
       alignItems: 'center',
-    },    modalText: {
+    }, modalText: {
       marginBottom: 20,
       textAlign: 'center',
-    },    modalButtons: {
+    }, modalButtons: {
       flexDirection: 'row',
       justifyContent: 'space-around',
       width: '100%',
-    },    modalButton: {
+    }, modalButton: {
       padding: 10,
       backgroundColor: '#2196F3',
       borderRadius: 5,
-    },    modalButtonText: {
+    }, modalButtonText: {
       color: 'white',
     },
   };
@@ -204,6 +237,12 @@ const Carrinho = () => {
         <TouchableOpacity style={styles.button_finalizar_pedido} onPress={handleFinalizeOrder}>
           <Text style={styles.text_pedido}>FINALIZAR PEDIDO</Text>
         </TouchableOpacity>
+        <AlertModal
+        visible={modalVisible2}
+        message="Seu carrinho está vazio. Adicione itens antes de prosseguir."
+        onClose={handleCloseModal}
+      />
+
         <Modal
           transparent={true}
           animationType="slide"

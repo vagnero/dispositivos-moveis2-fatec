@@ -6,10 +6,10 @@ import LoadingBar from '../components/LoadingBar';
 
 const Splash = () => {
   const { colors } = useContext(ThemeContext);
+  const { registerUser, setCurrentUser } = useUser();
   const [nome] = useState('Dev');
   const [email] = useState('dev');
   const [senha] = useState('');
-  const { registerUser, setCurrentUser } = useUser();
 
   useEffect(() => {
     if (registerUser) {

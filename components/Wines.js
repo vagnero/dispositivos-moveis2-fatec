@@ -7,7 +7,7 @@ const Wines = [
       ml: '750ml',
       wineDescription: 'Um vinho equilibrado e robusto, com notas de frutas vermelhas.',
       imageSource: require('../assets/home/vinho1.png'),
-      wineSold: 124,
+      wineSold: 123,
     },
     {
       wineName: 'Cazauvielho Bordeaux',

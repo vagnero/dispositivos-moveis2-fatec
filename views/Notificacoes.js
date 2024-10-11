@@ -8,6 +8,8 @@ const Notificacoes = () => {
 
     const styles = StyleSheet.create({
         container: {
+            marginTop: 20,
+            marginBottom: 20,
             flex: 1, // Garante que o container ocupe toda a altura disponível
         },
         content: {
@@ -33,7 +35,8 @@ const Notificacoes = () => {
     return (
         <Content>
             <View style={styles.container}>
-                <ScrollView contentContainerStyle={styles.content}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}
+                    style={{ flex: 1, marginBottom: 50 }}>
                     {Array.from({ length: 20 }).map((_, index) => (
                         <TouchableOpacity key={index} style={styles.card}>
                             <Text style={styles.msg}>Cupom de Desconto {index + 1}</Text>

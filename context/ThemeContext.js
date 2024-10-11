@@ -1,7 +1,7 @@
 // ThemeContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import Temas from '../components/Temas'; // Ajuste o caminho conforme necessário
 
 export const ThemeContext = createContext();
@@ -11,16 +11,24 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         const loadTheme = async () => {
-            const savedTheme = await AsyncStorage.getItem('theme');
-            setTheme(savedTheme || 'dark');
+            try {
+                const savedTheme = await SecureStore.getItemAsync('theme'); 
+                setTheme(savedTheme || 'dark');
+            } catch (error) {
+
+            }
         };
         loadTheme();
     }, []);
-
+    
     const toggleTheme = async () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
-        await AsyncStorage.setItem('theme', newTheme);
+        try {            
+            await SecureStore.setItemAsync('theme', newTheme); // Usando SecureStore
+        } catch (error) {
+            
+        }
     };
 
     const colors = theme === 'light' ? Temas.light : Temas.dark;

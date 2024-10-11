@@ -128,6 +128,9 @@ const RedefinirSenha = () => {
         <TouchableOpacity style={styles.button_senha} onPress={handleMessage}>
           <Text style={styles.text_senha}>ENVIAR NOVA SENHA</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button_senha} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.text_senha}>Voltar</Text>
+        </TouchableOpacity>
         </View>
       </View>
   );

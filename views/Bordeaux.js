@@ -12,18 +12,8 @@ const Bordeaux = () => {
   const { cartItems, setCartItems, cartSuccessMessage, setCartSuccessMessage } = useUser();
 
   const [filteredWines, setFilteredWines] = useState(
-    Wines.filter((wine) => wine.wineCategory === 'Bordeaux')
-  );
-
-  const handleSearch = (searchText) => {
-    // Filtrar com base na busca
-    const filtered = Wines.filter(
-      (wine) =>
-        wine.wineCategory === 'Bordeaux' &&
-        wine.wineName.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFilteredWines(filtered);
-  };
+    Wines.filter((wine) => wine.wineCategory === 'Bordeaux') 
+  );  
 
   const styles = {
     container: {

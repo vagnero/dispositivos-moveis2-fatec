@@ -1,11 +1,19 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useUser } from '../context/UserContext';
+import { FontAwesome } from 'react-native-vector-icons';
 
 const Menu = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const { colors } = useContext(ThemeContext);
+  const { currentUser } = useUser();
+
+  const getIconColor = (routeName) => {
+    return route.name === routeName ? 'blue' : colors.iconColor; // Troque 'blue' pela cor desejada para a rota ativa
+  };
 
   const styles = {
     div_menu: {
@@ -24,14 +32,23 @@ const Menu = () => {
   return (
     <View style={styles.div_menu}>
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <Image source={require('../assets/home/grid.png')} tintColor={ colors.iconColor }/>
+        <FontAwesome name="th-large" size={24} color={getIconColor('Home')} />
       </TouchableOpacity>
+
       <TouchableOpacity onPress={() => navigation.navigate('Carrinho')}>
-        <Image source={require('../assets/home/shopping-cart.png')} tintColor={ colors.iconColor }/>
+        <FontAwesome name="shopping-cart" size={24} color={getIconColor('Carrinho')} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('User')}>
-        <Image source={require('../assets/home/user.png')} tintColor={ colors.iconColor }/>
-      </TouchableOpacity>
+
+      {currentUser ? (
+        <TouchableOpacity onPress={() => navigation.navigate('User')}>
+          <FontAwesome name="user" size={24} color={getIconColor('User')} />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <FontAwesome name="sign-in" size={24} color={getIconColor('Login')} />
+        </TouchableOpacity>
+      )
+      }
     </View>
   );
 };

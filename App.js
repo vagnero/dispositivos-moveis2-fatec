@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from './context/ThemeContext';
-import { StatusBar } from 'react-native';
 
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';

@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { handleAddToCart } from '../utils/cartUtils';
 import wines from '../components/Wines';
 import Content from '../components/Content';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 const Sobre = () => {
   const { colors } = useContext(ThemeContext);
@@ -19,68 +19,77 @@ const Sobre = () => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [favoriteWines, setFavoriteWines] = useState([]);
 
+// Função para alternar o vinho favorito
+const toggleHeart = async (wine) => {
+  if (isWineFavorite(wine)) {
+    // Remove o vinho dos favoritos
+    const updatedFavorites = favoriteWines.filter((favWine) => favWine.wineName !== wine.wineName);
+    setFavoriteWines(updatedFavorites);
+    await saveFavoriteWines(updatedFavorites); // Salva os favoritos atualizados
+  } else {
+    // Adiciona o vinho aos favoritos
+    const updatedFavorites = [...favoriteWines, wine];
+    setFavoriteWines(updatedFavorites);
+    await saveFavoriteWines(updatedFavorites); // Salva os favoritos atualizados
+  }
 
-  const toggleHeart = (wine) => {
-    if (isWineFavorite(wine)) {
-      // Remove o vinho dos favoritos
-      setFavoriteWines(favoriteWines.filter((favWine) => favWine.wineName !== wine.wineName));
-    } else {
-      // Adiciona o vinho aos favoritos
-      setFavoriteWines([...favoriteWines, wine]);
-    }
+  setIsHeartFilled(!isHeartFilled); // Alterna o ícone do coração
+};
 
-    setIsHeartFilled(!isHeartFilled); // Alterna o ícone do coração
+// Verifica se o vinho já é favorito
+const isWineFavorite = (wine) => {
+  return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
+};
+
+// Salva os vinhos favoritos no SecureStore
+const saveFavoriteWines = async (wines) => {
+  try {
+    const jsonValue = JSON.stringify(wines);
+    await SecureStore.setItemAsync('favorite_wines', jsonValue);
+  } catch (e) {
+
+  }
+};
+
+// Carrega os vinhos favoritos do SecureStore
+const loadFavoriteWines = async () => {
+  try {
+    const jsonValue = await SecureStore.getItemAsync('favorite_wines');
+    return jsonValue != null ? JSON.parse(jsonValue) : [];
+  } catch (e) {
+
+    return [];
+  }
+};
+
+// Use o efeito para carregar os favoritos ao iniciar
+useEffect(() => {
+  const fetchFavorites = async () => {
+    const storedFavorites = await loadFavoriteWines();
+    setFavoriteWines(storedFavorites);
   };
 
-  // Verifica se o vinho já é favorito
-  const isWineFavorite = (wine) => {
-    return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
-  };
+  fetchFavorites();
+}, []);
 
-  // Salva os vinhos favoritos no armazenamento local
-  const saveFavoriteWines = async (wines) => {
-    try {
-      const jsonValue = JSON.stringify(wines);
-      await AsyncStorage.setItem('@favorite_wines', jsonValue);
-    } catch (e) {
-      console.error('Erro ao salvar favoritos:', e);
-    }
-  };
+// Atualize os favoritos sempre que houver uma mudança
+useEffect(() => {
+  saveFavoriteWines(favoriteWines);
+}, [favoriteWines]);
 
-  // Carrega os vinhos favoritos do armazenamento local
-  const loadFavoriteWines = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@favorite_wines');
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
-    } catch (e) {
-      console.error('Erro ao carregar favoritos:', e);
-      return [];
-    }
-  };
-
-  // Use o efeito para carregar os favoritos ao iniciar
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      const storedFavorites = await loadFavoriteWines();
-      setFavoriteWines(storedFavorites);
-    };
-
-    fetchFavorites();
-  }, []);
-
-  // Atualize os favoritos sempre que houver uma mudança
-  useEffect(() => {
-    saveFavoriteWines(favoriteWines);
-  }, [favoriteWines]);
 
   const styles = {
+    content: {
+      flex: 1,
+    },
+
     div_image: {
       alignItems: 'center'
     },
 
     image_vinho: {
-      width: 300,
-      height: 300
+      width: 250,
+      height: 250
     },
 
     container_informacoes: {
@@ -214,9 +223,8 @@ const Sobre = () => {
   };
 
   return (
-    <Content>
-      <ScrollView>
-        <View>
+    <Content>      
+        <View style={styles.content}>
           <View style={styles.div_image}>
             <Image source={imageSource} style={styles.image_vinho} />
           </View>
@@ -264,8 +272,7 @@ const Sobre = () => {
           <View style={styles.successMessageContainer}>
             <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
           </View>
-        )}
-      </ScrollView>
+        )}      
     </Content>
   );
 };

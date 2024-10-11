@@ -10,12 +10,12 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Content from '../components/Content';
 import WineCard from '../components/WineCard';
 import { useUser } from '../context/UserContext';
 import winesData from '../components/Wines';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 const Home = () => {
   const { colors } = useContext(ThemeContext);
@@ -47,22 +47,46 @@ const Home = () => {
     }
   }, [searchText, selectedCategories, wines]); // Adicionando wines como dependência
 
-  useEffect(() => {
-    const loadWines = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('wines');
-        const loadedWines = jsonValue != null ? JSON.parse(jsonValue) : winesData; // Carrega do AsyncStorage ou usa os dados iniciais
-        setWines(loadedWines);
-        setFilteredWines(loadedWines); // Atualiza a lista filtrada com os vinhos carregados
-      } catch (e) {
-        console.error('Erro ao carregar os vinhos:', e);
-        setWines(winesData); // Fallback para dados iniciais em caso de erro
-        setFilteredWines(winesData);
-      }
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsPressedButton1(false);
+      setIsPressedButton2(false);
+      setIsPressedButton3(false);
+      const loadWines = async () => {
+        try {
+          // Carrega os valores do SecureStore (wineName, wineSigns e wineSold)
+          const jsonValue = await SecureStore.getItemAsync('wines');
+          const loadedWines = jsonValue != null ? JSON.parse(jsonValue) : [];
 
-    loadWines(); // Chama a função para carregar os vinhos
-  }, []);
+          // Agora vamos mesclar com winesData (que tem os outros atributos)
+          const mergedWines = winesData.map(wineDataItem => {
+            // Procura se este wineDataItem existe no SecureStore carregado
+            const storedWine = loadedWines.find(stored => stored.wineName === wineDataItem.wineName);
+
+            // Se encontrar no SecureStore, substitui wineName, wineSigns, e wineSold
+            return storedWine
+              ? { ...wineDataItem, ...storedWine } // Mescla dados de winesData com o que veio do storage
+              : wineDataItem; // Caso contrário, mantém o dado original de winesData
+          });
+
+          // Atualiza os estados com os vinhos mesclados
+          setWines(mergedWines);
+          setFilteredWines(mergedWines); // Atualiza a lista filtrada com os vinhos mesclados
+
+        } catch (e) {
+          console.error('Erro ao carregar os vinhos:', e);
+          // Fallback para winesData caso haja erro
+          setWines(winesData);
+          setFilteredWines(winesData);
+        }
+      };
+
+      loadWines(); // Chama a função para carregar e mesclar os vinhos
+
+      // Retorno opcional para limpar ou desativar algo quando a tela perde o foco
+      return () => { };
+    }, [])
+  );
 
   const handlePressButton1 = () => {
     setIsPressedButton1(!isPressedButton1);
@@ -113,7 +137,9 @@ const Home = () => {
     if (!isSortedBySold) {
       // Ordenar por quantidade vendida
       const sortedWinesBySold = [...wines].sort((a, b) => {
-        return b.wineSold - a.wineSold; // Ordena do maior para o menor
+        const soldA = parseInt(a.wineSold, 10); // Certifica-se de que é um número
+        const soldB = parseInt(b.wineSold, 10); // Certifica-se de que é um número
+        return soldB - soldA; // Ordena do maior para o menor
       });
 
       setFilteredWines(sortedWinesBySold); // Atualiza a lista filtrada
@@ -160,7 +186,7 @@ const Home = () => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
+      padding: 10,
     },
 
     div_pesquisar: {

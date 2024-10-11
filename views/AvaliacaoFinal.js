@@ -138,7 +138,7 @@ const AvaliacaoFinal = () => {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Obrigado por sua Avaliação, sua opnião é muito importante para nos!</Text>
+              <Text style={styles.modalText}>Obrigado por sua Avaliação, sua opnião é muito importante para nós!</Text>
             </View>
           </View>
         </Modal>

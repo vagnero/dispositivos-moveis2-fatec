@@ -1,10 +1,13 @@
-import React, { useState, useContext } from 'react';
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useContext, useCallback } from 'react';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { BackHandler, Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
 import Header2 from '../components/Header2';
 import { ThemeContext } from '../context/ThemeContext';
+import * as SecureStore from 'expo-secure-store';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,17 +19,41 @@ const Login = () => {
   const { findUser, setCurrentUser } = useUser(); // Remova registerUser do destructuring
   const { colors } = useContext(ThemeContext);
 
-  const handleLogin = () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      // Cria uma função assíncrona dentro do efeito
+      async function fetchEmail() {
+        try {
+          const emailSalvo = await SecureStore.getItemAsync('userEmail');
+          if (emailSalvo) {
+            setEmail(emailSalvo); // Seta o email salvo
+          } else {
+            setEmail('')
+          }
+        } catch (error) {
+          console.log('Erro ao buscar email salvo:', error);
+        }
+      }
+  
+      // Chama a função assíncrona
+      fetchEmail();
+    }, [])
+  );
+  
+
+  const handleLogin = async () => {
     const user = findUser(email, senha);
     if (user) {
       setLoginSucesso(true);
       setCurrentUser(user);
       setMensagemErro('');
+      if (salvarEmail) {
+        await SecureStore.setItemAsync('userEmail', email);
+      } else {
+        await SecureStore.deleteItemAsync('userEmail');
+      }
       setTimeout(() => {
         navigation.navigate('Home');
-        if (!salvarEmail) {
-          setEmail(''); // Limpa o email se a checkbox não estiver marcada
-        }
         setSenha('');
         setLoginSucesso(false);
       }, 2000);
@@ -34,6 +61,36 @@ const Login = () => {
       setMensagemErro('Credenciais Inválidas');
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (salvarEmail) {
+        
+      }
+      const onBackPress = () => {
+        // Aqui você pode exibir um alerta se necessário ou simplesmente desativar a ação
+        // Exemplo de um alerta que confirma a saída do app
+        Alert.alert(
+          'Atenção',
+          'Você quer sair do aplicativo?',
+          [
+            { text: 'Cancelar', onPress: () => null, style: 'cancel' },
+            { text: 'Sim', onPress: () => BackHandler.exitApp() }, // Sai do app
+          ],
+          { cancelable: false }
+        );
+        return true; // Bloqueia o botão de voltar
+      };
+
+      // Adiciona o listener para o botão de voltar
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      // Remove o listener quando a tela perder o foco ou desmontar
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+
 
   const styles = StyleSheet.create({
     container: {

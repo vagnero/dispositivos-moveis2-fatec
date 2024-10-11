@@ -2,29 +2,63 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import winesData from '../components/Wines';
 
 const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
   const navigation = useNavigation();
   const { colors } = useContext(ThemeContext);
-  const [soldCount, setSoldCount] = useState(wine.wineSold);
+  const [soldCount, setSoldCount] = useState();
 
   useEffect(() => {
     const fetchWines = async () => {
       try {
-        const winesString = await AsyncStorage.getItem('wines');
+        const winesString = await SecureStore.getItemAsync('wines');
         const winesArray = winesString ? JSON.parse(winesString) : [];
-        const updatedWine = winesArray.find(item => item.wineName === wine.wineName);
-        if (updatedWine) {
-          setSoldCount(updatedWine.wineSold);
+        const storedWine = winesArray.find(item => item.wineName === wine.wineName);
+  
+        // Se encontrar o vinho no SecureStore, utilize os dados armazenados
+        if (storedWine) {
+          setSoldCount(storedWine.wineSold);
+          // Pega os dados restantes do winesData
+          const matchingWine = winesData.find(item => item.wineName === wine.wineName);
+          if (matchingWine) {
+            wine.imageSource = matchingWine.imageSource;
+            wine.winePrice = matchingWine.winePrice;          
+          }
+        } else {
+          // Se não houver dados no SecureStore, pega diretamente do winesData
+          const matchingWine = winesData.find(item => item.wineName === wine.wineName);
+          if (matchingWine) {
+            setSoldCount(matchingWine.wineSold || 0); // Use 0 se não houver 'wineSold'
+            wine.imageSource = matchingWine.imageSource; // Pega a imagem do vinho
+            wine.winePrice = matchingWine.winePrice; // Pega o preço do vinho
+          }
         }
       } catch (error) {
-        console.error('Erro ao carregar os vinhos:', error);
+        console.error('Erro ao carregar vinhos:', error);
       }
     };
-
     fetchWines();
-  }, [wine.wineName]);
+  }, [wine.wineName, wine.wineSold]);
+
+  useEffect(() => {
+    const checkAndSaveWines = async () => {
+      try {
+        const winesString = await SecureStore.getItemAsync('wines');
+        
+        // Verifica se já existem dados salvos
+        if (!winesString) {
+          // Se não houver dados, salve os dados iniciais
+          await saveWines(winesData);
+        }
+      } catch (error) {
+        console.error('Erro ao verificar os vinhos no SecureStore:', error);
+      }
+    };
+  
+    checkAndSaveWines();
+  }, []);
 
   const styles = {
     div_vinho: {
@@ -106,5 +140,22 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
     </View>
   );
 };
+
+
+
+// Função para salvar os vinhos
+const saveWines = async (winesData) => {
+  try {
+    // Filtra os dados para salvar apenas wineName e wineSold
+    const filteredData = winesData.map(({ wineName, wineSigns, wineSold }) => ({ wineName, wineSigns, wineSold }));
+
+    // Converte o array filtrado para uma string JSON e salva no SecureStore
+    await SecureStore.setItemAsync('wines', JSON.stringify(filteredData));
+  } catch (error) {
+    console.error('Erro ao salvar os vinhos:', error);
+  }
+};
+
+
 
 export default WineCard;

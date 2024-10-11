@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import Content from '../components/Content';
 import WineCard from '../components/WineCard';
 import { ThemeContext } from '../context/ThemeContext';
@@ -12,13 +12,13 @@ const Favoritos = () => {
   const { currentUser, cartItems, updateCartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
   const { colors } = useContext(ThemeContext);
 
-  // Função para carregar os favoritos salvos do AsyncStorage
+  // Função para carregar os favoritos salvos do SecureStorage
   const loadFavoriteWines = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@favorite_wines');
+      const jsonValue = await SecureStore.getItemAsync('favorite_wines');
       return jsonValue != null ? JSON.parse(jsonValue) : [];
     } catch (e) {
-      console.error('Erro ao carregar favoritos:', e);
+
       return [];
     }
   };
@@ -37,7 +37,7 @@ const Favoritos = () => {
   const removeFavoriteWine = async (wineToRemove) => {
     const updatedFavorites = favoriteWines.filter(wine => wine.wineName !== wineToRemove.wineName);
     setFavoriteWines(updatedFavorites);
-    await AsyncStorage.setItem('@favorite_wines', JSON.stringify(updatedFavorites));
+    await SecureStore.setItemAsync('favorite_wines', JSON.stringify(updatedFavorites));
   };
 
   const handleAddToCart = (item) => {
@@ -95,7 +95,8 @@ const Favoritos = () => {
       flexDirection: 'row',
       borderRadius: 10,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
+      padding: 10,
     },
 
     msg: {
@@ -109,7 +110,8 @@ const Favoritos = () => {
 
   return (
     <Content>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}  
+          style={{ flex: 1, marginBottom: 50 }}>
         <View style={styles.content}>
           <Text style={styles.title}>Seus Vinhos Favoritos</Text>
           {cartSuccessMessage && (

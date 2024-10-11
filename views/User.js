@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import Menu from '../components/Menu';
 import PrefItem from '../components/PrefItem';
 import { useUser } from '../context/UserContext';
@@ -7,8 +7,20 @@ import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 
 const User = () => {
-  const { theme, toggleTheme, colors } = useContext(ThemeContext);
-  const { currentUser } = useUser();
+  const { colors } = useContext(ThemeContext);
+  const { currentUser, setCurrentUser } = useUser();
+
+  const handleLogout = () => {
+    setCurrentUser(null); // Limpa o usuário atual
+    setMensagemErro(''); // Opcional: limpa a mensagem de erro se for necessário
+  
+    // Redireciona para a tela de login
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  };
+  
 
   const styles = {
     container: {
@@ -85,7 +97,7 @@ const User = () => {
           <PrefItem
             iconSource={require('../assets/user/sino.png')}
             text="Notificações"
-            view="Home"
+            view="Notificacoes"
           />
           <PrefItem
             iconSource={require('../assets/user/grid.png')}
@@ -102,11 +114,14 @@ const User = () => {
             text="Configurações"
             view="Home"
           />
-          <PrefItem
-            iconSource={require('../assets/user/Logout.png')}
-            text="Sair"
-            view="Login"
-          />
+          <TouchableOpacity onPress={handleLogout}
+          style={{ marginTop: 20 }}>
+            <PrefItem
+              iconSource={require('../assets/user/Logout.png')}
+              text="Sair"
+              view="Login"
+            />
+          </TouchableOpacity>
         </View>
         <Menu />
       </View>
