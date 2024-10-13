@@ -10,7 +10,7 @@ const Avaliacoes = () => {
   const { colors } = useContext(ThemeContext);
 
   const [avaliacoes, setAvaliacoes] = useState([
-    { nome: 'Audrey', rate: 4, data: '25/08/2024', texto: 'Um vinho robusto com notas de frutas vermelhas e um toque de especiarias. Excelente para acompanhar carnes vermelhas e queijos maturados. Um verdadeiro achado!' },
+    { nome: 'Audrey', rate: 4, data: '25/08/2024', texto: 'Minha experiência com o app foi incrível! A navegação é super intuitiva e rápida, com categorias bem organizadas e sugestões personalizadas. Encontrei facilmente um vinho robusto com notas de frutas vermelhas e toque de especiarias, perfeito para harmonizar com carnes e queijos. O processo de compra foi simples e seguro, e recebi atualizações do pedido em tempo real. Com certeza, voltarei a usar o app para futuras compras!' },
     { nome: 'José Leandro', rate: 4, data: '22/08/2024', texto: 'Fresco e vibrante, com aromas de maçã verde e limão. Perfeito para uma tarde de verão ou para acompanhar pratos leves como saladas e frutos do mar.' },
     { nome: 'Vagner', rate: 4, data: '01/08/2024', texto: 'Um rosé elegante, com sabor suave de morango e um final refrescante. Ideal para um brunch ou para uma tarde relaxante com amigos.' },
     { nome: 'Wesley Paulo', rate: 4, data: '20/06/2024', texto: 'Bolhas finas e persistentes com um sabor refrescante de pêssego e maçã. Uma escolha excelente para celebrações e ocasiões especiais.' },
@@ -21,7 +21,7 @@ const Avaliacoes = () => {
   ]);
 
   const [comments, setComments] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(10);
   const [showFullText, setShowFullText] = useState({});
 
   const formatDate = (date) => {

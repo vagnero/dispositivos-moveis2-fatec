@@ -26,7 +26,6 @@ const Carrinho = () => {
       const quantity = item.quantity;
 
       if (isNaN(price) || isNaN(quantity)) {
-        console.error(`Valor inválido detectado - Preço: ${price}, Quantidade: ${quantity}`);
         return;
       }
 
@@ -64,8 +63,6 @@ const Carrinho = () => {
           const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
           if (storedWine) {
             // Incrementa a quantidade vendida
-            console.log('Quantidade vendida de ', storedWine.wineName, ': ', storedWine.wineSold)
-            console.log('Quantidade incrementada: ', item.quantity)
             storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
           }
         });
