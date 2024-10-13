@@ -1,9 +1,13 @@
-import { useState, useContext } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Modal } from 'react-native';
+import { useState, useContext, useEffect } from 'react';
+import { Text, View, TouchableOpacity, TextInput, Modal, FlatList, KeyboardAvoidingView, Platform, Alert  } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
 import { ThemeContext } from '../context/ThemeContext';
+import { db } from '../config/firebaseConfig';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
+import { useUser } from '../context/UserContext';
 
 const AvaliacaoFinal = () => {
   const [rating, setRating] = useState(0);
@@ -11,12 +15,71 @@ const AvaliacaoFinal = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const { colors } = useContext(ThemeContext);
+  const [comments, setComments] = useState([]);
+  const { currentUser } = useUser();
+  const [name, setName] = useState(currentUser.nome);
+
+  const addComment = async () => {
+    if (name === '' || comment.trim() === '') {
+      Alert.alert('Erro', 'O comentário não podem estar vazio!');
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'comments'), {
+        name: name,
+        comment: comment,
+        date: Timestamp.now(),
+        rating: rating,
+      });
+      const newComment = {
+        name: name,
+        comment: comment,
+        date: { seconds: Date.now() / 1000 }, // Use o timestamp atual
+        rating: rating,
+      };
+      setComments([newComment]);
+
+      setName('');
+      setComment('');
+      fetchComments(); // Chama a função para buscar os comentários atualizados
+      setModalVisible(true); // Exibe a modal após adicionar o comentário
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error);
+    }
+  };
+
+  // Função para buscar comentários
+  const fetchComments = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'comments'));
+      const fetchedComments = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return { id: doc.id, ...data, date: data.date ? data.date : { seconds: Date.now() / 1000 } }; // Verifique se 'date' existe
+      });
+      
+      // Exibe apenas o último comentário
+      if (fetchedComments.length > 0) {
+        setComments([fetchedComments[fetchedComments.length - 1]]);
+      } else {
+        setComments([]); // Se não houver comentários, definir como vazio
+      }
+    } catch (error) {
+      console.error("Erro ao buscar comentários:", error);
+    }
+  };
+  
+  // Carregar comentários ao montar o componente
+  useEffect(() => {
+    fetchComments();
+  }, []);  
 
   const handleRating = (newRating) => {
     setRating(newRating);
   };
 
   const handleSubmit = () => {
+    addComment()
     setModalVisible(true);
     setTimeout(() => {
       setModalVisible(false);
@@ -83,6 +146,7 @@ const AvaliacaoFinal = () => {
       backgroundColor: 'rgba(0,0,0,0.5)'
     },
     modalContent: {
+      width: '80%',
       padding: 10,
       backgroundColor: 'white',
       borderRadius: 10,
@@ -91,6 +155,8 @@ const AvaliacaoFinal = () => {
     },
     modalText: {
       fontSize: 20,
+      padding: 10,
+      textAlign: 'center',
       fontWeight: 'bold',
       color: '#2D0C57'
     }
@@ -98,51 +164,54 @@ const AvaliacaoFinal = () => {
 
   return (
     <Content>
-      <View style={styles.div_container}>
-        <Text style={styles.text_title}>Avaliação</Text>
-        <Text style={styles.text_subtitle}>Avalie a sua experiência na plataforma e com a compra.</Text>
-
-        <View style={styles.starsContainer}>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <TouchableOpacity key={star} onPress={() => handleRating(star)}>
-              <FontAwesome
-                name={star <= rating ? 'star' : 'star-o'}
-                size={40}
-                color={star <= rating ? '#FFD700' : '#CCCCCC'}
-                style={styles.star}
-              />
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <TextInput
-          style={styles.textInput}
-          multiline
-          numberOfLines={4}
-          placeholder="Deixe seu comentário aqui..."
-          value={comment}
-          onChangeText={setComment}
-        />
-
-        <TouchableOpacity style={styles.button_enviar} onPress={handleSubmit}>
-          <Text style={styles.text_enviar}>ENVIAR</Text>
-        </TouchableOpacity>
-
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Obrigado por sua Avaliação, sua opnião é muito importante para nós!</Text>
-            </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"} >
+        <View style={styles.div_container}>
+          <Text style={styles.text_title}>Avaliação</Text>
+          <Text style={styles.text_subtitle}>Avalie a sua experiência na plataforma e com a compra.</Text>
+          <View style={styles.starsContainer}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <TouchableOpacity key={star} onPress={() => handleRating(star)}>
+                <FontAwesome
+                  name={star <= rating ? 'star' : 'star-o'}
+                  size={40}
+                  color={star <= rating ? '#FFD700' : '#CCCCCC'}
+                  style={styles.star}
+                />
+              </TouchableOpacity>
+            ))}
           </View>
-        </Modal>
-      </View>
+
+          <TextInput
+            style={styles.textInput}
+            multiline
+            numberOfLines={4}
+            placeholder="Deixe seu comentário aqui..."
+            value={comment}
+            onChangeText={setComment}
+          />
+
+          <TouchableOpacity style={styles.button_enviar} onPress={handleSubmit}>
+            <Text style={styles.text_enviar}>ENVIAR</Text>
+          </TouchableOpacity>
+
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalText}>Obrigado por sua Avaliação, sua opnião é muito importante para nós!</Text>
+              </View>
+            </View>
+          </Modal>          
+        </View>
+      </KeyboardAvoidingView>
     </Content>
   );
 };
