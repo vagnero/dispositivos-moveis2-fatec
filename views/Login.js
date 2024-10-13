@@ -33,13 +33,11 @@ const Login = () => {
         } catch (error) {
           console.log('Erro ao buscar email salvo:', error);
         }
-      }
-  
+      }  
       // Chama a função assíncrona
       fetchEmail();
     }, [])
-  );
-  
+  );  
 
   const handleLogin = async () => {
     const user = findUser(email, senha);
@@ -90,7 +88,6 @@ const Login = () => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
   );
-
 
   const styles = StyleSheet.create({
     container: {

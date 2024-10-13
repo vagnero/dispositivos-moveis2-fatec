@@ -12,15 +12,13 @@ const User = () => {
 
   const handleLogout = () => {
     setCurrentUser(null); // Limpa o usuário atual
-    setMensagemErro(''); // Opcional: limpa a mensagem de erro se for necessário
   
     // Redireciona para a tela de login
     navigation.reset({
       index: 0,
       routes: [{ name: 'Login' }],
     });
-  };
-  
+  };  
 
   const styles = {
     container: {
