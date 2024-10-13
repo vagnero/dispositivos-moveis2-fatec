@@ -5,7 +5,7 @@ import Content from '../components/Content';
 import WineItem from '../components/WineItem';
 import Wines from '../components/Wines';
 import { handleAddToCart } from '../utils/cartUtils';
-import { useUser, addToCart } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 
 const Pasta = () => {
   const { colors } = useContext(ThemeContext);
@@ -14,16 +14,6 @@ const Pasta = () => {
   const [filteredWines, setFilteredWines] = useState(
     Wines.filter((wine) => wine.wineCategory === 'Pasta')
   );
-
-  const handleSearch = (searchText) => {
-    // Filtrar com base na busca
-    const filtered = Wines.filter(
-      (wine) =>
-        wine.wineCategory === 'Pasta' &&
-        wine.wineName.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFilteredWines(filtered);
-  };
 
   const styles = {
     container: {
@@ -82,11 +72,14 @@ const Pasta = () => {
               filteredWines.map((wine, index) => (
                 <WineItem
                   key={index}
+                  wine={wine} // Passando o objeto wine diretamente
                   imageSource={wine.imageSource}
                   wineName={wine.wineName}
-                  price={wine.winePrice}
+                  price={wine.winePrice} 
                   ml={wine.ml}
-                  handleAddToCart={() => handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)} // Passando a função corretamente
+                  handleAddToCart={() =>
+                    handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
+                  }
                 />
               ))
             )}
