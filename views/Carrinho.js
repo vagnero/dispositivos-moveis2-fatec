@@ -30,7 +30,7 @@ const Carrinho = () => {
       }
 
       total += price * quantity;
-    });
+    }); 
     setTotal(total);
   };
 

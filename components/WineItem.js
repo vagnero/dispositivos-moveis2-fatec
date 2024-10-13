@@ -1,9 +1,94 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import Wines from './Wines';
+import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig';
 
-const WineItem = ({ imageSource, wineName, price, ml, handleAddToCart  }) => {
+const WineItem = ({ wine, imageSource, wineName, price, ml, handleAddToCart }) => {
   const { colors } = useContext(ThemeContext);
+  const [isHeartFilled, setIsHeartFilled] = useState(false);
+  const [favoriteWines, setFavoriteWines] = useState([]);
+
+  const toggleHeart = async (wine) => {
+    let updatedFavorites;
+  
+    if (isWineFavorite(wine)) {
+      // Remove dos favoritos
+      updatedFavorites = favoriteWines.filter((favWine) => favWine.wineName !== wine.wineName);
+  
+      // Remove do Firestore
+      await removeFavoriteWine(wine.wineName);
+    } else {
+      // Adiciona aos favoritos
+      updatedFavorites = [...favoriteWines, wine];
+  
+      // Salva no Firestore
+      await saveFavoriteWines(updatedFavorites);
+    }
+  
+    setFavoriteWines(updatedFavorites); // Atualiza o estado
+  };
+  
+  const removeFavoriteWine = async (wineName) => {
+    try {
+      const wineDoc = doc(db, 'favoriteWines', wineName);
+      await deleteDoc(wineDoc);
+      console.log(`Vinho ${wineName} removido dos favoritos no Firestore.`);
+    } catch (error) {
+      console.error('Erro ao remover vinho do Firestore:', error);
+    }
+  };
+
+  const isWineFavorite = (wine) => {
+    return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
+  };
+
+  const saveFavoriteWines = async (wines) => {
+    try {
+      const wineCollection = collection(db, 'favoriteWines');
+
+      // Salva cada vinho como um documento individual
+      for (const wine of wines) {
+        const wineData = {
+          wineName: wine.wineName || '',
+          price: wine.price || 0,
+          ml: wine.ml || '',
+          imageSource: wine.imageSource || '',
+        };
+
+        await setDoc(doc(wineCollection, wine.wineName), wineData);
+      }
+      console.log('Vinhos favoritos salvos no Firestore.');
+    } catch (error) {
+      console.error('Erro ao salvar vinhos no Firestore:', error);
+    }
+  };
+
+  const loadWines = async () => {
+    try {
+      const wineCollection = collection(db, 'favoriteWines');
+      const querySnapshot = await getDocs(wineCollection);
+  
+      // Verifica se existem documentos na coleção
+      if (querySnapshot.empty) {
+        console.log('Nenhum vinho favorito encontrado no Firestore.');
+        setFavoriteWines([]); // Define a lista de vinhos favoritos como vazia
+        return; // Sai da função se não houver vinhos
+      }
+  
+      const loadedWines = querySnapshot.docs.map((doc) => doc.data());
+      setFavoriteWines(loadedWines);
+    } catch (error) {
+      console.error('Erro ao carregar vinhos do Firestore:', error);
+    }
+  };  
+
+  // Chama a função ao montar o componente
+  useEffect(() => {
+    loadWines();
+  }, []);
 
   const styles = {
     div_vinho: {
@@ -84,15 +169,22 @@ const WineItem = ({ imageSource, wineName, price, ml, handleAddToCart  }) => {
           <Text style={styles.text_tamanho}>{ml}</Text>
         </View>
         <View style={styles.div_buttons}>
-          <TouchableOpacity style={styles.button_favorite}>
-            <Image source={require('../assets/bordeaux/heart.png')} />
+          <TouchableOpacity
+            style={styles.button_favorite}
+            onPress={() => toggleHeart({ wineName, price, ml, imageSource })}
+          >
+            <FontAwesome
+              name={isWineFavorite({ wineName, price, ml, imageSource }) ? 'heart' : 'heart-o'}
+              size={32}
+              color='red'
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button_carrinho} onPress={handleAddToCart}>
-            <Image source={require('../assets/bordeaux/shopping-cart-v2.png')} />
+            <Image source={require('../assets/bordeaux/shopping-cart.png')} />
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </View >
   );
 };
 

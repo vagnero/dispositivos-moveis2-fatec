@@ -79,7 +79,7 @@ const Avaliacoes = () => {
     container: {
       flex: 1,
       padding: 10,
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.background,
     },
     headerText: {
       fontSize: 25,
@@ -89,7 +89,7 @@ const Avaliacoes = () => {
     },
     link: {
       color: '#007BFF',
-      marginBottom: 60,
+      marginBottom: '20%',
       textAlign: 'center',
       fontWeight: 'bold',
     },
@@ -132,13 +132,13 @@ const Avaliacoes = () => {
               )}
             </View>
           ))}
-        </ScrollView>
-
         {visibleCount < allAvaliacoes.length && (
           <TouchableOpacity onPress={loadMoreComments}>
             <Text style={styles.link}>Mostrar mais</Text>
           </TouchableOpacity>
         )}
+        </ScrollView>
+
       </View>
     </Content>
   );

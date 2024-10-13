@@ -8,74 +8,100 @@ import { FontAwesome } from '@expo/vector-icons';
 import { handleAddToCart } from '../utils/cartUtils';
 import wines from '../components/Wines';
 import Content from '../components/Content';
-import * as SecureStore from 'expo-secure-store';
+import { db } from '../config/firebaseConfig'; // Importe seu arquivo de configuração do Firebase
+import { doc, setDoc, getDocs, collection, deleteDoc } from 'firebase/firestore';
 
 const Sobre = () => {
   const { colors } = useContext(ThemeContext);
   const route = useRoute();
   const { wineName, winePrice, wineSigns, wineDescription, imageSource } = route.params;
   const navigation = useNavigation();
-  const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
+  const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage, currentUser } = useUser();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [favoriteWines, setFavoriteWines] = useState([]);
 
-// Função para alternar o vinho favorito
-const toggleHeart = async (wine) => {
-  if (isWineFavorite(wine)) {
-    // Remove o vinho dos favoritos
-    const updatedFavorites = favoriteWines.filter((favWine) => favWine.wineName !== wine.wineName);
-    setFavoriteWines(updatedFavorites);
-    await saveFavoriteWines(updatedFavorites); // Salva os favoritos atualizados
-  } else {
-    // Adiciona o vinho aos favoritos
-    const updatedFavorites = [...favoriteWines, wine];
-    setFavoriteWines(updatedFavorites);
-    await saveFavoriteWines(updatedFavorites); // Salva os favoritos atualizados
-  }
+  // Função para alternar o vinho favorito
+  const toggleHeart = async (wine) => {
+    let updatedFavorites;
 
-  setIsHeartFilled(!isHeartFilled); // Alterna o ícone do coração
-};
+    if (isWineFavorite(wine)) {
+      // Remove dos favoritos
+      updatedFavorites = favoriteWines.filter((favWine) => favWine.wineName !== wine.wineName);
 
-// Verifica se o vinho já é favorito
-const isWineFavorite = (wine) => {
-  return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
-};
+      // Remove do Firestore
+      await removeFavoriteWine(wine.wineName);
+    } else {
+      // Adiciona aos favoritos
+      updatedFavorites = [...favoriteWines, wine];
 
-// Salva os vinhos favoritos no SecureStore
-const saveFavoriteWines = async (wines) => {
-  try {
-    const jsonValue = JSON.stringify(wines);
-    await SecureStore.setItemAsync('favorite_wines', jsonValue);
-  } catch (e) {
+      // Salva no Firestore
+      await saveFavoriteWines(updatedFavorites);
+    }
 
-  }
-};
-
-// Carrega os vinhos favoritos do SecureStore
-const loadFavoriteWines = async () => {
-  try {
-    const jsonValue = await SecureStore.getItemAsync('favorite_wines');
-    return jsonValue != null ? JSON.parse(jsonValue) : [];
-  } catch (e) {
-
-    return [];
-  }
-};
-
-// Use o efeito para carregar os favoritos ao iniciar
-useEffect(() => {
-  const fetchFavorites = async () => {
-    const storedFavorites = await loadFavoriteWines();
-    setFavoriteWines(storedFavorites);
+    setFavoriteWines(updatedFavorites); // Atualiza o estado
   };
 
-  fetchFavorites();
-}, []);
+  const removeFavoriteWine = async (wineName) => {
+    try {
+      const wineDoc = doc(db, 'favoriteWines', wineName);
+      await deleteDoc(wineDoc);
+      console.log(`Vinho ${wineName} removido dos favoritos no Firestore.`);
+    } catch (error) {
+      console.error('Erro ao remover vinho do Firestore:', error);
+    }
+  };
 
-// Atualize os favoritos sempre que houver uma mudança
-useEffect(() => {
-  saveFavoriteWines(favoriteWines);
-}, [favoriteWines]);
+  // Verifica se o vinho já é favorito
+  const isWineFavorite = (wine) => {
+    return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
+  };
+
+  // Salva os vinhos favoritos no SecureStore
+  const saveFavoriteWines = async (wines) => {
+    try {
+      const wineCollection = collection(db, 'favoriteWines');
+
+      // Salva cada vinho como um documento individual
+      for (const wine of wines) {
+        const wineData = {
+          wineName: wine.wineName || '',
+          price: wine.winePrice || wine.price,
+          ml: wine.ml || '',
+          imageSource: wine.imageSource || '',
+        };
+
+        await setDoc(doc(wineCollection, wine.wineName), wineData);
+      }
+      console.log('Vinhos favoritos salvos no Firestore.');
+    } catch (error) {
+      console.error('Erro ao salvar vinhos no Firestore:', error);
+    }
+  };
+
+  // Carrega os vinhos favoritos do SecureStore
+  const loadWines = async () => {
+    try {
+      const wineCollection = collection(db, 'favoriteWines');
+      const querySnapshot = await getDocs(wineCollection);
+
+      // Verifica se existem documentos na coleção
+      if (querySnapshot.empty) {
+        console.log('Nenhum vinho favorito encontrado no Firestore.');
+        setFavoriteWines([]); // Define a lista de vinhos favoritos como vazia
+        return; // Sai da função se não houver vinhos
+      }
+
+      const loadedWines = querySnapshot.docs.map((doc) => doc.data());
+      setFavoriteWines(loadedWines);
+    } catch (error) {
+      console.error('Erro ao carregar vinhos do Firestore:', error);
+    }
+  };
+
+  // Chama a função ao montar o componente
+  useEffect(() => {
+    loadWines();
+  }, []);
 
 
   const styles = {
@@ -223,7 +249,12 @@ useEffect(() => {
   };
 
   return (
-    <Content>      
+    <Content>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        style={{ flex: 1, marginBottom: 50 }}
+      >
         <View style={styles.content}>
           <View style={styles.div_image}>
             <Image source={imageSource} style={styles.image_vinho} />
@@ -246,12 +277,13 @@ useEffect(() => {
             </View>
             <View style={styles.div_buttons}>
               <View style={{ marginRight: 40, marginTop: 10, marginLeft: 20 }}>
-                <FontAwesome
-                  name={isWineFavorite(route.params) ? 'heart' : 'heart-o'}
-                  size={32}
-                  color='red'
-                  onPress={() => toggleHeart(route.params)} // Passando o objeto wine corretamente
-                />
+                <TouchableOpacity onPress={() => toggleHeart(route.params)}>
+                  <FontAwesome
+                    name={isWineFavorite(route.params) ? 'heart' : 'heart-o'}
+                    size={32}
+                    color='red'
+                  />
+                </TouchableOpacity>
               </View>
 
               {/* Adicione um onPress ao botão "ADICIONAR AO CARRINHO" */}
@@ -272,7 +304,8 @@ useEffect(() => {
           <View style={styles.successMessageContainer}>
             <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
           </View>
-        )}      
+        )}
+      </ScrollView>
     </Content>
   );
 };

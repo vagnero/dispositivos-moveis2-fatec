@@ -12,8 +12,8 @@ const Bordeaux = () => {
   const { cartItems, setCartItems, cartSuccessMessage, setCartSuccessMessage } = useUser();
 
   const [filteredWines, setFilteredWines] = useState(
-    Wines.filter((wine) => wine.wineCategory === 'Bordeaux') 
-  );  
+    Wines.filter((wine) => wine.wineCategory === 'Bordeaux')
+  );
 
   const styles = {
     container: {
@@ -72,11 +72,14 @@ const Bordeaux = () => {
               filteredWines.map((wine, index) => (
                 <WineItem
                   key={index}
+                  wine={wine} // Passando o objeto wine diretamente
                   imageSource={wine.imageSource}
                   wineName={wine.wineName}
-                  price={wine.winePrice}
+                  price={wine.price} 
                   ml={wine.ml}
-                  handleAddToCart={() => handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)} // Passando a função corretamente
+                  handleAddToCart={() =>
+                    handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
+                  }
                 />
               ))
             )}
