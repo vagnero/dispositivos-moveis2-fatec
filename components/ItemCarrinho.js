@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
-import eventEmitter from './eventEmitter';
 export const cartState = { totalQuantity: 0 }; // Objeto externo para armazenar totalQuantity
 
 const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, setCartItems, cartItems, calculateTotal }) => {
@@ -12,8 +11,6 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
   const calculateItens = () => {
     const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     setTotalQuantity(total);
-    cartState.totalQuantity = total; // ZEZIN PARA MANDAR QUALQUER COISA PARA OUTRA PAGINA, CRIE UM OBJETO AAAAA
-    eventEmitter.emit('cartUpdated', total);
   };
 
   useEffect(() => {
