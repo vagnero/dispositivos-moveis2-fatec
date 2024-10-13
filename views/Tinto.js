@@ -15,16 +15,6 @@ const Tinto = () => {
     Wines.filter((wine) => wine.wineCategory === 'Tinto Português')
   );
 
-  const handleSearch = (searchText) => {
-    // Filtrar com base na busca
-    const filtered = Wines.filter(
-      (wine) =>
-        wine.wineCategory === 'Tinto Português' &&
-        wine.wineName.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFilteredWines(filtered);
-  };
-
   const styles = {
     container: {
       flex: 1,
@@ -82,11 +72,14 @@ const Tinto = () => {
               filteredWines.map((wine, index) => (
                 <WineItem
                   key={index}
+                  wine={wine} // Passando o objeto wine diretamente
                   imageSource={wine.imageSource}
                   wineName={wine.wineName}
-                  price={wine.winePrice}
+                  price={wine.winePrice} 
                   ml={wine.ml}
-                  handleAddToCart={() => handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)} // Passando a função corretamente
+                  handleAddToCart={() =>
+                    handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
+                  }
                 />
               ))
             )}

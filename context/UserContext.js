@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig';
 
 const UserContext = createContext();
 
@@ -8,11 +10,21 @@ export const UserProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartSuccessMessage, setCartSuccessMessage] = useState('');
 
-  const registerUser = (user) => {
-    const newUser = { ...user, nome: user.nome };
-    setUsers([...users, newUser]);
-    setCurrentUser(newUser);
+  const registerUser = async (user) => {
+    const newUser = { ...user }; // Cria um novo usuário
+  
+    try {
+      // Cria um documento no Firestore com o ID do usuário baseado no e-mail ou um ID único
+      await setDoc(doc(db, 'users', newUser.email), newUser);
+      
+      // Se quiser, pode manter a lista de usuários em memória
+      setUsers([...users, newUser]); // Adiciona o novo usuário à lista      
+      console.log('Usuário registrado com sucesso no Firestore.');
+    } catch (error) {
+      console.error('Erro ao registrar usuário no Firestore:', error);
+    }
   };
+  
 
   const findUser = (email, senha) => {
     return users.find(user => user.email === email && user.senha === senha);

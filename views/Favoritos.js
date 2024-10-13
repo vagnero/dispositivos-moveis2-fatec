@@ -6,41 +6,50 @@ import { db } from '../config/firebaseConfig';
 import Content from '../components/Content';
 import WineItem from '../components/WineItem';
 import { ThemeContext } from '../context/ThemeContext';
-import { useUser, addToCart } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 import { handleAddToCart } from '../utils/cartUtils';
 
 const Favoritos = () => {
   const [favoriteWines, setFavoriteWines] = useState([]);
-  const { currentUser, cartItems, updateCartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
+  const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage, currentUser } = useUser();
   const { colors } = useContext(ThemeContext);
 
   // Função para carregar os favoritos salvos do SecureStorage
-  const loadFavoriteWines = async () => {
+  const loadWines = async () => {
+    if (!currentUser || !currentUser.nome) {
+      console.log('Usuário atual não está definido ou não possui um nome.');
+      return; // Sai da função se o usuário não estiver definido
+    }
+  
     try {
       const wineCollection = collection(db, 'favoriteWines');
       const querySnapshot = await getDocs(wineCollection);
-
-      const loadedWines = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      // Verifica se loadedWines é um array e então atualiza o estado
-      if (Array.isArray(loadedWines)) {
-        console.log('Sucesso ao carregar os Favoritos');
-        setFavoriteWines(loadedWines);
-      } else {
-        setFavoriteWines([]); // Se não for um array, define como vazio
+  
+      // Verifica se existem documentos na coleção
+      if (querySnapshot.empty) {
+        console.log('Nenhum vinho favorito encontrado no Firestore.');
+        setFavoriteWines([]); // Define a lista de vinhos favoritos como vazia
+        return; // Sai da função se não houver vinhos
       }
+  
+      // Mapeia os documentos carregados para um array de dados
+      const loadedWines = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id, // Inclui o ID do documento se necessário
+          ...doc.data(),
+        }))
+        .filter((wine) => wine.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
+  
+      // Atualiza o estado com os vinhos carregados
+      setFavoriteWines(loadedWines);
     } catch (error) {
       console.error('Erro ao carregar vinhos do Firestore:', error);
-      setFavoriteWines([]); // Define como vazio em caso de erro
     }
   };
 
   // UseEffect para carregar os favoritos quando a tela for montada
   useEffect(() => {
-    loadFavoriteWines();
+    loadWines();
   }, []);    
 
   const styles = StyleSheet.create({
@@ -69,7 +78,8 @@ const Favoritos = () => {
 
     card: {
       width: '60%',
-      marginBottom: 20,
+      height: 10,
+      marginBottom: 200,
       backgroundColor: colors.wineCardBackground,
       flexDirection: 'row',
       borderRadius: 10,
@@ -109,13 +119,12 @@ const Favoritos = () => {
             <Text style={styles.msg}>Você não tem vinhos favoritos ainda.</Text>
           ) : (
             favoriteWines.map((wine, index) => (
-              <View style={styles.cards}>
+              <View key={wine.id} style={styles.cards}>
                 <WineItem
-                  key={index}
                   wine={wine} // Passando o objeto wine diretamente
                   imageSource={wine.imageSource}
                   wineName={wine.wineName}
-                  price={wine.winePrice}
+                  price={wine.price}
                   ml={wine.ml}
                   handleAddToCart={() =>
                     handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)

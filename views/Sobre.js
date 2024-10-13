@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
-import { ScrollView, Text, View, Image, Icon, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, Image, Icon, TouchableOpacity, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
@@ -17,11 +17,15 @@ const Sobre = () => {
   const { wineName, winePrice, wineSigns, wineDescription, imageSource } = route.params;
   const navigation = useNavigation();
   const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage, currentUser } = useUser();
-  const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [favoriteWines, setFavoriteWines] = useState([]);
 
   // Função para alternar o vinho favorito
   const toggleHeart = async (wine) => {
+    if (!currentUser || !currentUser.nome) {
+      Alert.alert('Para Favoritar é necessário estar logado');
+      return; // Sai da função se o usuário não estiver definido
+    }
+    
     let updatedFavorites;
 
     if (isWineFavorite(wine)) {
@@ -43,7 +47,7 @@ const Sobre = () => {
 
   const removeFavoriteWine = async (wineName) => {
     try {
-      const wineDoc = doc(db, 'favoriteWines', wineName);
+      const wineDoc = doc(db, 'favoriteWines', `${wineName}_${currentUser.nome}`);
       await deleteDoc(wineDoc);
       console.log(`Vinho ${wineName} removido dos favoritos no Firestore.`);
     } catch (error) {
@@ -56,11 +60,16 @@ const Sobre = () => {
     return favoriteWines.some((favWine) => favWine.wineName === wine.wineName);
   };
 
-  // Salva os vinhos favoritos no SecureStore
   const saveFavoriteWines = async (wines) => {
+    // Verifica se currentUser e currentUser.nome estão definidos
+    if (!currentUser || !currentUser.nome) {
+      console.error('Usuário atual não está definido ou não possui um nome.');
+      return; // Sai da função se o usuário não estiver definido
+    }
+  
     try {
       const wineCollection = collection(db, 'favoriteWines');
-
+  
       // Salva cada vinho como um documento individual
       for (const wine of wines) {
         const wineData = {
@@ -69,17 +78,23 @@ const Sobre = () => {
           ml: wine.ml || '',
           imageSource: wine.imageSource || '',
         };
-
-        await setDoc(doc(wineCollection, wine.wineName), wineData);
+  
+        // Usando o wineName e o userName como chave para evitar duplicatas
+        await setDoc(doc(wineCollection, `${wine.wineName}_${currentUser.nome}`), wineData);
       }
       console.log('Vinhos favoritos salvos no Firestore.');
     } catch (error) {
       console.error('Erro ao salvar vinhos no Firestore:', error);
     }
-  };
+  };    
 
   // Carrega os vinhos favoritos do SecureStore
   const loadWines = async () => {
+    if (!currentUser || !currentUser.nome) {
+      console.log('Usuário atual não está definido ou não possui um nome.');
+      return; // Sai da função se o usuário não estiver definido
+    }
+
     try {
       const wineCollection = collection(db, 'favoriteWines');
       const querySnapshot = await getDocs(wineCollection);
@@ -91,8 +106,16 @@ const Sobre = () => {
         return; // Sai da função se não houver vinhos
       }
 
-      const loadedWines = querySnapshot.docs.map((doc) => doc.data());
-      setFavoriteWines(loadedWines);
+      // Mapeia os documentos carregados para um array de dados
+      const loadedWines = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id, // Inclui o ID do documento se necessário
+          ...doc.data(),
+        }))
+        .filter((wine) => wine.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
+
+      // Atualiza o estado com os vinhos carregados
+      setFavoriteWines(loadedWines);      
     } catch (error) {
       console.error('Erro ao carregar vinhos do Firestore:', error);
     }

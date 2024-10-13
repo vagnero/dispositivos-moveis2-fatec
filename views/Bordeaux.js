@@ -5,7 +5,7 @@ import Content from '../components/Content';
 import WineItem from '../components/WineItem';
 import Wines from '../components/Wines';
 import { handleAddToCart } from '../utils/cartUtils';
-import { useUser, addToCart } from '../context/UserContext';
+import { useUser } from '../context/UserContext';
 
 const Bordeaux = () => {
   const { colors } = useContext(ThemeContext);
@@ -75,7 +75,7 @@ const Bordeaux = () => {
                   wine={wine} // Passando o objeto wine diretamente
                   imageSource={wine.imageSource}
                   wineName={wine.wineName}
-                  price={wine.price} 
+                  price={wine.winePrice} 
                   ml={wine.ml}
                   handleAddToCart={() =>
                     handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
