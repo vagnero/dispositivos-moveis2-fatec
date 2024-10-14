@@ -8,7 +8,8 @@ import winesData from '../components/Wines';
 const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
   const navigation = useNavigation();
   const { colors } = useContext(ThemeContext);
-  const [soldCount, setSoldCount] = useState();
+  const [soldCount, setSoldCount] = useState(0); // Inicializa como 0
+  const [totalQuantity, setTotalQuantity] = useState(0); // Estado para manter a quantidade total
 
   useEffect(() => {
     const fetchWines = async () => {
@@ -16,7 +17,7 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
         const winesString = await SecureStore.getItemAsync('wines');
         const winesArray = winesString ? JSON.parse(winesString) : [];
         const storedWine = winesArray.find(item => item.wineName === wine.wineName);
-  
+
         // Se encontrar o vinho no SecureStore, utilize os dados armazenados
         if (storedWine) {
           setSoldCount(storedWine.wineSold);
@@ -59,6 +60,14 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
   
     checkAndSaveWines();
   }, []);
+
+  const handleAddToCart = () => {
+    const newTotalQuantity = totalQuantity + 1; // Incrementa o total
+    setTotalQuantity(newTotalQuantity); // Atualiza o estado com o novo total
+    console.log(`Total de itens no carrinho: ${newTotalQuantity}`); // Adiciona o console.log
+    onPressAddToCart({ ...wine, imageSource: wine.imageSource, quantity: 1 }, updateCartItems); // Passa 1 como quantidade do item adicionado
+    cartState = newTotalQuantity;
+  };
 
   const styles = {
     div_vinho: {
@@ -133,15 +142,13 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
       </TouchableOpacity>
       <View style={styles.div_text_button_vinho}>
         <Text style={styles.div_text_preco}>{wine.winePrice}</Text>
-        <TouchableOpacity onPress={() => onPressAddToCart({ ...wine, imageSource: wine.imageSource, quantity: 1 }, updateCartItems)} style={styles.addButton}>
+        <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
           <Image source={require('../assets/home/plus.png')} style={{ marginBottom: 10 }} />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-
 
 // Função para salvar os vinhos
 const saveWines = async (winesData) => {
@@ -155,7 +162,5 @@ const saveWines = async (winesData) => {
     console.error('Erro ao salvar os vinhos:', error);
   }
 };
-
-
 
 export default WineCard;
