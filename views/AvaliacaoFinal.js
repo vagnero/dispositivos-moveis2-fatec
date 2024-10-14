@@ -19,11 +19,6 @@ const AvaliacaoFinal = () => {
   const [name, setName] = useState(currentUser.nome);
 
   const addComment = async () => {
-    if (name === '' || comment.trim() === '') {
-      Alert.alert('Erro', 'O comentário não pode estar vazio!');
-      return;
-    }
-  
     try {
       // Adiciona o comentário ao Firestore
       const docRef = await addDoc(collection(db, 'comments'), {
@@ -85,6 +80,18 @@ const AvaliacaoFinal = () => {
   };
 
   const handleSubmit = () => {
+    if (name === '') {
+      Alert.alert('Erro', 'É necessário estar logado para comentar!');
+      return;
+    }
+    if (comment.trim() === '') {
+      Alert.alert('Erro', 'O comentário não pode estar vazio!');
+      return;
+    }
+    if (rating < 1) {
+      Alert.alert('Erro', 'Avalie com estrelas sua experiência no aplicativo!');
+      return;
+    }
     addComment()
     setModalVisible(true);
     setTimeout(() => {
