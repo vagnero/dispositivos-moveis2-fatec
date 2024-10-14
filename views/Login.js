@@ -137,7 +137,7 @@ const Login = () => {
       marginBottom: 15,
       fontSize: 14,
       fontWeight: 'bold',
-      color: '#2D0C57'
+      color: colors.textColor,
     },
 
     button: {
@@ -171,7 +171,7 @@ const Login = () => {
     textLogin2: {
       fontSize: 14,
       fontWeight: 'bold',
-      color: '#2D0C57'
+      color: colors.textColor,
     },
 
     mensagemErro: {

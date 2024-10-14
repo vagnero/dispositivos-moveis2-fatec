@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useContext, useCallback, useState, useEffect } from 'react';
+import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import Comentario from '../components/Comentario';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
@@ -23,6 +23,8 @@ const Avaliacoes = () => {
   const [comments, setComments] = useState([]);
   const [visibleCount, setVisibleCount] = useState(10);
   const [showFullText, setShowFullText] = useState({});
+  const [refreshing, setRefreshing] = useState(false); // Controle do refresh
+  const [loading, setLoading] = useState(true);
 
   const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, '0'); // Adiciona zero à esquerda, se necessário
@@ -34,32 +36,41 @@ const Avaliacoes = () => {
   const fetchComments = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'comments'));
-  
+
       const fetchedComments = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         nome: doc.data().name,
         rate: doc.data().rating,
-        data: formatDate(doc.data().date.toDate()), // Formata a data
         texto: doc.data().comment,
+        date: doc.data().date.toDate(), // Converte Timestamp para Date
       }));
-  
-      // Ordena os comentários por data decrescente no frontend
-      const sortedComments = fetchedComments.sort(
-        (a, b) => a.data.localeCompare(b.data)
+
+      // Ordena os comentários por data/hora decrescente
+      const sortedComments = fetchedComments.sort((a, b) =>
+        b.date.getTime() - a.date.getTime()
       );
-  
-      setComments(sortedComments);
+
+      setComments(sortedComments); // Atualiza o estado com os comentários 
     } catch (error) {
       console.error('Erro ao buscar comentários:', error);
+    } finally {
+      setLoading(false); // Finaliza o carregamento
+      setRefreshing(false); // Finaliza o refresh
     }
-  };  
+  };
+
+  // Função chamada ao puxar para baixo
+  const onRefresh = useCallback(() => {
+    setRefreshing(true); // Inicia o indicador de refresh
+    fetchComments().then(() => setRefreshing(false)); // Finaliza o refresh
+  }, []);
 
   useEffect(() => {
     fetchComments();
   }, []);
 
   const allAvaliacoes = [...comments, ...avaliacoes].sort(
-    (a, b) => new Date(b.data) - new Date(a.data)
+    (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
   );
 
   const loadMoreComments = () => {
@@ -98,16 +109,27 @@ const Avaliacoes = () => {
       textAlign: 'center',
       fontWeight: 'bold',
     },
-  };  
+    loading: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  };
 
   return (
     <Content>
+      {loading ? ( // Exibe indicador de carregamento inicial
+        <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
+      ) : (
       <View style={styles.container}>
         <Text style={styles.headerText}>Avaliações</Text>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
           style={{ flex: 1, marginBottom: 50 }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           {displayedAvaliacoes.map((item, index) => (
             <View key={item.id || index}>
@@ -119,8 +141,8 @@ const Avaliacoes = () => {
                   showFullText[index]
                     ? item.texto
                     : item.texto.length > 150
-                    ? `${item.texto.substring(0, 150)}...`
-                    : item.texto
+                      ? `${item.texto.substring(0, 150)}...`
+                      : item.texto
                 }
               />
               {item.texto.length > 150 && (
@@ -132,14 +154,14 @@ const Avaliacoes = () => {
               )}
             </View>
           ))}
-        {visibleCount < allAvaliacoes.length && (
-          <TouchableOpacity onPress={loadMoreComments}>
-            <Text style={styles.link}>Mostrar mais</Text>
-          </TouchableOpacity>
-        )}
+          {visibleCount < allAvaliacoes.length && (
+            <TouchableOpacity onPress={loadMoreComments}>
+              <Text style={styles.link}>Mostrar mais</Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
-
       </View>
+      )}
     </Content>
   );
 };

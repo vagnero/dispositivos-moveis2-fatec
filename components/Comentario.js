@@ -43,6 +43,7 @@ const Comentario = ({ nome, rate, data, texto }) => {
 
     text_coment: {
       fontSize: 13,
+      color: colors.textColor,
       textAlign: 'justify'
     }
   };

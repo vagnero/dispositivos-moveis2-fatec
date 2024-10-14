@@ -76,7 +76,7 @@ const HistoricoCompra = () => {
     // Converte o objeto em um array
     const groupedPurchasesArray = Object.values(groupedPurchases);
 
-    
+
     const renderItem = ({ item }) => {
         const toggleVisibility = () => {
             setVisibleItems(prevState => ({
@@ -84,44 +84,47 @@ const HistoricoCompra = () => {
                 [item.id]: !prevState[item.id] // Inverte a visibilidade do item
             }));
         };
-        return(
-        <View style={styles.purchaseItem}>
-            <TouchableOpacity onPress={toggleVisibility}>
-                <Text style={styles.dateText}>
-                    Data: {item.date}
-                </Text>
-                <Text style={styles.totalText}>
-                    Total: R$ {item.totalAmount.toFixed(2)}
-                </Text>
-            </TouchableOpacity>
-            {visibleItems[item.id] && (
-                <View>
-                    <Text style={styles.itemsTitle}>Itens:</Text>
-                    {item.items.map((product, index) => {
-                        const imageSource = getWineImage(product.wineName); // Busca a imagem usando o nome do vinho
-                        return (
-                            <View key={`${item.id}-${product.wineName}-${index}`} style={styles.itemContainer}>
-                                {imageSource && ( // Verifica se a imagem existe
-                                    <Image
-                                        source={imageSource} // Usa a imagem encontrada
-                                        style={styles.productImage}
-                                        resizeMode="contain"
-                                    />
-                                )}
-                                <View>
-                                    <Text style={styles.itemText}>
-                                        {product.wineName} - Quantidade: {product.quantity}
-                                    </Text>
-                                    <Text style={{ marginTop: 10 }}>
-                                        {product.winePrice}
-                                    </Text>
+        return (
+            <View style={styles.purchaseItem}>
+                <TouchableOpacity onPress={toggleVisibility}>
+                    <Text style={styles.dateText}>
+                        Data: {item.date}
+                    </Text>
+                    <Text style={styles.totalText}>
+                        Total: R$ {item.totalAmount.toFixed(2)}
+                    </Text>
+                </TouchableOpacity>
+                {visibleItems[item.id] && (
+                    <View>
+                        <Text style={styles.itemsTitle}>Itens:</Text>
+                        {item.items.map((product, index) => {
+                            const imageSource = getWineImage(product.wineName); // Busca a imagem usando o nome do vinho
+                            return (
+                                <View key={`${item.id}-${product.wineName}-${index}`} style={styles.itemContainer}>
+                                    {imageSource && ( // Verifica se a imagem existe
+                                        <Image
+                                            source={imageSource} // Usa a imagem encontrada
+                                            style={styles.productImage}
+                                            resizeMode="contain"
+                                        />
+                                    )}
+                                    <View>
+                                        <Text style={styles.itemText}>
+                                            {product.wineName}
+                                        </Text>
+                                        <Text style={{ marginTop: 10 }}>
+                                            Quantidade: {product.quantity}
+                                        </Text>
+                                        <Text style={{ marginTop: 10 }}>
+                                            {product.winePrice}
+                                        </Text>
+                                    </View>
                                 </View>
-                            </View>
-                        );
-                    })}
-                </View>
-            )}
-        </View>
+                            );
+                        })}
+                    </View>
+                )}
+            </View>
         );
     };
 
@@ -154,9 +157,9 @@ const HistoricoCompra = () => {
             marginVertical: 5,
         },
         productImage: {
-            width: 50,
-            height: 50,
-            marginRight: 10,
+            width: 100,
+            height: 100,
+            marginLeft: -25,
         },
         dateText: {
             fontSize: 14,

@@ -179,7 +179,7 @@ const Cadastrar = () => {
     textLogin2: {
       fontSize: 14,
       fontWeight: 'bold',
-      color: '#2D0C57'
+      color: colors.textColor,
     },
 
     mensagemErro: {

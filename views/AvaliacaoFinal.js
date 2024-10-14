@@ -5,8 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
 import { ThemeContext } from '../context/ThemeContext';
 import { db } from '../config/firebaseConfig';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp, collection, addDoc, getDocs } from 'firebase/firestore';
 import { useUser } from '../context/UserContext';
 
 const AvaliacaoFinal = () => {
@@ -21,31 +20,38 @@ const AvaliacaoFinal = () => {
 
   const addComment = async () => {
     if (name === '' || comment.trim() === '') {
-      Alert.alert('Erro', 'O comentário não podem estar vazio!');
+      Alert.alert('Erro', 'O comentário não pode estar vazio!');
       return;
     }
-
+  
     try {
-      await addDoc(collection(db, 'comments'), {
+      // Adiciona o comentário ao Firestore
+      const docRef = await addDoc(collection(db, 'comments'), {
         name: name,
         comment: comment,
-        date: Timestamp.now(),
+        date: Timestamp.now(), // Usa Timestamp corretamente
         rating: rating,
       });
+  
+      // Cria um novo comentário localmente, com o mesmo timestamp
       const newComment = {
+        id: docRef.id,
         name: name,
         comment: comment,
-        date: { seconds: Date.now() / 1000 }, // Use o timestamp atual
+        date: Timestamp.now().toDate(), // Converte para Date para uso no frontend
         rating: rating,
       };
-      setComments([newComment]);
-
+  
+      // Atualiza os comentários no estado
+      setComments((prevComments) => [newComment, ...prevComments]);
+  
+      // Limpa os campos
       setName('');
       setComment('');
-      fetchComments(); // Chama a função para buscar os comentários atualizados
-      setModalVisible(true); // Exibe a modal após adicionar o comentário
+      setRating(0);
+      setModalVisible(true); // Exibe o modal após adicionar o comentário
     } catch (error) {
-      console.error("Erro ao adicionar comentário:", error);
+      console.error('Erro ao adicionar comentário:', error);
     }
   };
 
