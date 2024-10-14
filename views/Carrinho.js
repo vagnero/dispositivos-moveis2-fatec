@@ -7,6 +7,8 @@ import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import AlertModal from '../components/AlertModal';
 import * as SecureStore from 'expo-secure-store';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig';
 
 const Carrinho = () => {
   const navigation = useNavigation();
@@ -32,7 +34,7 @@ const Carrinho = () => {
       total += price * quantity;
     }); 
     setTotal(total);
-  };
+  };  
 
   useEffect(() => {
     calculateTotal();
@@ -70,6 +72,8 @@ const Carrinho = () => {
         // Salva os vinhos atualizados de volta ao SecureStore
         await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
 
+        await savePurchaseHistory(currentUser, cartItems, total);
+
         // Limpa o carrinho
         setCartItems([]);
         navigation.navigate('AvaliacaoFinal'); // Usuário logado
@@ -79,6 +83,23 @@ const Carrinho = () => {
       }
     } else {
       setModalVisible(true); // Usuário não logado, abre o modal
+    }
+  };
+
+  const savePurchaseHistory = async (currentUser, cartItems, total) => {
+    try {
+      const purchaseData = {
+        userId: currentUser.nome, // Identificador do usuário
+        items: cartItems, // Itens comprados
+        totalAmount: total, // Valor total da compra
+        timestamp: new Date(), // Data da compra
+      };
+  
+      const purchaseCollection = collection(db, 'purchaseHistory');
+      await addDoc(purchaseCollection, purchaseData);
+      console.log('Compra registrada com sucesso.');
+    } catch (error) {
+      console.error('Erro ao salvar a compra no Firestore:', error);
     }
   };
 

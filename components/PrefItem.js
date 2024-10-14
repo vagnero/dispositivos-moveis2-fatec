@@ -8,8 +8,8 @@ const PrefItem = ({ iconSource, text, view }) => {
   return (
     <View style={styles.div_button_pref}>
       <TouchableOpacity style={styles.button_pref} onPress={() => navigation.navigate(view)}>
-        <View style={{ flexDirection: 'row', }}>
-          <Image style={styles.icon_pref} source={iconSource} />
+        <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+          {iconSource}
           <Text style={styles.text_pref}>{text}</Text>
         </View>
         <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')} />

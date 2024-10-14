@@ -33,14 +33,14 @@ const Login = () => {
         } catch (error) {
           console.log('Erro ao buscar email salvo:', error);
         }
-      }  
+      }
       // Chama a função assíncrona
       fetchEmail();
     }, [])
-  );  
+  );
 
   const handleLogin = async () => {
-    const user = findUser(email, senha);
+    const user = await findUser(email, senha); // Aguarde a busca do usuário
     if (user) {
       setLoginSucesso(true);
       setCurrentUser(user);
@@ -60,10 +60,11 @@ const Login = () => {
     }
   };
 
+
   useFocusEffect(
     useCallback(() => {
       if (salvarEmail) {
-        
+
       }
       const onBackPress = () => {
         // Aqui você pode exibir um alerta se necessário ou simplesmente desativar a ação
@@ -193,66 +194,66 @@ const Login = () => {
   });
 
   return (
-      <View style={styles.container}>
-        <Header2 />
-        <Text style={styles.headerText}>Login</Text>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.inputContainer}>
-            {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
-              <Text style={styles.mensagemErro}>{mensagemErro}</Text>
-            )}
-
-            <Text style={styles.label}>E-mail</Text>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={text => setEmail(text.toLowerCase())}
-              value={email}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Senha</Text>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={text => setSenha(text)}
-              value={senha}
-              secureTextEntry={true}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <TouchableOpacity
-              style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => setSalvarEmail(!salvarEmail)} // Clique no texto também altera o checkbox
-            >
-              <View style={{ marginBottom: 10 }}>
-                <Checkbox
-                  status={salvarEmail ? 'checked' : 'unchecked'}
-                  onPress={() => setSalvarEmail(!salvarEmail)}
-                />
-              </View>
-              <Text style={styles.label}>Salvar Login</Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity onPress={() => navigation.navigate('RedefinirSenha')}>
-            <Text style={styles.textEsqueceuSenha}>Esqueceu sua senha?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-
-          {loginSucesso && (
-            <Text style={styles.mensagemSucesso}>Login realizado com sucesso!</Text>
+    <View style={styles.container}>
+      <Header2 />
+      <Text style={styles.headerText}>Login</Text>
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.inputContainer}>
+          {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
+            <Text style={styles.mensagemErro}>{mensagemErro}</Text>
           )}
 
-          <TouchableOpacity onPress={() => navigation.navigate('Cadastrar')} style={styles.buttonLogin}>
-            <Text style={styles.textLogin1}>Não tem uma conta?</Text>
-            <Text style={styles.textLogin2}>Cadastrar</Text>
+          <Text style={styles.label}>E-mail</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={text => setEmail(text.toLowerCase())}
+            value={email}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Senha</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={text => setSenha(text)}
+            value={senha}
+            secureTextEntry={true}
+          />
+        </View>
+
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => setSalvarEmail(!salvarEmail)} // Clique no texto também altera o checkbox
+          >
+            <View style={{ marginBottom: 10 }}>
+              <Checkbox
+                status={salvarEmail ? 'checked' : 'unchecked'}
+                onPress={() => setSalvarEmail(!salvarEmail)}
+              />
+            </View>
+            <Text style={styles.label}>Salvar Login</Text>
           </TouchableOpacity>
         </View>
-      </View >
+
+        <TouchableOpacity onPress={() => navigation.navigate('RedefinirSenha')}>
+          <Text style={styles.textEsqueceuSenha}>Esqueceu sua senha?</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        {loginSucesso && (
+          <Text style={styles.mensagemSucesso}>Login realizado com sucesso!</Text>
+        )}
+
+        <TouchableOpacity onPress={() => navigation.navigate('Cadastrar')} style={styles.buttonLogin}>
+          <Text style={styles.textLogin1}>Não tem uma conta?</Text>
+          <Text style={styles.textLogin2}>Cadastrar</Text>
+        </TouchableOpacity>
+      </View>
+    </View >
   );
 }
 

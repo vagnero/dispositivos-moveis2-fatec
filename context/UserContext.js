@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 
 const UserContext = createContext();
@@ -26,9 +26,20 @@ export const UserProvider = ({ children }) => {
   };
   
 
-  const findUser = (email, senha) => {
-    return users.find(user => user.email === email && user.senha === senha);
-  };
+  const findUser = async (email, senha) => {
+    const userDoc = doc(db, 'users', email); // Acessa o documento do usuário baseado no e-mail
+    const userSnapshot = await getDoc(userDoc);
+
+    if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        // Aqui você deve verificar se a senha está correta
+        if (userData.senha === senha) { // Supondo que você tenha a senha armazenada como 'senha'
+            return userData; // Retorna os dados do usuário
+        }
+    }
+    return null; // Retorna null se não encontrar o usuário ou se a senha estiver incorreta
+};
+
 
   const updateCartItems = (items) => {
     const wineNames = items.map(item => item.wineName);

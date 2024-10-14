@@ -46,9 +46,9 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
   const handleRemoveFromCart = () => {
     removeFromCart(wineName);
     calculateTotal(); // Recalcula o total
-  };
+  };  
 
-  console.log("Total de itens no carrinho:" + totalQuantity);
+  // console.log("Total de itens no carrinho:" + totalQuantity);
   
   const styles = {
     div_vinho: {

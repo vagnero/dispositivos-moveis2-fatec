@@ -11,6 +11,7 @@ import Cadastrar from './views/Cadastrar';
 import Carrinho from './views/Carrinho';
 import Categorias from './views/Categorias';
 import Favoritos from './views/Favoritos';
+import HistoricoCompra from './views/HistoricoCompra';
 import Notificacoes from './views/Notificacoes';
 import Home from './views/Home';
 import Login from './views/Login';
@@ -76,6 +77,7 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Categorias" component={Categorias} />
           <Stack.Screen name="Favoritos" component={Favoritos} />
+          <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
           <Stack.Screen name="Notificacoes" component={Notificacoes} />
           <Stack.Screen name="Pasta" component={Pasta} />
           <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
