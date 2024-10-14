@@ -54,7 +54,6 @@ const WineItem = ({ wine, imageSource, wineName, price, ml, handleAddToCart }) =
   const saveFavoriteWines = async (wines) => {
     // Verifica se currentUser e currentUser.nome estão definidos
     if (!currentUser || !currentUser.nome) {
-      console.error('Usuário atual não está definido ou não possui um nome.');
       return; // Sai da função se o usuário não estiver definido
     }
 
@@ -82,7 +81,6 @@ const WineItem = ({ wine, imageSource, wineName, price, ml, handleAddToCart }) =
   // Função para carregar os vinhos favoritos do usuário atual
   const loadWines = async () => {
     if (!currentUser || !currentUser.nome) {
-      console.log('Usuário atual não está definido ou não possui um nome.');
       return; // Sai da função se o usuário não estiver definido
     }
 

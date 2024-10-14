@@ -17,7 +17,6 @@ const Favoritos = () => {
   // Função para carregar os favoritos salvos do SecureStorage
   const loadWines = async () => {
     if (!currentUser || !currentUser.nome) {
-      console.log('Usuário atual não está definido ou não possui um nome.');
       return; // Sai da função se o usuário não estiver definido
     }
   

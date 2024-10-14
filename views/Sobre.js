@@ -63,7 +63,6 @@ const Sobre = () => {
   const saveFavoriteWines = async (wines) => {
     // Verifica se currentUser e currentUser.nome estão definidos
     if (!currentUser || !currentUser.nome) {
-      console.error('Usuário atual não está definido ou não possui um nome.');
       return; // Sai da função se o usuário não estiver definido
     }
   
@@ -91,7 +90,6 @@ const Sobre = () => {
   // Carrega os vinhos favoritos do SecureStore
   const loadWines = async () => {
     if (!currentUser || !currentUser.nome) {
-      console.log('Usuário atual não está definido ou não possui um nome.');
       return; // Sai da função se o usuário não estiver definido
     }
 
