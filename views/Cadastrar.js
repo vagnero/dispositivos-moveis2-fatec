@@ -14,6 +14,7 @@ const Cadastrar = () => {
   const [senha, setSenha] = useState('');
   const [mensagemErro, setMensagemErro] = useState(''); // Estado para armazenar a mensagem de erro
   const [mensagemSucesso, setMensagemSucesso] = useState(''); // Estado para armazenar a mensagem de sucesso
+  const [mensagemModal, setMensagemModal] = useState('');
   const navigation = useNavigation();
   const { registerUser } = useUser();
   const { colors } = useContext(ThemeContext);
@@ -27,24 +28,37 @@ const Cadastrar = () => {
   };
 
   const handleChangeNome = (nome) => {
-    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]*$/.test(nome)) {
-      const formattedNome = formatValue(nome);
-      setNome(formattedNome); // Atualiza o estado nome
+    // Permite letras (incluindo acentuadas), números e espaços
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]*$/.test(nome)) {
+        const formattedNome = formatValue(nome);
+        setNome(formattedNome); // Atualiza o estado nome
     }
-  };
+};
 
-  const doesNameExist = async (nome) => {
+  const doesNomeExist = async (nome) => {
     const q = query(collection(db, 'users'), where('nome', '==', nome));
     const querySnapshot = await getDocs(q);
     return !querySnapshot.empty; // Retorna true se existir, false se não existir
   };
-
+  
+  const doesEmailExist = async (email) => {
+    const q = query(collection(db, 'users'), where('email', '==', email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty; // Retorna true se existir, false se não existir
+  };
+  
   const handleRegister = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email
 
-    const nameExists = await doesNameExist(nome);
-    if (nameExists) {
-        handleOpenModal()
+    const nomeExists = await doesNomeExist(nome);
+    const emailExists = await doesEmailExist(email);
+    if (nomeExists) {
+        handleOpenModal(nome)
+        return;
+    }
+    
+    if (emailExists) {
+        handleOpenModal(email)
         return;
     }
 
@@ -83,7 +97,12 @@ const Cadastrar = () => {
     }, 2000);
   };
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (item) => {
+    if (item === nome) {
+      setMensagemModal('Este nome já está em uso. Por favor, escolha outro.')
+    } else if(item === email) {
+      setMensagemModal('Este email já está em uso. Por favor, escolha outro.')
+    }
     setModalVisible(true);
   };
 
@@ -226,7 +245,7 @@ const Cadastrar = () => {
       </View>
       <AlertModal
         visible={modalVisible}
-        message="Este nome já está em uso. Por favor, escolha outro."
+        message={mensagemModal}
         onClose={handleCloseModal}
       />
     </View>

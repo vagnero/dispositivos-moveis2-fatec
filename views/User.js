@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import Menu from '../components/Menu';
 import PrefItem from '../components/PrefItem';
@@ -7,10 +7,12 @@ import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const User = () => {
   const { colors } = useContext(ThemeContext);
   const { currentUser, setCurrentUser } = useUser();
+  const navigation = useNavigation();
 
   const handleLogout = () => {
     setCurrentUser(null); // Limpa o usuário atual

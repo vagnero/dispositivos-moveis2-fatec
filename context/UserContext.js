@@ -12,11 +12,11 @@ export const UserProvider = ({ children }) => {
 
   const registerUser = async (user) => {
     const newUser = { ...user }; // Cria um novo usuário
-  
+
     try {
       // Cria um documento no Firestore com o ID do usuário baseado no e-mail ou um ID único
       await setDoc(doc(db, 'users', newUser.email), newUser);
-      
+
       // Se quiser, pode manter a lista de usuários em memória
       setUsers([...users, newUser]); // Adiciona o novo usuário à lista      
       console.log('Usuário registrado com sucesso no Firestore.');
@@ -24,22 +24,20 @@ export const UserProvider = ({ children }) => {
       console.error('Erro ao registrar usuário no Firestore:', error);
     }
   };
-  
 
   const findUser = async (email, senha) => {
     const userDoc = doc(db, 'users', email); // Acessa o documento do usuário baseado no e-mail
     const userSnapshot = await getDoc(userDoc);
 
     if (userSnapshot.exists()) {
-        const userData = userSnapshot.data();
-        // Aqui você deve verificar se a senha está correta
-        if (userData.senha === senha) { // Supondo que você tenha a senha armazenada como 'senha'
-            return userData; // Retorna os dados do usuário
-        }
+      const userData = userSnapshot.data();
+      // Aqui você deve verificar se a senha está correta
+      if (userData.senha === senha) { // Supondo que você tenha a senha armazenada como 'senha'
+        return userData; // Retorna os dados do usuário
+      }
     }
     return null; // Retorna null se não encontrar o usuário ou se a senha estiver incorreta
-};
-
+  };
 
   const updateCartItems = (items) => {
     const wineNames = items.map(item => item.wineName);
