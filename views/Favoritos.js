@@ -19,18 +19,18 @@ const Favoritos = () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
     }
-  
+
     try {
       const wineCollection = collection(db, 'favoriteWines');
       const querySnapshot = await getDocs(wineCollection);
-  
+
       // Verifica se existem documentos na coleção
       if (querySnapshot.empty) {
         console.log('Nenhum vinho favorito encontrado no Firestore.');
         setFavoriteWines([]); // Define a lista de vinhos favoritos como vazia
         return; // Sai da função se não houver vinhos
       }
-  
+
       // Mapeia os documentos carregados para um array de dados
       const loadedWines = querySnapshot.docs
         .map((doc) => ({
@@ -38,7 +38,7 @@ const Favoritos = () => {
           ...doc.data(),
         }))
         .filter((wine) => wine.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
-  
+
       // Atualiza o estado com os vinhos carregados
       setFavoriteWines(loadedWines);
     } catch (error) {
@@ -49,11 +49,12 @@ const Favoritos = () => {
   // UseEffect para carregar os favoritos quando a tela for montada
   useEffect(() => {
     loadWines();
-  }, []);    
+  }, []);
 
   const styles = StyleSheet.create({
     content: {
       alignItems: 'center',
+      position: 'relative',
       textAlign: 'center',
       margin: 'auto',
       justifyContent: 'center',
@@ -69,12 +70,26 @@ const Favoritos = () => {
       textAlign: 'center',
     },
 
-    successMessage: {
-      fontSize: 14,
-      color: 'green',
-      fontWeight: 'bold'
+    successMessageContainer: {
+      position: 'absolute',
+      top: '10%',
+      left: 0,
+      right: 0,
+      transform: [{ translateY: -20 }], // Ajusta a posição vertical
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999,
     },
-
+    successMessage: {
+      width: '85%',
+      fontSize: 15,
+      color: 'white',
+      padding: 5,
+      borderRadius: 10,
+      backgroundColor: 'rgba(0, 128, 0, 0.8)',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
     card: {
       width: '60%',
       height: 10,
@@ -107,13 +122,15 @@ const Favoritos = () => {
 
   return (
     <Content>
+      {cartSuccessMessage && (
+        <View style={styles.successMessageContainer}>
+          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+        </View>
+      )}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}
         style={{ flex: 1, marginBottom: 50 }}>
         <View style={styles.content}>
           <Text style={styles.title}>Seus Vinhos Favoritos</Text>
-          {cartSuccessMessage && (
-            <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
-          )}
           {!Array.isArray(favoriteWines) || favoriteWines.length === 0 ? (
             <Text style={styles.msg}>Você não tem vinhos favoritos ainda.</Text>
           ) : (

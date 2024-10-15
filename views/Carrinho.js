@@ -12,7 +12,7 @@ import { db } from '../config/firebaseConfig';
 
 const Carrinho = () => {
   const navigation = useNavigation();
-  const { cartItems, setCartItems, removeFromCart, cartSuccessMessage } = useUser();
+  const { cartItems, setCartItems, removeFromCart, cartSuccessMessage, setCartSuccessMessage } = useUser();
   const [total, setTotal] = useState(0.0);
   const { colors } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -190,11 +190,25 @@ const Carrinho = () => {
       marginLeft: 5
     },
 
+    successMessageContainer: {
+      position: 'absolute',
+      top: '74%',
+      left: 0,
+      right: 0,
+      transform: [{ translateY: -20 }], // Ajusta a posição vertical
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999,
+    },
     successMessage: {
-      fontSize: 16,
-      color: 'green',
-      marginBottom: 10,
-      textAlign: 'center'
+      width: '85%',
+      fontSize: 15,
+      color: 'white',
+      padding: 5,
+      borderRadius: 10,
+      backgroundColor: 'rgba(0, 128, 0, 0.8)',
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
 
     modalOverlay: {
@@ -228,7 +242,9 @@ const Carrinho = () => {
     <Content>
       <Text style={styles.text_title}>Carrinho</Text>
       {cartSuccessMessage && (
-        <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+        <View style={styles.successMessageContainer}>
+          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+        </View>
       )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {cartItems.filter((item, index, self) =>

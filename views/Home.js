@@ -185,6 +185,7 @@ const Home = () => {
 
   const styles = StyleSheet.create({
     container: {
+      position: 'relative',
       flex: 1,
       padding: 10,
     },
@@ -288,10 +289,25 @@ const Home = () => {
       justifyContent: 'center',
       marginBottom: 50,
     },
+    successMessageContainer: {
+      position: 'absolute',
+      top: '15%',
+      left: 0,
+      right: 0,
+      transform: [{ translateY: -20 }], // Ajusta a posição vertical
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999,
+    },
     successMessage: {
-      fontSize: 14,
-      color: 'green',
-      fontWeight: 'bold'
+      width: '90%',
+      fontSize: 15,
+      color: 'white',
+      padding: 10,
+      borderRadius: 10,
+      backgroundColor: 'rgba(0, 128, 0, 0.8)',
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
   });
 
@@ -359,7 +375,9 @@ const Home = () => {
           </ScrollView>
         </View>
         {cartSuccessMessage && (
-          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+          <View style={styles.successMessageContainer}>
+            <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+          </View>
         )}
 
         {/* Mosaico de vinhos */}

@@ -3,6 +3,7 @@ import { Text, View, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Aler
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
 import Header2 from '../components/Header2';
+import Menu2 from '../components/Menu2';
 import { ThemeContext } from '../context/ThemeContext';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
@@ -30,36 +31,36 @@ const Cadastrar = () => {
   const handleChangeNome = (nome) => {
     // Permite letras (incluindo acentuadas), números e espaços
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]*$/.test(nome)) {
-        const formattedNome = formatValue(nome);
-        setNome(formattedNome); // Atualiza o estado nome
+      const formattedNome = formatValue(nome);
+      setNome(formattedNome); // Atualiza o estado nome
     }
-};
+  };
 
   const doesNomeExist = async (nome) => {
     const q = query(collection(db, 'users'), where('nome', '==', nome));
     const querySnapshot = await getDocs(q);
     return !querySnapshot.empty; // Retorna true se existir, false se não existir
   };
-  
+
   const doesEmailExist = async (email) => {
     const q = query(collection(db, 'users'), where('email', '==', email));
     const querySnapshot = await getDocs(q);
     return !querySnapshot.empty; // Retorna true se existir, false se não existir
   };
-  
+
   const handleRegister = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email
 
     const nomeExists = await doesNomeExist(nome);
     const emailExists = await doesEmailExist(email);
     if (nomeExists) {
-        handleOpenModal(nome)
-        return;
+      handleOpenModal(nome)
+      return;
     }
-    
+
     if (emailExists) {
-        handleOpenModal(email)
-        return;
+      handleOpenModal(email)
+      return;
     }
 
     // Verificar se os campos estão vazios após remover espaços em branco
@@ -81,10 +82,11 @@ const Cadastrar = () => {
     if (senha.length < 6) {
       setMensagemErro('A senha deve ter no mínimo 6 caracteres.');
       return;
-    }    
+    }
 
     // Se todas as validações passarem, realiza o cadastro
     registerUser({ nome, email, senha });
+    setMensagemErro('');
     setMensagemSucesso('Cadastro realizado com sucesso!');
 
     // Redireciona para a tela de login após 2 segundos
@@ -100,7 +102,7 @@ const Cadastrar = () => {
   const handleOpenModal = (item) => {
     if (item === nome) {
       setMensagemModal('Este nome já está em uso. Por favor, escolha outro.')
-    } else if(item === email) {
+    } else if (item === email) {
       setMensagemModal('Este email já está em uso. Por favor, escolha outro.')
     }
     setModalVisible(true);
@@ -183,27 +185,36 @@ const Cadastrar = () => {
     },
 
     mensagemErro: {
-      marginTop: 10,
-      marginBottom: 25,
+      position: 'absolute',
+      top: -50,
+      left: 0,
+      right: 0,
+      fontSize: 16,
       color: 'red',
-      fontWeight: 'bold'
+      textAlign: 'center',
+      fontWeight: 'bold',
+      padding: 20,
+      zIndex: 999
     },
-
     mensagemSucesso: {
-      marginTop: 20,
+      position: 'absolute',
+      top: -50,
+      left: 0,
+      right: 0,
       fontSize: 16,
       color: 'green',
+      textAlign: 'center',
       fontWeight: 'bold',
-      marginTop: '100',
-      marginBottom: '20'
-    }
+      padding: 20,
+      zIndex: 999
+    },
   };
 
   return (
     <View style={styles.container}>
       <Header2 />
       <Text style={styles.headerText}>Cadastrar</Text>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
           <Text style={styles.mensagemErro}>{mensagemErro}</Text>
         )}
@@ -248,6 +259,7 @@ const Cadastrar = () => {
         message={mensagemModal}
         onClose={handleCloseModal}
       />
+      <Menu2 />
     </View>
   );
 }

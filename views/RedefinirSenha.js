@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Header2 from '../components/Header2';
+import Menu2 from '../components/Menu2';
 import { ThemeContext } from '../context/ThemeContext';
 
 const RedefinirSenha = () => {
@@ -16,6 +17,7 @@ const RedefinirSenha = () => {
 
     if (!emailRegex.test(email)) {
       setMensagemErro('Por favor, insira um email válido.');
+      setTimeout(() => {setMensagemErro('')}, 3000);
       return;
     }
     setMensagemErro('')
@@ -36,6 +38,7 @@ const RedefinirSenha = () => {
 
     content: {
       alignItems: 'center',
+      position: 'relative',
     },
 
     text_title: {
@@ -80,34 +83,50 @@ const RedefinirSenha = () => {
       borderRadius: 30,
       marginTop: 50
     },
-
     text_senha: {
       color: 'white',
       fontSize: 16,
       fontWeight: 'bold'
     },
-
-    mensagemErro: {
-      marginTop: 10,
-      marginBottom: 25,
-      color: 'red',
-      fontWeight: 'bold'
+    buttonLogin: {
+      flexDirection: 'row',
+      marginTop: 30
     },
-
+    textLogin2: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: colors.textColor,
+    },
+    mensagemErro: {
+      position: 'absolute',
+      top: 250,
+      left: 0,
+      right: 0,
+      fontSize: 16,
+      color: 'red',
+      textAlign: 'center',
+      fontWeight: 'bold',
+      padding: 20,
+      zIndex: 999
+    },
     mensagemSucesso: {
-      marginTop: 20,
+      position: 'absolute',
+      top: 250,
+      left: 0,
+      right: 0,
       fontSize: 16,
       color: 'green',
+      textAlign: 'center',
       fontWeight: 'bold',
-      marginTop: '100',
-      marginBottom: '20'
-    }
+      padding: 20,
+      zIndex: 999
+    },
   };
 
   return (
-      <View style={styles.div_container}>
-        <Header2 />
-        <View style={styles.content}>
+    <View style={styles.div_container}>
+      <Header2 />
+      <View style={styles.content}>
         <Text style={styles.text_title}>Redefinir Senha</Text>
         {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
           <Text style={styles.mensagemErro}>{mensagemErro}</Text>
@@ -128,11 +147,12 @@ const RedefinirSenha = () => {
         <TouchableOpacity style={styles.button_senha} onPress={handleMessage}>
           <Text style={styles.text_senha}>ENVIAR NOVA SENHA</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button_senha} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.text_senha}>Voltar</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.buttonLogin}>
+          <Text style={styles.textLogin2}>Voltar</Text>
         </TouchableOpacity>
-        </View>
       </View>
+      <Menu2 />
+    </View>
   );
 };
 

@@ -6,6 +6,7 @@ import { BackHandler, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
 import Header2 from '../components/Header2';
+import Menu2 from '../components/Menu2';
 import { ThemeContext } from '../context/ThemeContext';
 import * as SecureStore from 'expo-secure-store';
 
@@ -40,6 +41,12 @@ const Login = () => {
   );
 
   const handleLogin = async () => {
+    if (!email) {
+      setMensagemErro('Por favor, preencha todos os campos.');
+      setTimeout(() => {setMensagemErro('')}, 2000);
+      return;
+    }
+
     const user = await findUser(email, senha); // Aguarde a busca do usuário
     if (user) {
       setLoginSucesso(true);
@@ -57,6 +64,7 @@ const Login = () => {
       }, 2000);
     } else {
       setMensagemErro('Credenciais Inválidas');
+      setTimeout(() => {setMensagemErro('')}, 2000);
     }
   };
 
@@ -108,6 +116,7 @@ const Login = () => {
 
     inputContainer: {
       width: "80%",
+      podition: 'absolute',
       marginBottom: 30
     },
 
@@ -175,22 +184,30 @@ const Login = () => {
     },
 
     mensagemErro: {
-      marginTop: 10,
-      marginBottom: 25,
+      position: 'absolute',
+      top: 10,
+      left: 0,
+      right: 0,
+      fontSize: 16,
       color: 'red',
+      textAlign: 'center',
       fontWeight: 'bold',
-      textAlign: 'center'
+      padding: 20,
+      zIndex: 999
     },
 
     mensagemSucesso: {
-      marginTop: 20,
+      position: 'absolute',
+      top: 170,
+      left: 0,
+      right: 0,
       fontSize: 16,
       color: 'green',
+      textAlign: 'center',
       fontWeight: 'bold',
-      marginTop: '100',
-      marginBottom: '20',
-      textAlign: 'center'
-    }
+      padding: 20,
+      zIndex: 999
+    },
   });
 
   return (
@@ -253,6 +270,7 @@ const Login = () => {
           <Text style={styles.textLogin2}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
+      <Menu2 />
     </View >
   );
 }

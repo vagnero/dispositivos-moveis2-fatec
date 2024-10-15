@@ -256,16 +256,23 @@ const Sobre = () => {
 
     successMessageContainer: {
       position: 'absolute',
-      bottom: 100, // Posição vertical ajustada para baixo
-      alignSelf: 'center',
-      backgroundColor: '#4CAF50',
+      top: '15%',
+      left: 0,
+      right: 0,
+      transform: [{ translateY: -20 }], // Ajusta a posição vertical
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999,
+    },
+    successMessage: {
+      width: '90%',
+      fontSize: 15,
+      color: 'white',
       padding: 10,
       borderRadius: 10,
-    },
-
-    successMessage: {
-      color: 'white',
+      backgroundColor: 'rgba(0, 128, 0, 0.8)',
       fontWeight: 'bold',
+      textAlign: 'center',
     },
   };
 
