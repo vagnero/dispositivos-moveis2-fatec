@@ -2,6 +2,7 @@
 const dark = {
     background: '#322A4D',
     textColor: '#FFFFFF',
+    text: '#000',
     iconColor: '#FFFFFF',
     primary: '#BA22FB',
     secondary: '#381CDE',
@@ -12,11 +13,14 @@ const dark = {
     bottomHeaderGradient: '#BA22FB',
     wineCardBackground: '#CDC5D7',
     search: '#fff',
+    card: '#fff',
+    link: 'blue',
   };
   
   const light = {
     background: '#FAF9FB',
     textColor: '#000',
+    text: '#fff',
     iconColor: '#000000',
     primary: '#2D0C57',
     secondary: '#CDC5D7',
@@ -27,6 +31,8 @@ const dark = {
     bottomHeaderGradient: '#2D0C57',
     wineCardBackground: '#CDC5D7',
     search: '#2D0C57',
+    card: '#2D0C57',
+    link: 'blue',
   };
   
   export default { dark, light };

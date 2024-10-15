@@ -93,7 +93,7 @@ const User = () => {
           <PrefItem
             iconSource={<Image source={require('../assets/user/map.png')} style={styles.image} />}
             text="Endereços"
-            view="Home"
+            view="ManagerAddress"
           />
           <PrefItem
             iconSource={<Image source={require('../assets/user/cartao.png')} style={styles.image} />}

@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from './context/ThemeContext';
 
+import AddressRegistrationScreen from './views/AddressRegistrationScreen';
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';
 import Bordeaux from './views/Bordeaux';
@@ -12,6 +13,7 @@ import Carrinho from './views/Carrinho';
 import Categorias from './views/Categorias';
 import Favoritos from './views/Favoritos';
 import HistoricoCompra from './views/HistoricoCompra';
+import ManagerAddress from './views/ManagerAddress';
 import Notificacoes from './views/Notificacoes';
 import Home from './views/Home';
 import Login from './views/Login';
@@ -69,6 +71,7 @@ const MainNavigator = ({ isSplashReady }) => {
         <>        
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
           <Stack.Screen name="Bordeaux" component={Bordeaux} />
@@ -78,6 +81,7 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="Categorias" component={Categorias} />
           <Stack.Screen name="Favoritos" component={Favoritos} />
           <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+          <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
           <Stack.Screen name="Notificacoes" component={Notificacoes} />
           <Stack.Screen name="Pasta" component={Pasta} />
           <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
