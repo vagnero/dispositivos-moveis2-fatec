@@ -106,10 +106,10 @@ const Categorias = () => {
           <View style={styles.div_mosaico_vinhos}>
             {/* Card Bordeaux */}
             <View style={styles.div_vinho}>
-              <TouchableOpacity onPress={() => navigation.navigate('Bordeaux')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Branco')}>
                 <View style={styles.div_image_text_vinho}>
-                  <Image source={require('../assets/categorias/bordeaux-QUADRADO.png')} style={styles.div_image_vinho} />
-                  <Text style={styles.div_text_subtitle}>Bordeaux</Text>
+                  <Image source={require('../assets/categorias/branco.jpg')} style={styles.div_image_vinho} />
+                  <Text style={styles.div_text_subtitle}>Branco</Text>
                   <Text style={styles.div_text_count}>(4)</Text>
                 </View>
               </TouchableOpacity>
@@ -117,10 +117,10 @@ const Categorias = () => {
 
             {/* Card Borgonha (Duplicado) */}
             <View style={styles.div_vinho}>
-              <TouchableOpacity onPress={() => navigation.navigate('Borgonha')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Rose')}>
                 <View style={styles.div_image_text_vinho}>
-                  <Image source={require('../assets/categorias/borgonha-QUADRADO.png')} style={styles.div_image_vinho} />
-                  <Text style={styles.div_text_subtitle}>Borgonha</Text>
+                  <Image source={require('../assets/categorias/rose.jpg')} style={styles.div_image_vinho} />
+                  <Text style={styles.div_text_subtitle}>Rosé</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>
               </TouchableOpacity>
@@ -139,10 +139,10 @@ const Categorias = () => {
 
             {/* Card Pasta (Adicionado) */}
             <View style={styles.div_vinho}>
-              <TouchableOpacity onPress={() => navigation.navigate('Pasta')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Espumante')}>
                 <View style={styles.div_image_text_vinho}>
                   <Image source={require('../assets/categorias/pasta-QUADRADO.png')} style={styles.div_image_vinho} />
-                  <Text style={styles.div_text_subtitle}>Pasta</Text>
+                  <Text style={styles.div_text_subtitle}>Espumante</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>
               </TouchableOpacity>

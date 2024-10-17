@@ -7,12 +7,12 @@ import Wines from '../components/Wines';
 import { handleAddToCart } from '../utils/cartUtils';
 import { useUser } from '../context/UserContext';
 
-const Bordeaux = () => {
+const Rose = () => {
   const { colors } = useContext(ThemeContext);
   const { cartItems, setCartItems, cartSuccessMessage, setCartSuccessMessage } = useUser();
 
   const [filteredWines, setFilteredWines] = useState(
-    Wines.filter((wine) => wine.wineCategory === 'Bordeaux')
+    Wines.filter((wine) => wine.wineCategory === 'Rosé')
   );
 
   const styles = {
@@ -105,4 +105,4 @@ const Bordeaux = () => {
   );
 };
 
-export default Bordeaux;
+export default Rose;

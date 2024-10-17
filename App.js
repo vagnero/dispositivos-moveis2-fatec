@@ -6,18 +6,19 @@ import { ThemeProvider } from './context/ThemeContext';
 import AddressRegistrationScreen from './views/AddressRegistrationScreen';
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';
-import Bordeaux from './views/Bordeaux';
-import Borgonha from './views/Borgonha';
+import Branco from './views/Branco';
+import Rose from './views/Rose';
 import Cadastrar from './views/Cadastrar';
 import Carrinho from './views/Carrinho';
 import Categorias from './views/Categorias';
+import Espumante from './views/Espumante';
 import Favoritos from './views/Favoritos';
 import HistoricoCompra from './views/HistoricoCompra';
-import ManagerAddress from './views/ManagerAddress';
-import Notificacoes from './views/Notificacoes';
 import Home from './views/Home';
 import Login from './views/Login';
-import Pasta from './views/Pasta';
+import ManagerAddress from './views/ManagerAddress';
+import Notificacoes from './views/Notificacoes';
+import Payment from './views/Payment';
 import RedefinirSenha from './views/RedefinirSenha';
 import Splash from './views/Splash';
 import Sobre from './views/Sobre';
@@ -69,21 +70,22 @@ const MainNavigator = ({ isSplashReady }) => {
 
       {isSplashReady ? (
         <>        
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
-          <Stack.Screen name="Bordeaux" component={Bordeaux} />
-          <Stack.Screen name="Borgonha" component={Borgonha} />
+          <Stack.Screen name="Branco" component={Branco} />
+          <Stack.Screen name="Rose" component={Rose} />
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Categorias" component={Categorias} />
+          <Stack.Screen name="Espumante" component={Espumante} />
           <Stack.Screen name="Favoritos" component={Favoritos} />
           <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
           <Stack.Screen name="Notificacoes" component={Notificacoes} />
-          <Stack.Screen name="Pasta" component={Pasta} />
+          <Stack.Screen name="Payment" component={Payment} />
           <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
           <Stack.Screen name="Tinto" component={Tinto} />
           <Stack.Screen name="Sobre" component={Sobre} />

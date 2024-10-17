@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import Menu from '../components/Menu';
 import PrefItem from '../components/PrefItem';
 import PrefItem2 from '../components/PrefItem';
 import { useUser } from '../context/UserContext';
@@ -98,7 +97,7 @@ const User = () => {
           <PrefItem
             iconSource={<Image source={require('../assets/user/cartao.png')} style={styles.image} />}
             text="Forma de pagamento"
-            view="Home"
+            view="Payment"
           />
           <PrefItem
             iconSource={<Image source={require('../assets/user/sino.png')} style={styles.image} />}
@@ -129,7 +128,6 @@ const User = () => {
             />
           </TouchableOpacity>
         </View>
-        <Menu />
       </View>
     </Content>
   );

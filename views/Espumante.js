@@ -7,28 +7,41 @@ import Wines from '../components/Wines';
 import { handleAddToCart } from '../utils/cartUtils';
 import { useUser } from '../context/UserContext';
 
-const Pasta = () => {
+const Espumante = () => {
   const { colors } = useContext(ThemeContext);
   const { cartItems, setCartItems, cartSuccessMessage, setCartSuccessMessage } = useUser();
 
   const [filteredWines, setFilteredWines] = useState(
-    Wines.filter((wine) => wine.wineCategory === 'Pasta')
+    Wines.filter((wine) => wine.wineCategory === 'Espumante')
   );
 
   const styles = {
     container: {
       flex: 1,
+      position: 'relative',
       padding: 20,
       backgroundColor: colors.background,
     },
-
-    successMessage: {
-      // marginTop: 5,
-      fontSize: 14,
-      color: 'green',
-      fontWeight: 'bold'
+    successMessageContainer: {
+      position: 'absolute',
+      top: '10%',
+      left: 0,
+      right: 0,
+      transform: [{ translateY: -20 }], // Ajusta a posição vertical
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999,
     },
-
+    successMessage: {
+      width: '90%',
+      fontSize: 15,
+      color: 'white',
+      padding: 10,
+      borderRadius: 10,
+      backgroundColor: 'rgba(0, 128, 0, 0.4)',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
     div_bordeaux: {
       marginBottom: 15,
     },
@@ -55,13 +68,15 @@ const Pasta = () => {
   return (
     <Content>
       <View style={styles.container}>
+        {cartSuccessMessage && (
+          <View style={styles.successMessageContainer}>
+            <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
+          </View>
+        )}        
         <View style={styles.div_bordeaux}>
-          <Text style={styles.text_bordeaux}>Pasta</Text>
+          <Text style={styles.text_bordeaux}>Bordeaux</Text>
         </View>
 
-        {cartSuccessMessage && (
-          <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
-        )}
 
         {/* Vinhos */}
         <ScrollView vertical showsVerticalScrollIndicator={false}>
@@ -75,7 +90,7 @@ const Pasta = () => {
                   wine={wine} // Passando o objeto wine diretamente
                   imageSource={wine.imageSource}
                   wineName={wine.wineName}
-                  price={wine.winePrice} 
+                  price={wine.winePrice}
                   ml={wine.ml}
                   handleAddToCart={() =>
                     handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
@@ -90,4 +105,4 @@ const Pasta = () => {
   );
 };
 
-export default Pasta;
+export default Espumante;
