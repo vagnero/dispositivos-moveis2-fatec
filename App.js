@@ -56,7 +56,7 @@ const MainNavigator = ({ isSplashReady }) => {
   const { colors } = useContext(ThemeContext); // Aqui você pode usar o useContext
 
   return (
-    <Stack.Navigator initialRouteName="Home"
+    <Stack.Navigator initialRouteName="Payment"
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.primary, // Cor de fundo da barra
