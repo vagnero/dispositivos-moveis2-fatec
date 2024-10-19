@@ -147,7 +147,15 @@ const ConfirmPayment = ({ route }) => {
     textButtonEditar: {
       textAlign: 'center',
       fontSize: 20,
-
+    },
+    modalContent: {
+      textAlign: 'center',
+      backgroundColor: 'white',
+      width: 350,
+      borderRadius: 10,
+      padding: 20,
+      margin: 'auto',
+      marginTop: 250,
     },
   });
 
@@ -190,28 +198,6 @@ const ConfirmPayment = ({ route }) => {
               <Text style={styles.textButtonAddress}>Selecione o endereço de Entrega</Text>
               <Text style={styles.textButtonAddress} >{selectedAddress}</Text>
             </TouchableOpacity>
-            <Modal
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => setModalVisible(false)}
-            >
-              <View style={styles.modalContent}>
-                <View style={styles.modalInnerContent}>
-                  {addresses.length === 0 ? (
-                    <Text style={styles.noAddressesText}>Não há endereços cadastrados.</Text>
-                  ) : (
-                    <FlatList
-                      data={addresses}
-                      keyExtractor={(item) => item.id}
-                      renderItem={renderAddressItem}
-                    />
-                  )}
-                  <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                    <Text style={styles.closeButtonText}>Fechar</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
           </View>
 
           <View style={styles.content}>
@@ -232,6 +218,28 @@ const ConfirmPayment = ({ route }) => {
           </View>
         </View>
       )}
+          <Modal
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalContent}>
+              <View style={styles.modalInnerContent}>
+                {addresses.length === 0 ? (
+                  <Text style={styles.noAddressesText}>Não há endereços cadastrados.</Text>
+                ) : (
+                  <FlatList
+                    data={addresses}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderAddressItem}
+                  />
+                )}
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Fechar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
     </Content>
   );
 };
