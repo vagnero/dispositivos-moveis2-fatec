@@ -29,22 +29,24 @@ const AlertModal = ({ visible, message, onClose }) => {
   };
 
   return (
-    <Modal
-      transparent={true}
-      visible={visible}
-      animationType="none" // Desabilita animações padrão para usar a animação personalizada
-      onRequestClose={handleClose}
-    >
-      <View style={styles.modalContainer}>
-        <Animated.View style={[styles.alertBox, { transform: [{ scale: scaleValue }] }]}>
-          <Text style={styles.alertMessage}>{message}</Text>
+    <View>
+      <Modal
+        transparent={true}
+        visible={visible}
+        animationType="none" // Desabilita animações padrão para usar a animação personalizada
+        onRequestClose={handleClose}
+      >
+        <View style={styles.modalContainer}>
+          <Animated.View style={[styles.alertBox, { transform: [{ scale: scaleValue }] }]}>
+            <Text style={styles.alertMessage}>{message}</Text>
 
-          <TouchableOpacity style={styles.okButton} onPress={handleClose}>
-            <Text style={styles.buttonText}>OK</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    </Modal>
+            <TouchableOpacity style={styles.okButton} onPress={handleClose}>
+              <Text style={styles.buttonText}>OK</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
+    </View>
   );
 };
 
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)', // Fundo transparente com opacidade
+    backgroundColor: 'rgba(0,0,0,0.8)', // Fundo transparente com opacidade
   },
   alertBox: {
     width: 250,

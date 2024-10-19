@@ -33,7 +33,7 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
 
     try {
       const cardData = { cardNumber, cardHolder, expiryDate, cvv };
-      const userDocRef = doc(db, 'paymentCard', `${currentUser.nome}_card`);
+      const userDocRef = doc(db, 'paymentCard', `${currentUser.nome}_${cardNumber.slice(-4)}`);
       await setDoc(userDocRef, cardData);
       setMensagem('Cartão Salvo!'); // Mensagem de sucesso
       setModalAlertVisible(true);
@@ -71,7 +71,7 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
     modalContent: {
       width: '90%',
@@ -128,7 +128,7 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       <Modal
         transparent={true}
         visible={modalVisible}

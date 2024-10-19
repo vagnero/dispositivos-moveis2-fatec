@@ -1,24 +1,34 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, FlatList } from 'react-native';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, FlatList, Alert } from 'react-native';
+import { collection, getDocs, doc, getDoc, addDoc, deleteDoc } from 'firebase/firestore';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'; // Importando useRoute
 import { db } from '../config/firebaseConfig';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
+import * as SecureStore from 'expo-secure-store';
+import AlertModal from '../components/AlertModal';
+import CardModal from '../components/CardModal';
 
 const ConfirmPayment = ({ route }) => {
+  const { cartItems, setCartItems, currentUser } = useUser();
   const [addresses, setAddresses] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const navigation = useNavigation();
-  const { currentUser } = useUser();
   const [loading, setLoading] = useState(true);
   const { colors } = useContext(ThemeContext);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [mensagem, setMensagem] = useState('');
+  const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [modalVisibleAddress, setModalVisibleAddress] = useState(false);
+  const [cards, setCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [modalCardVisible, setModalCardVisible] = useState(null);
+  const [status, setStatus] = useState('');
 
   // Recuperando o parâmetro 'total' da rota
-  const { onPaymentSuccess, total } = route.params;
+  const { total } = route.params;
 
   const fetchPaymentMethod = useCallback(async () => {
     try {
@@ -52,8 +62,131 @@ const ConfirmPayment = ({ route }) => {
   useFocusEffect(
     useCallback(() => {
       fetchPaymentMethod();
-    }, [fetchPaymentMethod])
+      fetchLoadCards();
+    }, [fetchPaymentMethod, fetchLoadCards])
   );
+
+  const pagamentoAprovado = async () => {
+    if (paymentMethod === 'Cartão' && !selectedCard) {
+      setMensagem('Selecione um Cartão')
+      setModalAlertVisible(true);
+      return
+    }
+
+    if (!selectedAddress) {
+      setMensagem('Selecione um Endereço para a Entrega')
+      setModalAlertVisible(true);
+      return
+    }
+
+    let newStatus;
+
+    if (paymentMethod === 'Boleto') {
+      newStatus = "Aguardando Pagamento";
+      setStatus(newStatus)
+      navigation.navigate('Boleto', { total })
+    }
+
+    if (paymentMethod === 'Pix') {
+      newStatus = "Aguardando Pagamento";
+      setStatus(newStatus)
+      navigation.navigate('PixPayment', { total });
+    }
+
+    if (paymentMethod === 'Cartão') {
+      newStatus = "Preparando para Envio";
+      setStatus(newStatus)
+      setMensagem('Compra Efetuada!')
+      setModalAlertVisible(true);
+      navigation.navigate('AvaliacaoFinal'); // Usuário logado
+    }
+    // Atualizar o wineSold no SecureStore
+    try {
+      const winesString = await SecureStore.getItemAsync('wines');
+      const winesArray = winesString ? JSON.parse(winesString) : [];
+
+      // Atualiza o wineSold para cada item no carrinho
+      cartItems.forEach(item => {
+        const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
+        if (storedWine) {
+          // Incrementa a quantidade vendida
+          storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
+        }
+      });
+
+      // Salva os vinhos atualizados de volta ao SecureStore
+      await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
+
+      await savePurchaseHistory(currentUser, cartItems, total, newStatus);
+
+      // Limpa o carrinho
+      setCartItems([]);
+    } catch (error) {
+      console.error('Erro ao atualizar o carrinho:', error);
+      Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
+    }
+
+  };
+
+  const savePurchaseHistory = async (currentUser, cartItems, total, status) => {
+    try {
+      const purchaseData = {
+        userId: currentUser.nome, // Identificador do usuário
+        items: cartItems, // Itens comprados
+        totalAmount: total, // Valor total da compra
+        timestamp: new Date(), // Data da compra
+        status: status,
+        paymentMethod: paymentMethod,
+        address: selectedAddress,
+      };
+
+      const purchaseCollection = collection(db, 'purchaseHistory');
+      await addDoc(purchaseCollection, purchaseData);
+      console.log('Compra registrada com sucesso.');
+    } catch (error) {
+      console.error('Erro ao salvar a compra no Firestore:', error);
+    }
+  };
+
+  // Função para buscar cartões salvos
+  const fetchLoadCards = async () => {
+    try {
+      const userCardsCollection = collection(db, 'paymentCard'); // Coleção de cartões
+      const userCardDocs = await getDocs(userCardsCollection);
+      const userCards = [];
+
+      userCardDocs.forEach(doc => {
+        if (doc.id.startsWith(`${currentUser.nome}_`)) {
+          userCards.push({ id: doc.id, ...doc.data() }); // Adiciona cartões ao array
+        }
+      });
+
+      if (userCards.length > 0) {
+        setCards(userCards); // Atualiza o estado com todos os cartões
+      } else {
+        console.log('Nenhum cartão encontrado.');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar cartões:', error);
+    }
+  };
+
+  const handleCloseModalAlert = () => {
+    setModalAlertVisible(false);
+  };
+
+  const handleDeleteCard = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'paymentCard', id)); // Deleta o endereço com o id correto
+      setMensagem('Cartão excluído com sucesso!'); // Mensagem de sucesso
+      setModalAlertVisible(true); // Mostra modal de sucesso
+      fetchLoadCards(); // Atualiza a lista de endereços
+    } catch (error) {
+      console.error('Erro ao excluir cartão')
+      setMensagem('Não foi possível excluir o Cartão.'); // Mensagem de sucesso
+      setModalAlertVisible(true); // Mostra modal de sucesso
+    }
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -124,6 +257,14 @@ const ConfirmPayment = ({ route }) => {
       backgroundColor: '#e74c3c',
       marginTop: 10,
     },
+    confirmCard: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 48,
+      borderRadius: 5,
+      backgroundColor: '#2196F3',
+      marginTop: 10,
+    },
     closeButtonText: {
       color: '#fff',
       fontWeight: 'bold',
@@ -148,6 +289,12 @@ const ConfirmPayment = ({ route }) => {
       textAlign: 'center',
       fontSize: 20,
     },
+    modalContainer: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     modalContent: {
       textAlign: 'center',
       backgroundColor: 'white',
@@ -157,18 +304,48 @@ const ConfirmPayment = ({ route }) => {
       margin: 'auto',
       marginTop: 250,
     },
+    deleteButton: {
+      width: 100,
+      backgroundColor: 'red',
+      marginBottom: 20,
+      padding: 10,
+      borderRadius: 5,
+    },
+    deleteText: {
+      color: 'white',
+      textAlign: 'center',
+    },
   });
+
+  const renderCardItem = ({ item }) => (
+    <View key={item.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedCard(item.cardNumber); // Armazena os últimos dígitos
+          setModalVisible(false); // Fecha o modal após a seleção do cartão
+        }}
+        style={styles.buttonAddress}
+      >
+        <Text style={styles.textButtonAddress}>
+          **** **** **** {item.cardNumber.slice(-4)} {/* Exibe apenas os últimos 4 dígitos */}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleDeleteCard(item.id)} style={styles.deleteButton}>
+        <Text style={styles.deleteText}>Deletar</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   const renderAddressItem = ({ item }) => (
     <View key={item.id}>
       <TouchableOpacity
         onPress={() => {
           setSelectedAddress(item.recipientName);
-          setModalVisible(false); // Fecha o modal após a seleção do endereço
+          setModalVisibleAddress(false); // Fecha o modal após a seleção do endereço
         }}
         style={styles.buttonAddress}
       >
-        <Text style={styles.textButtonAddress}>Endereço: {item.recipientName}</Text>
+        <Text style={styles.textButtonAddress}>{item.recipientName}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -181,10 +358,22 @@ const ConfirmPayment = ({ route }) => {
         <View style={styles.container}>
           <View style={styles.content}>
             <Text style={styles.title}>Forma de pagamento</Text>
-            <Text style={styles.title}>{paymentMethod}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Payment')}>
-              <Text>Alterar</Text>
+            <TouchableOpacity onPress={() => { navigation.navigate('Payment') }}>
+              <Text style={styles.title}>{paymentMethod}</Text>
             </TouchableOpacity>
+            <View>
+              {paymentMethod === 'Cartão' && (
+                <View style={{ direction: 'row' }}>
+                  <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.buttonAddress}>
+                    {!selectedCard ? <Text style={{ fontSize: 20 }}>Escolher Cartão</Text> :
+                      <Text style={{ fontSize: 20 }}>**** **** **** {selectedCard.slice(-4)}</Text>}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.navigate('Payment')}>
+                    <Text>Alterar</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </View>
           <View style={styles.contentEndereco}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -194,9 +383,9 @@ const ConfirmPayment = ({ route }) => {
                   <Text style={styles.textButtonEditar}>Editar</Text> : <Text style={styles.textButtonEditar}>Cadastrar</Text>}
               </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.buttonAddress} >
-              <Text style={styles.textButtonAddress}>Selecione o endereço de Entrega</Text>
-              <Text style={styles.textButtonAddress} >{selectedAddress}</Text>
+            <TouchableOpacity onPress={() => setModalVisibleAddress(true)} style={styles.buttonAddress} >
+              {!selectedAddress ? <Text style={styles.textButtonAddress}>Selecione o endereço de Entrega</Text> :
+                <Text style={styles.textButtonAddress} >{selectedAddress}</Text>}
             </TouchableOpacity>
           </View>
 
@@ -206,7 +395,7 @@ const ConfirmPayment = ({ route }) => {
           </View>
 
           <View style={styles.content}>
-            <TouchableOpacity style={styles.saveButton} onPress={onPaymentSuccess}>
+            <TouchableOpacity style={styles.saveButton} onPress={() => (pagamentoAprovado())}>
               <Text style={styles.saveButtonText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -218,28 +407,62 @@ const ConfirmPayment = ({ route }) => {
           </View>
         </View>
       )}
-          <Modal
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-          >
-            <View style={styles.modalContent}>
-              <View style={styles.modalInnerContent}>
-                {addresses.length === 0 ? (
-                  <Text style={styles.noAddressesText}>Não há endereços cadastrados.</Text>
-                ) : (
-                  <FlatList
-                    data={addresses}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderAddressItem}
-                  />
-                )}
-                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                  <Text style={styles.closeButtonText}>Fechar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
+      <AlertModal
+        visible={modalAlertVisible}
+        message={mensagem}
+        onClose={handleCloseModalAlert}
+      />
+      <CardModal
+        modalVisible={modalCardVisible}
+        setModalVisible={setModalCardVisible}
+      />
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {cards.length === 0 ? (
+              <Text style={styles.noCardsText}>Não há cartões cadastrados.</Text>
+            ) : (
+              <FlatList
+                data={cards}
+                keyExtractor={(item) => item.id}
+                renderItem={renderCardItem}
+              />
+            )}
+            <TouchableOpacity onPress={() => { setModalCardVisible(true) }} style={styles.confirmCard}>
+              <Text style={styles.closeButtonText}>Adicionar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        transparent={true}
+        visible={modalVisibleAddress}
+        onRequestClose={() => setModalVisibleAddress(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {addresses.length === 0 ? (
+              <Text style={styles.noAddressesText}>Não há endereços cadastrados.</Text>
+            ) : (
+              <FlatList
+                data={addresses}
+                keyExtractor={(item) => item.id}
+                renderItem={renderAddressItem}
+              />
+            )}
+            <TouchableOpacity onPress={() => setModalVisibleAddress(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </Content>
   );
 };

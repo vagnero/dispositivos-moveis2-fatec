@@ -185,7 +185,7 @@ const Login = () => {
 
     mensagemErro: {
       position: 'absolute',
-      top: 10,
+      top: 160,
       left: 0,
       right: 0,
       fontSize: 16,

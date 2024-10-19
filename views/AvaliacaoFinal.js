@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Modal, Animated, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Modal, Animated, KeyboardAvoidingView, Platform, BackHandler  } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
@@ -110,6 +110,21 @@ const AvaliacaoFinal = () => {
     setMensagem('');
     setModalAlertVisible(false);
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('Home'); // Altere para o nome da sua tela Home
+      return true; // Impede o comportamento padrão
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    // Limpa o listener quando o componente é desmontado
+    return () => backHandler.remove();
+  }, [navigation]);
 
   useEffect(() => {
     if (modalVisible) {

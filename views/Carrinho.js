@@ -6,19 +6,14 @@ import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import AlertModal from '../components/AlertModal';
-import ConfirmPayment from './ConfirmPayment';
-import * as SecureStore from 'expo-secure-store';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
 
 const Carrinho = () => {
   const navigation = useNavigation();
-  const { cartItems, setCartItems, removeFromCart, cartSuccessMessage, setCartSuccessMessage } = useUser();
+  const { cartItems, setCartItems, removeFromCart, cartSuccessMessage, setCartSuccessMessage, currentUser } = useUser();
   const [total, setTotal] = useState(0.0);
   const { colors } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
-  const { currentUser } = useUser();
   const [mensagem, setMensagem] = useState('');
 
   const calculateTotal = () => {
@@ -55,65 +50,13 @@ const Carrinho = () => {
   const handleFinalizeOrder = () => {
     if (cartItems.length === 0 || total === 0) {
       setMensagem('Seu Carrinho está vazio!')
-      handleOpenModalAlert()
+      setModalAlertVisible(true);
     } else if (currentUser) {
-      navigation.navigate('ConfirmPayment', {
-        onPaymentSuccess: pagamentoAprovado,
-        total,
-      })
+      navigation.navigate('ConfirmPayment', { total })
     } else {
       setModalVisible(true); // Usuário não logado, abre o modal
     }
-  }
-
-  const pagamentoAprovado = async () => {
-    // Atualizar o wineSold no SecureStore
-    try {
-      const winesString = await SecureStore.getItemAsync('wines');
-      const winesArray = winesString ? JSON.parse(winesString) : [];
-
-      // Atualiza o wineSold para cada item no carrinho
-      cartItems.forEach(item => {
-        const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
-        if (storedWine) {
-          // Incrementa a quantidade vendida
-          storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
-        }
-      });
-
-      setMensagem('Compra Efetuada!')
-      handleOpenModalAlert()
-
-      // Salva os vinhos atualizados de volta ao SecureStore
-      await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
-
-      await savePurchaseHistory(currentUser, cartItems, total);
-
-      // Limpa o carrinho
-      setCartItems([]);
-      navigation.navigate('AvaliacaoFinal'); // Usuário logado
-    } catch (error) {
-      console.error('Erro ao atualizar o carrinho:', error);
-      Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
-    }
-  };
-
-  const savePurchaseHistory = async (currentUser, cartItems, total) => {
-    try {
-      const purchaseData = {
-        userId: currentUser.nome, // Identificador do usuário
-        items: cartItems, // Itens comprados
-        totalAmount: total, // Valor total da compra
-        timestamp: new Date(), // Data da compra
-      };
-
-      const purchaseCollection = collection(db, 'purchaseHistory');
-      await addDoc(purchaseCollection, purchaseData);
-      console.log('Compra registrada com sucesso.');
-    } catch (error) {
-      console.error('Erro ao salvar a compra no Firestore:', error);
-    }
-  };
+  }  
 
   const handleLogin = () => {
     // Lógica para redirecionar para a tela de login
@@ -123,14 +66,6 @@ const Carrinho = () => {
 
   const handleCancel = () => {
     setModalVisible(false); // Fecha o modal
-  };
-
-  const handleOpenModalAlert = () => {
-    setModalAlertVisible(true);
-  };
-
-  const handleCloseModalAlert = () => {
-    setModalAlertVisible(false);
   };
 
   const styles = {
@@ -283,12 +218,6 @@ const Carrinho = () => {
         <TouchableOpacity style={styles.button_finalizar_pedido} onPress={handleFinalizeOrder}>
           <Text style={styles.text_pedido}>FINALIZAR PEDIDO</Text>
         </TouchableOpacity>
-        <AlertModal
-          visible={modalAlertVisible}
-          message={mensagem}
-          onClose={handleCloseModalAlert}
-        />
-
         <Modal
           transparent={true}
           animationType="slide"
@@ -309,6 +238,11 @@ const Carrinho = () => {
             </View>
           </View>
         </Modal>
+        <AlertModal
+        visible={modalAlertVisible}
+        message={mensagem}
+        onClose={() => {setModalAlertVisible(false)}}
+      />
       </View>
     </Content>
   );

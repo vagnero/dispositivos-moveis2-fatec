@@ -70,6 +70,7 @@ const Payment = () => {
 
       setMensagem(`Forma de pagamento atualizada para ${selectedPayment}!`); // Mensagem de sucesso
       setModalVisible2(true);
+      
     } catch (error) {
       console.error('Erro ao atualizar forma de pagamento:', error);
       setMensagem('Não foi possível atualizar a forma de pagamento.');

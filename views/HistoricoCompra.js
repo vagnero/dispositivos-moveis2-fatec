@@ -64,6 +64,9 @@ const HistoricoCompra = () => {
                 date: displayDate,
                 totalAmount: purchase.totalAmount,
                 items: purchase.items,
+                paymentMethod: purchase.paymentMethod,
+                status: purchase.status,
+                address: purchase.address,
                 visible: false, // Estado para controlar a visibilidade dos itens
             };
         } else {
@@ -79,6 +82,7 @@ const HistoricoCompra = () => {
 
     const renderItem = ({ item }) => {
         const toggleVisibility = () => {
+            console.log(item);
             setVisibleItems(prevState => ({
                 ...prevState,
                 [item.id]: !prevState[item.id] // Inverte a visibilidade do item
@@ -96,6 +100,15 @@ const HistoricoCompra = () => {
                 </TouchableOpacity>
                 {visibleItems[item.id] && (
                     <View>
+                        <Text style={styles.totalText}>
+                            Forma de Pagamento: {item.paymentMethod}
+                        </Text>
+                        <Text style={styles.totalText}>
+                            Status: {item.status}
+                        </Text>
+                        <Text style={styles.totalText}>
+                            Endereço: {item.address}
+                        </Text>
                         <Text style={styles.itemsTitle}>Itens:</Text>
                         {item.items.map((product, index) => {
                             const imageSource = getWineImage(product.wineName); // Busca a imagem usando o nome do vinho

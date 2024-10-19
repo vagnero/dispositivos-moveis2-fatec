@@ -6,6 +6,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import AddressRegistrationScreen from './views/AddressRegistrationScreen';
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';
+import Boleto from './views/Boleto';
 import Branco from './views/Branco';
 import Rose from './views/Rose';
 import Cadastrar from './views/Cadastrar';
@@ -20,6 +21,7 @@ import Login from './views/Login';
 import ManagerAddress from './views/ManagerAddress';
 import Notificacoes from './views/Notificacoes';
 import Payment from './views/Payment';
+import PixPayment from './views/PixPayment';
 import RedefinirSenha from './views/RedefinirSenha';
 import Splash from './views/Splash';
 import Sobre from './views/Sobre';
@@ -74,6 +76,7 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
+          <Stack.Screen name="Boleto" component={Boleto} />
           <Stack.Screen name="Branco" component={Branco} />
           <Stack.Screen name="Rose" component={Rose} />
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
@@ -88,6 +91,7 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
           <Stack.Screen name="Notificacoes" component={Notificacoes} />
           <Stack.Screen name="Payment" component={Payment} />
+          <Stack.Screen name="PixPayment" component={PixPayment} />
           <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
           <Stack.Screen name="Tinto" component={Tinto} />
           <Stack.Screen name="Sobre" component={Sobre} />
