@@ -1,12 +1,11 @@
+import React, { useState, useContext, useEffect } from 'react';
 import { db } from '../config/firebaseConfig'; // Importe a configuração do Firebase
-import { doc, setDoc } from 'firebase/firestore'; // Importa métodos do Firestore
-import React, { useState, useContext } from 'react';
+import { doc, setDoc, getDoc } from 'firebase/firestore'; // Importa métodos do Firestore
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Content from '../components/Content';
 import { ThemeContext } from '../context/ThemeContext';
 import { useUser } from '../context/UserContext';
-import { useNavigation } from '@react-navigation/native';
 import CardModal from '../components/CardModal';
 import AlertModal from '../components/AlertModal';
 
@@ -15,10 +14,23 @@ const Payment = () => {
   const [modalVisible, setModalVisible] = useState(null); // Estado para forma de pagamento
   const { colors } = useContext(ThemeContext);
   const { currentUser } = useUser(); // Obtém o usuário atual do contexto
-  const navigation = useNavigation();
   const [modalVisible2, setModalVisible2] = useState(false);
   const [mensagem, setMensagem] = useState('');
 
+  useEffect(() => {
+    const fetchPaymentMethod = async () => {
+      try {
+        const userDocRef = doc(db, 'paymentMethods', currentUser.nome);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setSelectedPayment(userDoc.data().paymentMethod);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar a forma de pagamento: ", error);
+      }
+    };
+    fetchPaymentMethod();
+  }, []);
 
   // Função para salvar ou atualizar a forma de pagamento no Firestore
   const savePayment = async () => {
@@ -26,6 +38,24 @@ const Payment = () => {
       setMensagem('Selecione uma forma de pagamento.');
       setModalVisible2(true);
       return;
+    }
+
+    if (selectedPayment === 'Cartão') {
+      // Verifica se há um cartão registrado
+      try {
+        const cardDocRef = doc(db, 'paymentCard', `${currentUser.nome}_card`);
+        const cardDoc = await getDoc(cardDocRef);
+        if (!cardDoc.exists()) {
+          setMensagem('Nenhum cartão cadastrado. Por favor, cadastre um cartão antes de salvar.');
+          setModalVisible2(true);
+          return;
+        }
+      } catch (error) {
+        console.error('Erro ao verificar cartão cadastrado:', error);
+        setMensagem('Erro ao verificar cartão cadastrado.');
+        setModalVisible2(true);
+        return;
+      }
     }
 
     try {
@@ -59,13 +89,11 @@ const Payment = () => {
   const styles = StyleSheet.create({
     container: {
       width: '90%',
-      height: 10,
+      height: '45%',
       borderRadius: 10,
       marginBottom: '45%',
       marginTop: 100,
       margin: 'auto',
-      flex: 1,
-      padding: 20,
       backgroundColor: colors.card,
     },
     title: {
@@ -84,11 +112,6 @@ const Payment = () => {
       fontSize: 18,
       color: colors.secondary,
     },
-    radioButtonContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 10,
-    },
     textCadastroCard: {
       width: 150,
       margin: 'auto',
@@ -100,16 +123,19 @@ const Payment = () => {
       textAlign: 'center',
     },
     saveButton: {
-      width: '100%',
-      margin: 'auto',
-      marginTop: 20,
-      position: 'bottom',
       backgroundColor: colors.primary,
       padding: 10,
-      borderRadius: 5,
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1,
     },
     saveButtonText: {
       textAlign: 'center',
+      fontSize: 20,
       color: '#fff',
       fontWeight: 'bold',
     },
@@ -119,29 +145,12 @@ const Payment = () => {
     <Content>
       <Text style={styles.title}>Escolha a forma de pagamento</Text>
       <View style={styles.container}>
-        {/* Opção: Cartão */}
-        <View style={styles.radioButtonContainer}>
-          <TouchableOpacity
-            style={styles.radioContainer}
-            onPress={() => setSelectedPayment('Cartão')}
-          >
-            <RadioButton
-              value="Cartão"
-              status={selectedPayment === 'Cartão' ? 'checked' : 'unchecked'}
-              onPress={() => setSelectedPayment('Cartão')}
-            />
-            <Text style={styles.paymentOption}>Cartão de Crédito</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={() => openModal()}
-          disabled={!selectedPayment}
-        >
-          <Text style={styles.textCadastroCard}>Cadastrar Cartão</Text>
-        </TouchableOpacity>
-
-        {/* Opção: Pix */}
-        <View style={styles.radioButtonContainer}>
+        <View style={{ padding: 10, position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1, }}>
+          {/* Opção: Pix */}
           <TouchableOpacity
             style={styles.radioContainer}
             onPress={() => setSelectedPayment('Pix')}
@@ -153,10 +162,9 @@ const Payment = () => {
             />
             <Text style={styles.paymentOption}>Pix</Text>
           </TouchableOpacity>
-        </View>
 
-        {/* Opção: Boleto */}
-        <View style={styles.radioButtonContainer}>
+          {/* Opção: Boleto */}
+
           <TouchableOpacity
             style={styles.radioContainer}
             onPress={() => setSelectedPayment('Boleto')}
@@ -168,24 +176,40 @@ const Payment = () => {
             />
             <Text style={styles.paymentOption}>Boleto</Text>
           </TouchableOpacity>
-        </View>
+          {/* Opção: Cartão */}
+          <TouchableOpacity
+            style={styles.radioContainer}
+            onPress={() => setSelectedPayment('Cartão')}
+          >
+            <RadioButton
+              value="Cartão"
+              status={selectedPayment === 'Cartão' ? 'checked' : 'unchecked'}
+              onPress={() => setSelectedPayment('Cartão')}
+            />
+            <Text style={styles.paymentOption}>Cartão de Crédito</Text>
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={() => openModal()}
+          >
+            <Text style={styles.textCadastroCard}>Cadastrar Cartão</Text>
+          </TouchableOpacity>
+        </View>
         {/* Botão de Salvar */}
         <TouchableOpacity style={styles.saveButton} onPress={savePayment}>
           <Text style={styles.saveButtonText}>Salvar Forma de Pagamento</Text>
         </TouchableOpacity>
-
-        {/* Modal para Cadastro de Cartão */}
-        <CardModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-        <AlertModal
-          visible={modalVisible2}
-          message={mensagem}
-          onClose={handleCloseModal}
-        />
       </View>
+      {/* Modal para Cadastro de Cartão */}
+      <CardModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+      <AlertModal
+        visible={modalVisible2}
+        message={mensagem}
+        onClose={handleCloseModal}
+      />
     </Content>
   );
 };

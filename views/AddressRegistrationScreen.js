@@ -112,6 +112,7 @@ const AddressRegistrationScreen = () => {
             width: '100%',
             height: '100%',
             alignItems: 'center',
+            marginTop: 40,
             backgroundColor: colors.background,
         },
         title: {

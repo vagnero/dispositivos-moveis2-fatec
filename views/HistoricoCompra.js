@@ -132,13 +132,13 @@ const HistoricoCompra = () => {
         container: {
             flex: 1,
             backgroundColor: loading ? '#f5f5f5' : colors.background,
-            marginBottom: 50,
             padding: 16,
         },
         title: {
             fontSize: 24,
             fontWeight: 'bold',
-            marginBottom: 16,
+            marginBottom: 6,
+            textAlign: 'center',
             color: colors.textColor,
         },
         purchaseItem: {

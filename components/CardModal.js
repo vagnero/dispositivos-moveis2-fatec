@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import AlertModal from '../components/AlertModal';
+import { useUser } from '../context/UserContext';
+import { db } from '../config/firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 const CardModal = ({ modalVisible, setModalVisible }) => {
   const [cardNumber, setCardNumber] = useState('');
@@ -9,6 +12,7 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
   const [cvv, setCvv] = useState('');
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [mensagem, setMensagem] = useState('');
+  const { currentUser } = useUser(); 
 
   useEffect(() => {
     if (modalVisible) {
@@ -20,17 +24,25 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
     }
   }, [modalVisible]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
       setMensagem('Preencha todos os campos do cartão.');
       setModalAlertVisible(true);
       return;
     }
-    const cardData = { cardNumber, cardHolder, expiryDate, cvv };
-    console.log('Dados do Cartão Salvo: ', cardData)
-    setMensagem('Cartão Salvo!'); // Mensagem de sucesso
-    setModalAlertVisible(true);
-    setModalVisible(false);
+
+    try {
+      const cardData = { cardNumber, cardHolder, expiryDate, cvv };
+      const userDocRef = doc(db, 'paymentCard', `${currentUser.nome}_card`);
+      await setDoc(userDocRef, cardData);
+      setMensagem('Cartão Salvo!'); // Mensagem de sucesso
+      setModalAlertVisible(true);
+      setModalVisible(false);
+    } catch (error) {
+      setMensagem('Erro ao salvar o cartão.');
+      setModalAlertVisible(true);
+      console.error('Erro ao salvar o cartão:', error);
+    }
   };
 
   const validateNumber = (text) => {

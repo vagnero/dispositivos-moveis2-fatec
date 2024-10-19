@@ -6,6 +6,7 @@ import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import AlertModal from '../components/AlertModal';
+import ConfirmPayment from './ConfirmPayment';
 import * as SecureStore from 'expo-secure-store';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
@@ -16,8 +17,9 @@ const Carrinho = () => {
   const [total, setTotal] = useState(0.0);
   const { colors } = useContext(ThemeContext);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const { currentUser } = useUser();
+  const [mensagem, setMensagem] = useState('');
 
   const calculateTotal = () => {
     let total = 0;
@@ -32,9 +34,9 @@ const Carrinho = () => {
       }
 
       total += price * quantity;
-    }); 
+    });
     setTotal(total);
-  };  
+  };
 
   useEffect(() => {
     calculateTotal();
@@ -50,39 +52,49 @@ const Carrinho = () => {
     }
   }, [cartSuccessMessage]);
 
-  const handleFinalizeOrder = async () => {
+  const handleFinalizeOrder = () => {
     if (cartItems.length === 0 || total === 0) {
-      // Alert.alert("Carrinho Vazio", "Seu carrinho está vazio. Adicione itens antes de prosseguir.");
-      handleOpenModal()
+      setMensagem('Seu Carrinho está vazio!')
+      handleOpenModalAlert()
     } else if (currentUser) {
-      // Atualizar o wineSold no SecureStore
-      try {
-        const winesString = await SecureStore.getItemAsync('wines');
-        const winesArray = winesString ? JSON.parse(winesString) : [];
-
-        // Atualiza o wineSold para cada item no carrinho
-        cartItems.forEach(item => {
-          const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
-          if (storedWine) {
-            // Incrementa a quantidade vendida
-            storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
-          }
-        });
-
-        // Salva os vinhos atualizados de volta ao SecureStore
-        await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
-
-        await savePurchaseHistory(currentUser, cartItems, total);
-
-        // Limpa o carrinho
-        setCartItems([]);
-        navigation.navigate('AvaliacaoFinal'); // Usuário logado
-      } catch (error) {
-        console.error('Erro ao atualizar o carrinho:', error);
-        Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
-      }
+      navigation.navigate('ConfirmPayment', {
+        onPaymentSuccess: pagamentoAprovado,
+        total,
+      })
     } else {
       setModalVisible(true); // Usuário não logado, abre o modal
+    }
+  }
+
+  const pagamentoAprovado = async () => {
+    // Atualizar o wineSold no SecureStore
+    try {
+      const winesString = await SecureStore.getItemAsync('wines');
+      const winesArray = winesString ? JSON.parse(winesString) : [];
+
+      // Atualiza o wineSold para cada item no carrinho
+      cartItems.forEach(item => {
+        const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
+        if (storedWine) {
+          // Incrementa a quantidade vendida
+          storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
+        }
+      });
+
+      setMensagem('Compra Efetuada!')
+      handleOpenModalAlert()
+
+      // Salva os vinhos atualizados de volta ao SecureStore
+      await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
+
+      await savePurchaseHistory(currentUser, cartItems, total);
+
+      // Limpa o carrinho
+      setCartItems([]);
+      navigation.navigate('AvaliacaoFinal'); // Usuário logado
+    } catch (error) {
+      console.error('Erro ao atualizar o carrinho:', error);
+      Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
     }
   };
 
@@ -94,7 +106,7 @@ const Carrinho = () => {
         totalAmount: total, // Valor total da compra
         timestamp: new Date(), // Data da compra
       };
-  
+
       const purchaseCollection = collection(db, 'purchaseHistory');
       await addDoc(purchaseCollection, purchaseData);
       console.log('Compra registrada com sucesso.');
@@ -113,12 +125,12 @@ const Carrinho = () => {
     setModalVisible(false); // Fecha o modal
   };
 
-  const handleOpenModal = () => {
-    setModalVisible2(true);
+  const handleOpenModalAlert = () => {
+    setModalAlertVisible(true);
   };
 
-  const handleCloseModal = () => {
-    setModalVisible2(false);
+  const handleCloseModalAlert = () => {
+    setModalAlertVisible(false);
   };
 
   const styles = {
@@ -143,7 +155,7 @@ const Carrinho = () => {
       width: '90%',
       height: '15%',
       margin: 'auto',
-      marginBottom: 60,
+      marginBottom: 20,
       marginTop: 10,
       backgroundColor: colors.wineCardBackground,
       borderRadius: 25,
@@ -272,10 +284,10 @@ const Carrinho = () => {
           <Text style={styles.text_pedido}>FINALIZAR PEDIDO</Text>
         </TouchableOpacity>
         <AlertModal
-        visible={modalVisible2}
-        message="Seu carrinho está vazio. Adicione itens antes de prosseguir."
-        onClose={handleCloseModal}
-      />
+          visible={modalAlertVisible}
+          message={mensagem}
+          onClose={handleCloseModalAlert}
+        />
 
         <Modal
           transparent={true}

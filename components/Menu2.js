@@ -1,16 +1,23 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FontAwesome } from 'react-native-vector-icons';
+import { useUser } from '../context/UserContext';
 
 const Menu2 = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { colors } = useContext(ThemeContext);
+  const { setCurrentUser } = useUser();
 
   const getIconColor = (routeName) => {
     return route.name === routeName ? 'blue' : colors.iconColor; // Troque 'blue' pela cor desejada para a rota ativa
+  };
+
+  const handleHome = () => {
+    setCurrentUser(null); // Limpa o usuário atual
+    navigation.navigate('Home')
   };
 
   const styles = {
@@ -29,7 +36,7 @@ const Menu2 = () => {
 
   return (
     <View style={styles.div_menu}>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity onPress={handleHome}>
         <FontAwesome name="th-large" size={24} color={getIconColor('Home')} />
       </TouchableOpacity>
     </View>

@@ -8,19 +8,42 @@ const Content = ({ children }) => {
     const { colors } = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
+        container: {
+            backgroundColor: colors.background,
+            flex: 1,
+        },
         body: {
             flex: 1,
-            textAlign: 'center',
-            justifyContent: 'center',
-            backgroundColor: colors.background,
+            marginTop: 50, // Altura do header
+            marginBottom: 40, // Altura do menu
+        },
+        header: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+        },
+        menu: {
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
         },
     });
 
     return (
-        <View style={styles.body}>
-            <Header />
-            {children}
-            <Menu />
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Header />
+            </View>
+            <View style={styles.body}>
+                {children}
+            </View>
+            <View style={styles.menu}>
+                <Menu />
+            </View>
         </View>
     );
 };

@@ -10,6 +10,9 @@ const Comentario = ({ nome, rate, data, texto }) => {
     div_comentario: {
       marginBottom: '1%',
       marginTop: 20,
+      backgroundColor: colors.card,
+      padding: 10,
+      borderRadius: 10,
     },
 
     div_text_comentario: {
@@ -20,19 +23,19 @@ const Comentario = ({ nome, rate, data, texto }) => {
     text_nome: {
       width: '65%',
       fontSize: 15,
-      color: 'black',
+      color: colors.text,
       fontWeight: 'bold',
     },
     text_rate: {
       fontSize: 15,
-      color: 'black',
+      color: colors.text,
       marginLeft: 10,
       marginBottom: '2%',
     },
 
     text_data: {
       fontSize: 13,
-      color: colors.textColor,
+      color: colors.text,
     },
 
     star: {
@@ -43,7 +46,7 @@ const Comentario = ({ nome, rate, data, texto }) => {
 
     text_coment: {
       fontSize: 13,
-      color: colors.textColor,
+      color: colors.text,
       textAlign: 'justify'
     }
   };

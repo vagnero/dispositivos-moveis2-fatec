@@ -21,7 +21,7 @@ const PrefItem = ({ iconSource, text, view }) => {
 const styles = {
   div_button_pref: {
     width: '100%',
-    height: '6%',
+    height: 45,
     marginTop: 12,
     justifyContent: 'center'
   },

@@ -13,6 +13,13 @@ const Header = () => {
     const navigation = useNavigation();
 
     const styles = StyleSheet.create({
+        content: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+          },
         header: {
             width: '100%',
             backgroundColor: colors.background,
@@ -31,7 +38,7 @@ const Header = () => {
     });
 
     return (
-        <View>
+        <View style={styles.content}>
             <LinearGradient
                 colors={[colors.bottomHeaderGradient, colors.topHeaderGradient]}
                 style={styles.header}

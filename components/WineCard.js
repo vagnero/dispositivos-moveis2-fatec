@@ -64,7 +64,7 @@ const WineCard = ({ wine, onPressAddToCart, updateCartItems }) => {
   const handleAddToCart = () => {
     const newTotalQuantity = totalQuantity + 1; // Incrementa o total
     setTotalQuantity(newTotalQuantity); // Atualiza o estado com o novo total
-    console.log(`Total de itens no carrinho: ${newTotalQuantity}`); // Adiciona o console.log
+    // console.log(`Total de itens no carrinho: ${newTotalQuantity}`);
     onPressAddToCart({ ...wine, imageSource: wine.imageSource, quantity: 1 }, updateCartItems); // Passa 1 como quantidade do item adicionado
     cartState = newTotalQuantity;
   };

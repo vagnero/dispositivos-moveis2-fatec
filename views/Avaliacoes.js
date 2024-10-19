@@ -8,8 +8,14 @@ import { collection, getDocs } from 'firebase/firestore';
 
 const Avaliacoes = () => {
   const { colors } = useContext(ThemeContext);
-
+  const [comments, setComments] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [showFullText, setShowFullText] = useState({});
+  const [refreshing, setRefreshing] = useState(false); // Controle do refresh
+  const [loading, setLoading] = useState(true);
   const [avaliacoes, setAvaliacoes] = useState([
+
+  
     { nome: 'Audrey', rate: 4, data: '25/08/2024', texto: 'Minha experiência com o app foi incrível! A navegação é super intuitiva e rápida, com categorias bem organizadas e sugestões personalizadas. Encontrei facilmente um vinho robusto com notas de frutas vermelhas e toque de especiarias, perfeito para harmonizar com carnes e queijos. O processo de compra foi simples e seguro, e recebi atualizações do pedido em tempo real. Com certeza, voltarei a usar o app para futuras compras!' },
     { nome: 'José Leandro', rate: 4, data: '22/08/2024', texto: 'Fresco e vibrante, com aromas de maçã verde e limão. Perfeito para uma tarde de verão ou para acompanhar pratos leves como saladas e frutos do mar.' },
     { nome: 'Vagner', rate: 4, data: '01/08/2024', texto: 'Um rosé elegante, com sabor suave de morango e um final refrescante. Ideal para um brunch ou para uma tarde relaxante com amigos.' },
@@ -20,34 +26,40 @@ const Avaliacoes = () => {
     { nome: 'Maria', rate: 4, data: '10/02/2024', texto: 'Aromas intensos de ameixa e tabaco, com um paladar rico e bem equilibrado. Excelente para acompanhar pratos de carne e massas com molhos robustos.' },
   ]);
 
-  const [comments, setComments] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(10);
-  const [showFullText, setShowFullText] = useState({});
-  const [refreshing, setRefreshing] = useState(false); // Controle do refresh
-  const [loading, setLoading] = useState(true);
-
   const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0'); // Adiciona zero à esquerda, se necessário
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês é zero-indexado
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+    if (date instanceof Date) {
+      const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if necessary
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    return ''; // Return an empty string if not a valid date
   };
 
   const fetchComments = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'comments'));
 
-      const fetchedComments = querySnapshot.docs.map((doc) => ({
+      const fetchedComments = querySnapshot.docs.map((doc) => {
+        const dados = doc.data();
+        let data = dados.date;
+      if (data && data.toDate) {
+        data = data.toDate();
+      } else if (!(data instanceof Date)) {
+        data = new Date(data);
+      }
+      return {
         id: doc.id,
-        nome: doc.data().name,
-        rate: doc.data().rating,
-        texto: doc.data().comment,
-        date: doc.data().date.toDate(), // Converte Timestamp para Date
-      }));
+        nome: dados.name,
+        rate: dados.rating,
+        texto: dados.comment,
+        data: data // Converte Timestamp para Date
+        }
+      });
 
       // Ordena os comentários por data/hora decrescente
       const sortedComments = fetchedComments.sort((a, b) =>
-        b.date.getTime() - a.date.getTime()
+        b.data.getTime() - a.data.getTime()
       );
 
       setComments(sortedComments); // Atualiza o estado com os comentários 
@@ -69,9 +81,7 @@ const Avaliacoes = () => {
     fetchComments();
   }, []);
 
-  const allAvaliacoes = [...comments, ...avaliacoes].sort(
-    (a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()
-  );
+  const allAvaliacoes = [...comments, ...avaliacoes]
 
   const loadMoreComments = () => {
     setVisibleCount(prevCount => prevCount + 5);
@@ -96,7 +106,7 @@ const Avaliacoes = () => {
       fontSize: 25,
       fontWeight: 'bold',
       textAlign: 'center',
-      color: '#2D0C57',
+      color: colors.primary,
     },
     link: {
       color: '#007BFF',
@@ -121,46 +131,46 @@ const Avaliacoes = () => {
       {loading ? ( // Exibe indicador de carregamento inicial
         <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
       ) : (
-      <View style={styles.container}>
-        <Text style={styles.headerText}>Avaliações</Text>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          style={{ flex: 1, marginBottom: 50 }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          {displayedAvaliacoes.map((item, index) => (
-            <View key={item.id || index}>
-              <Comentario
-                nome={item.nome}
-                rate={item.rate}
-                data={item.data}
-                texto={
-                  showFullText[index]
-                    ? item.texto
-                    : item.texto.length > 150
-                      ? `${item.texto.substring(0, 150)}...`
-                      : item.texto
-                }
-              />
-              {item.texto.length > 150 && (
-                <TouchableOpacity onPress={() => toggleShowFullText(index)}>
-                  <Text style={styles.link2}>
-                    {showFullText[index] ? 'Mostrar menos' : 'Mostrar mais'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ))}
-          {visibleCount < allAvaliacoes.length && (
-            <TouchableOpacity onPress={loadMoreComments}>
-              <Text style={styles.link}>Mostrar mais</Text>
-            </TouchableOpacity>
-          )}
-        </ScrollView>
-      </View>
+        <View style={styles.container}>
+          <Text style={styles.headerText}>Avaliações</Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            style={{ flex: 1 }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            {displayedAvaliacoes.map((item, index) => (
+              <View key={item.id || index}>
+                <Comentario
+                  nome={item.nome}
+                  rate={item.rate}
+                  data={formatDate(item.data)}
+                  texto={
+                    showFullText[index]
+                      ? item.texto
+                      : item.texto.length > 150
+                        ? `${item.texto.substring(0, 150)}...`
+                        : item.texto
+                  }
+                />
+                {item.texto.length > 150 && (
+                  <TouchableOpacity onPress={() => toggleShowFullText(index)}>
+                    <Text style={styles.link2}>
+                      {showFullText[index] ? 'Mostrar menos' : 'Mostrar mais'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ))}
+            {visibleCount < allAvaliacoes.length && (
+              <TouchableOpacity onPress={loadMoreComments}>
+                <Text style={styles.link}>Mostrar mais</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
+        </View>
       )}
     </Content>
   );

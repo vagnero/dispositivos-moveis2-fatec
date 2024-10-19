@@ -212,8 +212,7 @@ const Notificacoes = () => {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            marginBottom: 50,
-            padding: 20,
+            padding: 10,
         },
         rowFront: {
             flexDirection: 'row',

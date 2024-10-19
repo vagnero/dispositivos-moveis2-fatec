@@ -28,7 +28,7 @@ const Menu = () => {
     };
   }, []);
 
-  console.log("Total de itens no carrinho:" + cartState.totalQuantity);
+  // console.log("Total de itens no carrinho:" + cartState.totalQuantity);
 
   const getIconColor = (routeName) => {
     return route.name === routeName ? 'blue' : colors.iconColor; // Troque 'blue' pela cor desejada para a rota ativa
@@ -40,7 +40,7 @@ const Menu = () => {
       bottom: 0,
       left: 0,
       right: 0,
-      height: 60,
+      height: 40,
       alignItems: 'center',
       justifyContent: 'space-around',
       flexDirection: 'row',

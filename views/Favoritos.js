@@ -128,7 +128,7 @@ const Favoritos = () => {
         </View>
       )}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}
-        style={{ flex: 1, marginBottom: 50 }}>
+        style={{ flex: 1 }}>
         <View style={styles.content}>
           <Text style={styles.title}>Seus Vinhos Favoritos</Text>
           {!Array.isArray(favoriteWines) || favoriteWines.length === 0 ? (

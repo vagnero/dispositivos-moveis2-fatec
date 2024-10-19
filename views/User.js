@@ -67,9 +67,14 @@ const User = () => {
 
     div_conteudo_pref: {
       width: '100%',
-      height: '100%',
+      height: '70%',
       backgroundColor: colors.wineCardBackground,
-      borderRadius: 25
+      borderRadius: 25,
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1,
     }
   };
 
@@ -119,8 +124,7 @@ const User = () => {
             text="Configurações"
             view="Home"
           />
-          <TouchableOpacity onPress={handleLogout}
-            style={{ marginTop: 20 }}>
+          <TouchableOpacity onPress={handleLogout} >
             <PrefItem
               iconSource={<Image source={require('../assets/user/Logout.png')} style={styles.image} />}
               text="Sair"

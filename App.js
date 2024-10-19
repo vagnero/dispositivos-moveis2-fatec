@@ -11,6 +11,7 @@ import Rose from './views/Rose';
 import Cadastrar from './views/Cadastrar';
 import Carrinho from './views/Carrinho';
 import Categorias from './views/Categorias';
+import ConfirmPayment from './views/ConfirmPayment';
 import Espumante from './views/Espumante';
 import Favoritos from './views/Favoritos';
 import HistoricoCompra from './views/HistoricoCompra';
@@ -56,7 +57,7 @@ const MainNavigator = ({ isSplashReady }) => {
   const { colors } = useContext(ThemeContext); // Aqui você pode usar o useContext
 
   return (
-    <Stack.Navigator initialRouteName="Payment"
+    <Stack.Navigator initialRouteName="Home"
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.primary, // Cor de fundo da barra
@@ -78,6 +79,7 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Categorias" component={Categorias} />
+          <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} />
           <Stack.Screen name="Espumante" component={Espumante} />
           <Stack.Screen name="Favoritos" component={Favoritos} />
           <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />

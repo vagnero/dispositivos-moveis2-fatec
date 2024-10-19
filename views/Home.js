@@ -187,7 +187,7 @@ const Home = () => {
     container: {
       position: 'relative',
       flex: 1,
-      padding: 10,
+      padding: 5,
     },
 
     div_pesquisar: {
@@ -196,7 +196,7 @@ const Home = () => {
       flexDirection: 'row',
       alignItems: 'center',
       margin: 'auto',
-      marginTop: 10,
+      marginBottom: 10,
       borderWidth: 1,
       borderColor: colors.search,
       borderRadius: 15,
@@ -313,19 +313,19 @@ const Home = () => {
 
   return (
     <Content >
-      <View style={styles.div_pesquisar} >
-        <TouchableOpacity >
-          <Image source={require('../assets/home/search.png')} style={styles.image_pesquisar} />
-        </TouchableOpacity>
-        <TextInput
-          placeholder="Pesquise por vinhos..."
-          placeholderTextColor={colors.search}
-          value={searchText}
-          onChangeText={handleSearch}
-        />
-      </View>
       <View style={styles.container}>
         {/* Filtro */}
+        <View style={styles.div_pesquisar} >
+          <TouchableOpacity >
+            <Image source={require('../assets/home/search.png')} style={styles.image_pesquisar} />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Pesquise por vinhos..."
+            placeholderTextColor={colors.search}
+            value={searchText}
+            onChangeText={handleSearch}
+          />
+        </View>
         <View style={styles.div_categorias_opcoes}>
           <ScrollView
             horizontal

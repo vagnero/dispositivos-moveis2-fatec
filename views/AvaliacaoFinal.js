@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Modal, FlatList, KeyboardAvoidingView, Platform, Alert  } from 'react-native';
+import { useState, useContext, useEffect, useRef } from 'react';
+import { Text, View, TouchableOpacity, TextInput, Modal, Animated, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
@@ -7,6 +7,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { db } from '../config/firebaseConfig';
 import { Timestamp, collection, addDoc, getDocs } from 'firebase/firestore';
 import { useUser } from '../context/UserContext';
+import AlertModal from '../components/AlertModal';
 
 const AvaliacaoFinal = () => {
   const [rating, setRating] = useState(0);
@@ -17,6 +18,9 @@ const AvaliacaoFinal = () => {
   const [comments, setComments] = useState([]);
   const { currentUser } = useUser();
   const [name, setName] = useState(currentUser.nome);
+  const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [mensagem, setMensagem] = useState('');
+  const scaleValue = useRef(new Animated.Value(0)).current;
 
   const addComment = async () => {
     try {
@@ -27,7 +31,7 @@ const AvaliacaoFinal = () => {
         date: Timestamp.now(), // Usa Timestamp corretamente
         rating: rating,
       });
-  
+
       // Cria um novo comentário localmente, com o mesmo timestamp
       const newComment = {
         id: docRef.id,
@@ -36,10 +40,10 @@ const AvaliacaoFinal = () => {
         date: Timestamp.now().toDate(), // Converte para Date para uso no frontend
         rating: rating,
       };
-  
+
       // Atualiza os comentários no estado
       setComments((prevComments) => [newComment, ...prevComments]);
-  
+
       // Limpa os campos
       setName('');
       setComment('');
@@ -58,7 +62,7 @@ const AvaliacaoFinal = () => {
         const data = doc.data();
         return { id: doc.id, ...data, date: data.date ? data.date : { seconds: Date.now() / 1000 } }; // Verifique se 'date' existe
       });
-      
+
       // Exibe apenas o último comentário
       if (fetchedComments.length > 0) {
         setComments([fetchedComments[fetchedComments.length - 1]]);
@@ -69,11 +73,11 @@ const AvaliacaoFinal = () => {
       console.error("Erro ao buscar comentários:", error);
     }
   };
-  
+
   // Carregar comentários ao montar o componente
   useEffect(() => {
     fetchComments();
-  }, []);  
+  }, []);
 
   const handleRating = (newRating) => {
     setRating(newRating);
@@ -81,24 +85,43 @@ const AvaliacaoFinal = () => {
 
   const handleSubmit = () => {
     if (name === '') {
-      Alert.alert('Erro', 'É necessário estar logado para comentar!');
+      setMensagem('É necessário estar logado para comentar!');
+      setModalAlertVisible(true);
       return;
     }
     if (comment.trim() === '') {
-      Alert.alert('Erro', 'O comentário não pode estar vazio!');
+      setMensagem('O comentário não pode estar vazio!');
+      setModalAlertVisible(true);
       return;
     }
     if (rating < 1) {
-      Alert.alert('Erro', 'Avalie com estrelas sua experiência no aplicativo!');
+      setMensagem('Avalie com estrelas sua experiência no aplicativo!');
+      setModalAlertVisible(true);
       return;
     }
     addComment()
-    setModalVisible(true);
     setTimeout(() => {
       setModalVisible(false);
       navigation.navigate('Home');
     }, 4000);
   };
+
+  const handleCloseModal = () => {
+    setMensagem('');
+    setModalAlertVisible(false);
+  };
+
+  useEffect(() => {
+    if (modalVisible) {
+      // Animação para aumentar a escala (abrir modal)
+      Animated.spring(scaleValue, {
+        toValue: 1,
+        useNativeDriver: true,
+        friction: 4,
+        tension: 10,
+      }).start();
+    }
+  }, [modalVisible]);
 
   const styles = {
     div_container: {
@@ -172,7 +195,25 @@ const AvaliacaoFinal = () => {
       textAlign: 'center',
       fontWeight: 'bold',
       color: '#2D0C57'
-    }
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.5)', // Fundo transparente com opacidade
+    },
+    alertBox: {
+      width: 250,
+      padding: 20,
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    alertMessage: {
+      fontSize: 16,
+      textAlign: 'center',
+      marginBottom: 20,
+    },
   };
 
   return (
@@ -208,21 +249,27 @@ const AvaliacaoFinal = () => {
           <TouchableOpacity style={styles.button_enviar} onPress={handleSubmit}>
             <Text style={styles.text_enviar}>ENVIAR</Text>
           </TouchableOpacity>
-
           <Modal
-            animationType="fade"
             transparent={true}
             visible={modalVisible}
+            animationType="none" // Desabilita animações padrão para usar a animação personalizada
             onRequestClose={() => {
               setModalVisible(!modalVisible);
             }}
           >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContent}>
-                <Text style={styles.modalText}>Obrigado por sua Avaliação, sua opnião é muito importante para nós!</Text>
-              </View>
+            <View style={styles.modalContainer}>
+              <Animated.View style={[styles.alertBox, { transform: [{ scale: scaleValue }] }]}>
+                <Text style={styles.alertMessage}>
+                Obrigado por sua Avaliação, sua opnião é muito importante para nós!
+                </Text>
+              </Animated.View>
             </View>
-          </Modal>          
+          </Modal>
+          <AlertModal
+            visible={modalAlertVisible}
+            message={mensagem}
+            onClose={handleCloseModal}
+          />
         </View>
       </KeyboardAvoidingView>
     </Content>
