@@ -13,6 +13,7 @@ const Cadastrar = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [nick, setNick] = useState('');
   const [mensagemErro, setMensagemErro] = useState(''); // Estado para armazenar a mensagem de erro
   const [mensagemSucesso, setMensagemSucesso] = useState(''); // Estado para armazenar a mensagem de sucesso
   const [mensagemModal, setMensagemModal] = useState('');
@@ -85,7 +86,7 @@ const Cadastrar = () => {
     }
 
     // Se todas as validações passarem, realiza o cadastro
-    registerUser({ nome, email, senha });
+    registerUser({ nome, email, senha, nick });
     setMensagemErro('');
     setMensagemSucesso('Cadastro realizado com sucesso!');
 

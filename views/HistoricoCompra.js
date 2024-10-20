@@ -82,7 +82,6 @@ const HistoricoCompra = () => {
 
     const renderItem = ({ item }) => {
         const toggleVisibility = () => {
-            console.log(item);
             setVisibleItems(prevState => ({
                 ...prevState,
                 [item.id]: !prevState[item.id] // Inverte a visibilidade do item

@@ -32,7 +32,8 @@
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.10",
-    "Vinoteca": "file:"
+    "Vinoteca": "file:",
+    "expo-image-picker": "~15.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"

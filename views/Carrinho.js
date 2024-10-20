@@ -88,7 +88,7 @@ const Carrinho = () => {
     },
     div_conteudo_price: {
       width: '90%',
-      height: '15%',
+      height: '20%',
       margin: 'auto',
       marginBottom: 20,
       marginTop: 10,

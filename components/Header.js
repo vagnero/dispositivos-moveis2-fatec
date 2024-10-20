@@ -19,7 +19,7 @@ const Header = () => {
             left: 0,
             right: 0,
             zIndex: 1,
-          },
+        },
         header: {
             width: '100%',
             backgroundColor: colors.background,
@@ -47,8 +47,7 @@ const Header = () => {
             >
                 <View style={styles.div_saudacao_pesquisar}>
                     <View style={{ flexDirection: 'row' }}>
-                        {currentUser ? <Greeting name={currentUser.nome} /> :
-                        <Greeting name={''}/>}
+                        <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
                         <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
                             <TouchableOpacity onPress={() => navigation.navigate('Favoritos')}>
                                 <Image
