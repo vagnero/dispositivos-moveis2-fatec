@@ -18,7 +18,8 @@ const Greeting = ({ name }) => {
 
   const styles = {
     text_saudacao: {
-      fontSize: 16, 
+      fontSize: 16,
+      flexWrap: 'nowrap',
       marginBottom: 10,
       color: colors.textColor,
     },
@@ -30,9 +31,9 @@ const Greeting = ({ name }) => {
   };
 
   return (
-    <Text style={styles.text_saudacao}>
-        Olá {name || ''},
+    <Text style={styles.text_saudacao} numberOfLines={1}>
         <Text style={styles.text_get_greeting}> {getGreeting()}! </Text>
+        {name || ''}
     </Text>
   );
 };

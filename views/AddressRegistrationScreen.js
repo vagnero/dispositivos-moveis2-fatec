@@ -173,7 +173,7 @@ const AddressRegistrationScreen = () => {
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Nome do Destinatário</Text>
                         <TextInput
-                            placeholder="Nome do Destinatário"
+                            placeholder="Ex: Casa, Trabalho, etc..."
                             value={recipientName}
                             onChangeText={setRecipientName}
                             style={styles.textInput}

@@ -8,31 +8,71 @@ import { doc, setDoc } from 'firebase/firestore';
 const CardModal = ({ modalVisible, setModalVisible }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [mensagem, setMensagem] = useState('');
-  const { currentUser } = useUser(); 
+  const { currentUser } = useUser();
+  const [data, setData] = useState('');
+
+  const handleChangeNumberCard = (text) => {
+    // Remove caracteres que não sejam dígitos
+    const cleanedText = text.replace(/\D/g, '');
+
+    // Adiciona espaços a cada 4 dígitos
+    const formattedText = cleanedText
+      .replace(/(\d{4})(?=\d)/g, '$1 ')
+      .trim();
+
+    setCardNumber(formattedText);
+  };
+
+  const handleChangeData = (text) => {
+    // Remove caracteres que não sejam dígitos
+    const cleanedText = text.replace(/\D/g, '');
+
+    // Formata a string com a barra após o segundo dígito
+    let formattedText = cleanedText;
+    if (cleanedText.length > 2) {
+      formattedText = `${cleanedText.slice(0, 2)}/${cleanedText.slice(2)}`;
+    }
+
+    setData(formattedText);
+  };
+
+  const formatValue = (value) => {
+    return value.toLowerCase()
+      .replace(/( de | da | do | das | dos )/g, (match) => match.toLowerCase())
+      .replace(/\b(?!de |da |do |das |dos )\w/g, (char) => char.toUpperCase())
+      .replace(/(à|á|â|ã|ä|å|æ|ç|è|é|ê|ë|ì|í|î|ï|ñ|ò|ó|ô|õ|ö|ø|ù|ú|û|ü|ý|ÿ)\w/g, (match) => match.toLowerCase());
+  };
+
+  const handleChangeCardHolder = (cardHolder) => {
+    // Permite letras (incluindo acentuadas), números e espaços
+    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]*$/.test(cardHolder)) {
+      const formattedNome = formatValue(cardHolder);
+      setCardHolder(formattedNome); 
+    }
+  };
 
   useEffect(() => {
     if (modalVisible) {
       // Limpa os campos do formulário quando o modal é montado
       setCardNumber('');
       setCardHolder('');
-      setExpiryDate('');
+      setData('');
       setCvv('');
     }
   }, [modalVisible]);
 
   const handleSave = async () => {
-    if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
+    if (!cardNumber || !cardHolder || !data || !cvv) {
       setMensagem('Preencha todos os campos do cartão.');
       setModalAlertVisible(true);
       return;
     }
 
     try {
-      const cardData = { cardNumber, cardHolder, expiryDate, cvv };
+      const cardData = { cardNumber, cardHolder, data, cvv };
       const userDocRef = doc(db, 'paymentCard', `${currentUser.nome}_${cardNumber.slice(-4)}`);
       await setDoc(userDocRef, cardData);
       setMensagem('Cartão Salvo!'); // Mensagem de sucesso
@@ -45,16 +85,8 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
     }
   };
 
-  const validateNumber = (text) => {
-    setCardNumber(text.replace(/[^0-9]/g, ''));
-  };
-
   const validateHolderName = (text) => {
     setCardHolder(text.replace(/[^a-zA-Z\s]/g, ''));
-  };
-
-  const validateExpiryDate = (text) => {
-    setExpiryDate(text.replace(/[^0-9/]/g, ''));
   };
 
   const validateCVV = (text) => {
@@ -138,32 +170,36 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
         <View style={styles.modalView}>
           <View style={styles.modalContent}>
             <Text style={styles.title}>Cadastro de Cartão</Text>
+            <Text style={{ fontSize: 15 }}>Número do Cartão</Text>
             <TextInput
               style={styles.input}
-              placeholder="Número do Cartão"
+              placeholder="XXXX XXXX XXXX XXXX"
               value={cardNumber}
-              onChangeText={validateNumber}
+              onChangeText={handleChangeNumberCard}
               keyboardType="numeric"
-              maxLength={16}
+              maxLength={19}
             />
+            <Text style={{ fontSize: 15 }}>Nome do Titular</Text>
             <TextInput
               style={styles.input}
               placeholder="Nome do Titular"
               value={cardHolder}
-              onChangeText={validateHolderName}
+              onChangeText={handleChangeCardHolder}
               maxLength={30}
             />
+            <Text style={{ fontSize: 15 }}>Data de Vencimento</Text>
             <TextInput
               style={styles.input}
-              placeholder="Data de Validade (MM/YY)"
-              value={expiryDate}
-              onChangeText={validateExpiryDate}
+              placeholder="MM/YY"
+              value={data}
+              onChangeText={handleChangeData}
               keyboardType="numeric"
               maxLength={5}
             />
+            <Text style={{ fontSize: 15 }}>CVV</Text>
             <TextInput
               style={styles.input}
-              placeholder="CVV"
+              placeholder="XXX"
               value={cvv}
               onChangeText={validateCVV}
               keyboardType="numeric"

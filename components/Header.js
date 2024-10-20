@@ -47,8 +47,10 @@ const Header = () => {
             >
                 <View style={styles.div_saudacao_pesquisar}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
-                        <View style={{ marginLeft: 80, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
+                        <View style={{ width: '65%' }}>
+                            <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
+                        </View>
+                        <View style={{ marginLeft: 8, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
                             <TouchableOpacity onPress={() => navigation.navigate('Favoritos')}>
                                 <Image
                                     source={require('../assets/info/heart.png')}

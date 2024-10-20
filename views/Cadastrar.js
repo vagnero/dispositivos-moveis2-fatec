@@ -223,7 +223,7 @@ const Cadastrar = () => {
           <Text style={styles.mensagemSucesso}>{mensagemSucesso}</Text>
         )}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Nome Completo</Text>
+          <Text style={styles.label}>Nome</Text>
           <TextInput
             style={styles.textInput}
             value={nome}
