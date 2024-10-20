@@ -51,6 +51,11 @@ const Boleto = ({ route }) => {
         alert('Função de imprimir ainda não implementada!');
     };
 
+    const handleSave = () => {
+        // Lógica para imprimir ou compartilhar o boleto
+        alert('Função de Salvar ainda não implementada!');
+    };
+
     return (
         <Content>
             <ScrollView style={styles.container}>
@@ -74,7 +79,7 @@ const Boleto = ({ route }) => {
 
                 <Button title="Imprimir Boleto" onPress={handlePrint} />
                 <View style={{ marginTop: 20 }}>
-                    <Button title="Salvar Boleto" onPress={handlePrint} />
+                    <Button title="Salvar Boleto" onPress={handleSave} />
                 </View>
                 <View style={{ marginTop: 20 }}>
                     <Button title="Avaliar Sistema" onPress={() => {navigation.navigate('AvaliacaoFinal')}} />

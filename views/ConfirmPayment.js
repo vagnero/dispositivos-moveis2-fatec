@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, FlatList, Alert } from 'react-native';
-import { collection, getDocs, doc, getDoc, addDoc, deleteDoc } from 'firebase/firestore';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'; // Importando useRoute
+import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
@@ -12,20 +12,21 @@ import CardModal from '../components/CardModal';
 
 const ConfirmPayment = ({ route }) => {
   const { cartItems, setCartItems, currentUser } = useUser();
-  const [addresses, setAddresses] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const { colors } = useContext(ThemeContext);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [mensagem, setMensagem] = useState('');
-  const [modalAlertVisible, setModalAlertVisible] = useState(false);
-  const [modalVisibleAddress, setModalVisibleAddress] = useState(false);
+  const [purchaseHistory, setPurchaseHistory] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState(null);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [modalCardVisible, setModalCardVisible] = useState(null);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [status, setStatus] = useState('');
+  const [mensagem, setMensagem] = useState('');
+  const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [modalCardVisible, setModalCardVisible] = useState(null);
+  const [modalVisibleAddress, setModalVisibleAddress] = useState(false);
 
   // Recuperando o parâmetro 'total' da rota
   const { total } = route.params;
@@ -98,7 +99,7 @@ const ConfirmPayment = ({ route }) => {
       setStatus(newStatus)
       setMensagem('Compra Efetuada!')
       setModalAlertVisible(true);
-      navigation.navigate('AvaliacaoFinal'); // Usuário logado
+      setTimeout(() => {navigation.navigate('AvaliacaoFinal')}, 2000);
     }
     // Atualizar o wineSold no SecureStore
     try {
@@ -125,7 +126,6 @@ const ConfirmPayment = ({ route }) => {
       console.error('Erro ao atualizar o carrinho:', error);
       Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
     }
-
   };
 
   const savePurchaseHistory = async (currentUser, cartItems, total, status) => {
@@ -138,6 +138,7 @@ const ConfirmPayment = ({ route }) => {
         status: status,
         paymentMethod: paymentMethod,
         address: selectedAddress,
+        card: selectedCard,
       };
 
       const purchaseCollection = collection(db, 'purchaseHistory');
@@ -147,6 +148,46 @@ const ConfirmPayment = ({ route }) => {
       console.error('Erro ao salvar a compra no Firestore:', error);
     }
   };
+
+  const fetchPurchaseHistory = async () => {
+    try {
+      if (!currentUser?.nome) {
+        throw new Error("Usuário não encontrado");
+      }
+
+      const q = query(
+        collection(db, 'purchaseHistory'),
+        where('userId', '==', currentUser.nome) // Filtra pelo usuário atual
+      );
+
+      const querySnapshot = await getDocs(q);
+      const purchases = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      const sortedPurchases = purchases.sort((a, b) => b.timestamp - a.timestamp);
+
+      setPurchaseHistory(sortedPurchases);
+
+      // Se houver compras, seta os valores do cartão e endereço da compra mais recente
+      if (sortedPurchases.length > 0) {
+        const lastPurchase = sortedPurchases[0]; // A compra mais recente
+        setPaymentMethod(lastPurchase.paymentMethod);
+        setSelectedCard(lastPurchase.card);
+        setSelectedAddress(lastPurchase.address);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar histórico de compras:', error);
+      Alert.alert('Erro', 'Não foi possível carregar o histórico de compras.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPurchaseHistory();
+  }, []);
 
   // Função para buscar cartões salvos
   const fetchLoadCards = async () => {

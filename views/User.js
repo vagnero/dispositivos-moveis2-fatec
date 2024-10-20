@@ -14,7 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 const User = () => {
   const { colors } = useContext(ThemeContext);
-  const { currentUser, setCurrentUser } = useUser();
+  const { currentUser, setCurrentUser, cartItems, setCartItems } = useUser();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalProfileVisible, setModalProfileVisible] = useState(false);
@@ -23,6 +23,7 @@ const User = () => {
 
   const handleLogout = () => {
     setCurrentUser(null); // Limpa o usuário atual
+    setCartItems([]) // Remove os itens do carrinho
 
     // Redireciona para a tela de login
     navigation.reset({
@@ -253,11 +254,6 @@ const User = () => {
               </View>
               <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')} />
             </View>
-            {/* <PrefItem
-              iconSource={<Image source={require('../assets/user/perfil.png')} style={styles.image} />}
-              text="Informações pessoais"
-              view="Home"
-            /> */}
           </TouchableOpacity>
           <PrefItem
             iconSource={<Image source={require('../assets/user/map.png')} style={styles.image} />}
@@ -289,12 +285,17 @@ const User = () => {
             text="Configurações"
             view="Home"
           /> */}
-          <TouchableOpacity onPress={handleLogout} >
-            <PrefItem
-              iconSource={<Image source={require('../assets/user/Logout.png')} style={styles.image} />}
-              text="Sair"
-              view="Login"
-            />
+          <TouchableOpacity onPress={handleLogout}>
+            <View style={{
+              width: '87%', flexDirection: 'row', marginLeft: 20, alignItems: 'center',
+              justifyContent: 'space-between', marginTop: 20,
+            }}>
+              <View style={{ flexDirection: 'row', }}>
+                <Image source={require('../assets/user/Logout.png')} style={styles.image} />
+                <Text style={styles.text_pref}>Sair</Text>
+              </View>
+              <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -334,8 +335,7 @@ const User = () => {
               <View>
                 <Text style={{ marginVertical: 10, fontSize: 17 }}>Nome: {currentUser.nome}</Text>
                 <Text style={{ marginVertical: 10, fontSize: 17 }}>Email: {currentUser.email}</Text>
-                <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>
-                {/* Adicione mais informações conforme necessário */}
+                <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>                
               </View>
             )}
             <Button title="Fechar" onPress={() => { setModalProfileVisible(false) }} />

@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext } from 'react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
+import * as Crypto from 'expo-crypto';
+import bcrypt from 'bcryptjs';
 
 const UserContext = createContext();
 
@@ -13,7 +15,17 @@ export const UserProvider = ({ children }) => {
   const registerUser = async (user) => {
     const newUser = { ...user }; // Cria um novo usuário
 
+    const hashPassword = async (password) => {
+      const hashedPassword = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        password,
+        { encoding: Crypto.CryptoEncoding.HEX }
+      );
+      return hashedPassword;
+    };
+
     try {
+      newUser.senha = await hashPassword(newUser.senha); // 10 é o número de "salts"
       // Cria um documento no Firestore com o ID do usuário baseado no e-mail ou um ID único
       await setDoc(doc(db, 'users', newUser.email), newUser);
 
@@ -29,11 +41,22 @@ export const UserProvider = ({ children }) => {
     const userDoc = doc(db, 'users', email); // Acessa o documento do usuário baseado no e-mail
     const userSnapshot = await getDoc(userDoc);
 
+    const hashPassword = async (password) => {
+      return await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        password,
+        { encoding: Crypto.CryptoEncoding.HEX }
+      );
+    };
+
     if (userSnapshot.exists()) {
       const userData = userSnapshot.data();
       // Aqui você deve verificar se a senha está correta
-      if (userData.senha === senha) { // Supondo que você tenha a senha armazenada como 'senha'
-        return userData; // Retorna os dados do usuário
+      const hashedInputPassword = await hashPassword(senha);
+
+      // Compara o hash gerado com o hash armazenado
+      if (hashedInputPassword === userData.senha) {
+        return userData; // Retorna os dados do usuário se a senha estiver correta
       }
     }
     return null; // Retorna null se não encontrar o usuário ou se a senha estiver incorreta

@@ -14,8 +14,10 @@
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "*",
+    "bcryptjs": "^2.4.3",
     "events": "^3.3.0",
     "expo": "~51.0.36",
+    "expo-image-picker": "~15.0.7",
     "expo-linear-gradient": "~13.0.2",
     "expo-secure-store": "~13.0.2",
     "expo-sqlite": "~14.0.6",
@@ -33,7 +35,7 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.10",
     "Vinoteca": "file:",
-    "expo-image-picker": "~15.0.7"
+    "expo-crypto": "~13.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"
