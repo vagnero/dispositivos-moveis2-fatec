@@ -10,6 +10,7 @@ import wines from '../components/Wines';
 import Content from '../components/Content';
 import { db } from '../config/firebaseConfig'; // Importe seu arquivo de configuração do Firebase
 import { doc, setDoc, getDocs, collection, deleteDoc } from 'firebase/firestore';
+import AlertModal from '../components/AlertModal';
 
 const Sobre = () => {
   const { colors } = useContext(ThemeContext);
@@ -18,11 +19,14 @@ const Sobre = () => {
   const navigation = useNavigation();
   const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage, currentUser } = useUser();
   const [favoriteWines, setFavoriteWines] = useState([]);
+  const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [mensagem, setMensagem] = useState('');
 
   // Função para alternar o vinho favorito
   const toggleHeart = async (wine) => {
     if (!currentUser || !currentUser.nome) {
-      Alert.alert('Para Favoritar é necessário estar logado');
+      setMensagem('Para Favoritar é necessário estar logado')
+      setModalAlertVisible(true);
       return; // Sai da função se o usuário não estiver definido
     }
     
@@ -152,8 +156,6 @@ const Sobre = () => {
       fontWeight: 'bold',
       color: colors.textColor,
       marginLeft: '7%',
-      marginTop: '5%',
-      marginBottom: '3%'
     },
 
     div_avaliacoes: {
@@ -184,12 +186,10 @@ const Sobre = () => {
       fontWeight: 'bold',
       marginLeft: '7%',
       color: colors.textColor,
-      marginBottom: '3%'
     },
 
     text_sobre: {
       marginLeft: '7%',
-      marginBottom: '3%',
       fontSize: 22,
       fontWeight: 'bold',
       color: '#2D0C57'
@@ -280,8 +280,8 @@ const Sobre = () => {
     <Content>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        style={{ flex: 1, marginBottom: 50 }}
+        contentContainerStyle={{  }}
+        style={{ flex: 1 }}
       >
         <View style={styles.content}>
           <View style={styles.div_image}>
@@ -334,6 +334,11 @@ const Sobre = () => {
           </View>
         )}
       </ScrollView>
+      <AlertModal
+        visible={modalAlertVisible}
+        message={mensagem}
+        onClose={() => {setModalAlertVisible(false)}}
+      />
     </Content>
   );
 };

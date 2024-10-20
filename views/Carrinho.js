@@ -88,7 +88,7 @@ const Carrinho = () => {
     },
     div_conteudo_price: {
       width: '90%',
-      height: '20%',
+      height: '16%',
       margin: 'auto',
       marginBottom: 20,
       marginTop: 10,
@@ -103,7 +103,7 @@ const Carrinho = () => {
       flexDirection: 'row',
       alignItems: 'center', // Garantir que o texto e o valor estejam alinhados verticalmente
       justifyContent: 'center', // Adiciona alinhamento horizontal para o centro
-      marginBottom: 10,
+      marginBottom: 1,
     },
 
     text_total: {
@@ -121,7 +121,7 @@ const Carrinho = () => {
 
     button_finalizar_pedido: {
       width: 180,
-      height: 56,
+      height: 50,
       backgroundColor: colors.button,
       borderWidth: 1,
       borderColor: '#D9D0E3',

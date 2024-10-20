@@ -99,7 +99,7 @@ const ConfirmPayment = ({ route }) => {
       setStatus(newStatus)
       setMensagem('Compra Efetuada!')
       setModalAlertVisible(true);
-      setTimeout(() => {navigation.navigate('AvaliacaoFinal')}, 2000);
+      setTimeout(() => { navigation.navigate('AvaliacaoFinal') }, 2000);
     }
     // Atualizar o wineSold no SecureStore
     try {
@@ -237,7 +237,7 @@ const ConfirmPayment = ({ route }) => {
     },
     content: {
       width: 350,
-      maxHeight: 150,
+      height: 150,
       padding: 20,
       marginTop: 5,
       backgroundColor: '#fff',
@@ -261,10 +261,43 @@ const ConfirmPayment = ({ route }) => {
       shadowRadius: 2,
       elevation: 5,
     },
+    contentTotal: {
+      width: 350,
+      maxHeight: 150,
+      padding: 20,
+      marginTop: 5,
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 5,
+    },
+    contentButtons: {
+      width: 350,
+      height: '25%',
+      padding: 20,
+      marginTop: 5,
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 5,
+    },
+    titlePaymentMethod: {
+      fontSize: 24,
+      textAlign: 'center',
+      fontWeight: 'bold',
+      marginTop: 20,
+      color: colors.secondary,
+    },
     title: {
       fontSize: 24,
+      textAlign: 'center',
       fontWeight: 'bold',
-      marginBottom: 20,
       color: 'black',
     },
     address: {
@@ -277,15 +310,14 @@ const ConfirmPayment = ({ route }) => {
       color: 'white',
       backgroundColor: '#2196F3',
     },
-    saveButton: {
+    buttomConfirm: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: 48,
       borderRadius: 5,
+      padding: 10,
       backgroundColor: '#2ecc71',
-      marginTop: 10,
     },
-    saveButtonText: {
+    textConfirm: {
       color: '#fff',
       fontWeight: 'bold',
       fontSize: 16,
@@ -297,6 +329,9 @@ const ConfirmPayment = ({ route }) => {
       borderRadius: 5,
       backgroundColor: '#e74c3c',
       marginTop: 10,
+    },
+    noCardsText: {
+      color: 'black',
     },
     confirmCard: {
       alignItems: 'center',
@@ -400,17 +435,15 @@ const ConfirmPayment = ({ route }) => {
           <View style={styles.content}>
             <Text style={styles.title}>Forma de pagamento</Text>
             <TouchableOpacity onPress={() => { navigation.navigate('Payment') }}>
-              <Text style={styles.title}>{paymentMethod}</Text>
+              {paymentMethod ? <Text style={styles.titlePaymentMethod}>{paymentMethod}</Text> :
+                <Text style={{ fontSize: 20, color: 'blue', marginTop: 20, textAlign: 'center' }}>Selecionar</Text>}
             </TouchableOpacity>
             <View>
               {paymentMethod === 'Cartão' && (
                 <View style={{ direction: 'row' }}>
                   <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.buttonAddress}>
                     {!selectedCard ? <Text style={{ fontSize: 20 }}>Escolher Cartão</Text> :
-                      <Text style={{ fontSize: 20 }}>**** **** **** {selectedCard.slice(-4)}</Text>}
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('Payment')}>
-                    <Text>Alterar</Text>
+                      <Text style={{ fontSize: 20, textAlign: 'center' }}>**** **** **** {selectedCard.slice(-4)}</Text>}
                   </TouchableOpacity>
                 </View>
               )}
@@ -430,14 +463,14 @@ const ConfirmPayment = ({ route }) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.content}>
-            <Text style={styles.title}>Total a pagar:</Text>
+          <View style={styles.contentTotal}>
+            <Text style={styles.title}>Total a pagar</Text>
             <Text style={styles.title}>R$ {total},00</Text>
           </View>
 
-          <View style={styles.content}>
-            <TouchableOpacity style={styles.saveButton} onPress={() => (pagamentoAprovado())}>
-              <Text style={styles.saveButtonText}>Confirmar</Text>
+          <View style={styles.contentButtons}>
+            <TouchableOpacity style={styles.buttomConfirm} onPress={() => (pagamentoAprovado())}>
+              <Text style={styles.textConfirm}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.closeButton}

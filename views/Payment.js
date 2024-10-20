@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { db } from '../config/firebaseConfig'; // Importe a configuração do Firebase
-import { doc, setDoc, getDoc } from 'firebase/firestore'; // Importa métodos do Firestore
+import { doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore'; // Importa métodos do Firestore
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Content from '../components/Content';
@@ -43,9 +43,16 @@ const Payment = () => {
     if (selectedPayment === 'Cartão') {
       // Verifica se há um cartão registrado
       try {
-        const cardDocRef = doc(db, 'paymentCard', `${currentUser.nome}_card`);
-        const cardDoc = await getDoc(cardDocRef);
-        if (!cardDoc.exists()) {
+        const userCardsCollection = collection(db, 'paymentCard'); // Coleção de cartões
+        const userCardDocs = await getDocs(userCardsCollection);
+        const userCards = [];
+
+        userCardDocs.forEach(doc => {
+          if (doc.id.startsWith(`${currentUser.nome}_`)) {
+            userCards.push({ id: doc.id, ...doc.data() }); // Adiciona cartões ao array
+          }
+        });
+        if (userCards.length === 0) {
           setMensagem('Nenhum cartão cadastrado. Por favor, cadastre um cartão antes de salvar.');
           setModalVisible2(true);
           return;
@@ -70,7 +77,7 @@ const Payment = () => {
 
       setMensagem(`Forma de pagamento atualizada para ${selectedPayment}!`); // Mensagem de sucesso
       setModalVisible2(true);
-      
+
     } catch (error) {
       console.error('Erro ao atualizar forma de pagamento:', error);
       setMensagem('Não foi possível atualizar a forma de pagamento.');
@@ -90,10 +97,10 @@ const Payment = () => {
   const styles = StyleSheet.create({
     container: {
       width: '90%',
-      height: '45%',
+      height: '50%',
       borderRadius: 10,
       marginBottom: '45%',
-      marginTop: 100,
+      marginTop: 50,
       margin: 'auto',
       backgroundColor: colors.card,
     },
@@ -112,6 +119,9 @@ const Payment = () => {
     paymentOption: {
       fontSize: 18,
       color: colors.secondary,
+    },
+    buttonCadastroCard: {
+      marginBottom: 10,
     },
     textCadastroCard: {
       width: 150,
@@ -146,11 +156,13 @@ const Payment = () => {
     <Content>
       <Text style={styles.title}>Escolha a forma de pagamento</Text>
       <View style={styles.container}>
-        <View style={{ padding: 10, position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1, }}>
+        <View style={{
+          padding: 10, position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1,
+        }}>
           {/* Opção: Pix */}
           <TouchableOpacity
             style={styles.radioContainer}
@@ -190,9 +202,7 @@ const Payment = () => {
             <Text style={styles.paymentOption}>Cartão de Crédito</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => openModal()}
-          >
+          <TouchableOpacity onPress={() => openModal()} style={styles.buttonCadastroCard} >
             <Text style={styles.textCadastroCard}>Cadastrar Cartão</Text>
           </TouchableOpacity>
         </View>

@@ -21,7 +21,7 @@ const Comentario = ({ nome, rate, data, texto }) => {
     },
 
     text_nome: {
-      width: '65%',
+      width: '63%',
       fontSize: 15,
       color: colors.text,
       fontWeight: 'bold',

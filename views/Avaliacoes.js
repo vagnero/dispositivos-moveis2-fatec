@@ -13,9 +13,7 @@ const Avaliacoes = () => {
   const [showFullText, setShowFullText] = useState({});
   const [refreshing, setRefreshing] = useState(false); // Controle do refresh
   const [loading, setLoading] = useState(true);
-  const [avaliacoes, setAvaliacoes] = useState([
-
-  
+  const [avaliacoes, setAvaliacoes] = useState([  
     { nome: 'Audrey', rate: 4, data: '25/08/2024', texto: 'Minha experiência com o app foi incrível! A navegação é super intuitiva e rápida, com categorias bem organizadas e sugestões personalizadas. Encontrei facilmente um vinho robusto com notas de frutas vermelhas e toque de especiarias, perfeito para harmonizar com carnes e queijos. O processo de compra foi simples e seguro, e recebi atualizações do pedido em tempo real. Com certeza, voltarei a usar o app para futuras compras!' },
     { nome: 'José Leandro', rate: 4, data: '22/08/2024', texto: 'Fresco e vibrante, com aromas de maçã verde e limão. Perfeito para uma tarde de verão ou para acompanhar pratos leves como saladas e frutos do mar.' },
     { nome: 'Vagner', rate: 4, data: '01/08/2024', texto: 'Um rosé elegante, com sabor suave de morango e um final refrescante. Ideal para um brunch ou para uma tarde relaxante com amigos.' },
@@ -141,12 +139,12 @@ const Avaliacoes = () => {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           >
-            {displayedAvaliacoes.map((item, index) => (
+            {allAvaliacoes.map((item, index) => (
               <View key={item.id || index}>
                 <Comentario
                   nome={item.nome}
                   rate={item.rate}
-                  data={formatDate(item.data)}
+                  data={typeof item.data === 'string' ? item.data : formatDate(item.data)}
                   texto={
                     showFullText[index]
                       ? item.texto

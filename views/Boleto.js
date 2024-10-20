@@ -99,14 +99,14 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 2,
     },
     boletoContainer: {
-        padding: 20,
+        padding: 10,
         backgroundColor: '#fff',
         borderRadius: 10,
         elevation: 2,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     label: {
         fontSize: 16,

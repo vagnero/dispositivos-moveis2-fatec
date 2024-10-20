@@ -53,10 +53,6 @@ const Branco = () => {
       color: colors.primary,
     },
 
-    container_vinhos: {
-      marginBottom: 50,
-    },
-
     noResultsText: {
       fontSize: 18,
       color: '#2D0C57',
@@ -74,13 +70,13 @@ const Branco = () => {
           </View>
         )}        
         <View style={styles.div_bordeaux}>
-          <Text style={styles.text_bordeaux}>Bordeaux</Text>
+          <Text style={styles.text_bordeaux}>Branco</Text>
         </View>
 
 
         {/* Vinhos */}
         <ScrollView vertical showsVerticalScrollIndicator={false}>
-          <View style={styles.container_vinhos}>
+          <View>
             {filteredWines.length === 0 ? (
               <Text style={styles.noResultsText}>Nenhum resultado encontrado</Text>
             ) : (

@@ -124,9 +124,9 @@ const Cadastrar = () => {
       fontSize: 35,
       fontWeight: 'bold',
       textAlign: 'center',
-      marginTop: 30,
+      marginTop: 20,
       marginLeft: 33,
-      marginBottom: 40,
+      marginBottom: 20,
       color: colors.textColor,
     },
 

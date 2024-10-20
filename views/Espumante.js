@@ -74,7 +74,7 @@ const Espumante = () => {
           </View>
         )}        
         <View style={styles.div_bordeaux}>
-          <Text style={styles.text_bordeaux}>Bordeaux</Text>
+          <Text style={styles.text_bordeaux}>Espumante</Text>
         </View>
 
 

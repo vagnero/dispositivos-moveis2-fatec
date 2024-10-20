@@ -88,12 +88,13 @@ const RedefinirSenha = () => {
       fontSize: 16,
       fontWeight: 'bold'
     },
-    buttonLogin: {
+    buttonVoltar: {
       flexDirection: 'row',
-      marginTop: 30
+      padding: 20,
+      marginTop: 30,
     },
-    textLogin2: {
-      fontSize: 24,
+    textVoltar: {
+      fontSize: 15,
       fontWeight: 'bold',
       color: colors.textColor,
     },
@@ -147,8 +148,8 @@ const RedefinirSenha = () => {
         <TouchableOpacity style={styles.button_senha} onPress={handleMessage}>
           <Text style={styles.text_senha}>ENVIAR NOVA SENHA</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.buttonLogin}>
-          <Text style={styles.textLogin2}>Voltar</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.buttonVoltar}>
+          <Text style={styles.textVoltar}>Voltar</Text>
         </TouchableOpacity>
       </View>
       <Menu2 />
