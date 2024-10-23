@@ -3,9 +3,36 @@ import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
 import { useUser } from '../context/UserContext';
 import LoadingBar from '../components/LoadingBar';
+import * as SecureStore from 'expo-secure-store';
 
 const Splash = () => {
   const { colors } = useContext(ThemeContext);
+  const { findUser, setCurrentUser } = useUser(); // Remova registerUser do destructuring
+
+  const checkUserLogin = async () => {
+    try {
+      const storedEmail = await SecureStore.getItemAsync('userEmail');
+      const storedSenha = await SecureStore.getItemAsync('userPassword');
+      if (storedEmail && storedSenha) {
+        const user = await findUser(storedEmail, storedSenha); // Supondo que você tenha uma função para buscar o usuário pelo email
+        if (user) {
+          setCurrentUser(user);
+        } else {
+          setCurrentUser(null);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+    } catch (error) {
+      console.error('Erro ao verificar login do usuário:', error);
+      setCurrentUser(null);
+    }
+  };
+
+  useEffect(() => {
+    checkUserLogin();
+  }, []);  
+
   // const { registerUser, setCurrentUser } = useUser();
   // const [nome] = useState('Dev');
   // const [email] = useState('dev');

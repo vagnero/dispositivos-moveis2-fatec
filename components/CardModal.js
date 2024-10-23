@@ -5,14 +5,14 @@ import { useUser } from '../context/UserContext';
 import { db } from '../config/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 
-const CardModal = ({ modalVisible, setModalVisible }) => {
+const CardModal = ({ modalVisible, setModalVisible, onAddCard }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
+  const [data, setData] = useState('');
   const [cvv, setCvv] = useState('');
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [mensagem, setMensagem] = useState('');
   const { currentUser } = useUser();
-  const [data, setData] = useState('');
 
   const handleChangeNumberCard = (text) => {
     // Remove caracteres que não sejam dígitos
@@ -78,6 +78,7 @@ const CardModal = ({ modalVisible, setModalVisible }) => {
       setMensagem('Cartão Salvo!'); // Mensagem de sucesso
       setModalAlertVisible(true);
       setModalVisible(false);
+      onAddCard();
     } catch (error) {
       setMensagem('Erro ao salvar o cartão.');
       setModalAlertVisible(true);

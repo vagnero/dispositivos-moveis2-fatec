@@ -11,6 +11,7 @@ import { db, storage } from '../config/firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
+import * as SecureStore from 'expo-secure-store';
 
 const User = () => {
   const { colors } = useContext(ThemeContext);
@@ -21,15 +22,25 @@ const User = () => {
   const [nickname, setNickname] = useState('');
   const [profileImage, setProfileImage] = useState("");
 
-  const handleLogout = () => {
-    setCurrentUser(null); // Limpa o usuário atual
-    setCartItems([]) // Remove os itens do carrinho
+  const handleLogout = async () => {
+    try {
+      setCurrentUser(null); // Limpa o usuário atual
+      setCartItems([]); // Remove os itens do carrinho
 
-    // Redireciona para a tela de login
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }],
-    });
+      // Limpa informações armazenadas no SecureStore
+      await SecureStore.deleteItemAsync('userEmail');
+      await SecureStore.deleteItemAsync('userPassword'); // Caso tenha armazenado a senha
+      // Adicione outras chaves que você deseja limpar, se necessário
+
+      // Redireciona para a tela de login
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      // Você pode mostrar um alerta ou notificação ao usuário, se desejado
+    }
   };
 
   const loadProfileImage = async () => {
@@ -234,7 +245,7 @@ const User = () => {
                 />
               )}
             </TouchableOpacity>
-            <Text style={styles.text_nome}>{currentUser.nick || currentUser.nome}</Text>
+            <Text style={styles.text_nome}>{currentUser?.nick || currentUser?.nome}</Text>
           </View>
           <TouchableOpacity onPress={() => { setModalVisible(true) }} style={{ marginRight: 20 }}>
             <FontAwesome name="pencil" size={20} color={colors.textColor} />
@@ -331,13 +342,15 @@ const User = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Informações Pessoais</Text>
-            {currentUser && (
-              <View>
-                <Text style={{ marginVertical: 10, fontSize: 17 }}>Nome: {currentUser.nome}</Text>
-                <Text style={{ marginVertical: 10, fontSize: 17 }}>Email: {currentUser.email}</Text>
-                <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>                
-              </View>
-            )}
+            {currentUser ? (
+                <View>
+                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Nome: {currentUser.nome}</Text>
+                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Email: {currentUser.email}</Text>
+                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>
+                </View>
+              ) : (
+                <Text style={{ marginVertical: 10, fontSize: 17 }}>Usuário não encontrado.</Text>
+              )}
             <Button title="Fechar" onPress={() => { setModalProfileVisible(false) }} />
           </View>
         </View>

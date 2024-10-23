@@ -2,7 +2,6 @@ import React, { createContext, useState, useContext } from 'react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import * as Crypto from 'expo-crypto';
-import bcrypt from 'bcryptjs';
 
 const UserContext = createContext();
 

@@ -16,6 +16,7 @@ const Carrinho = () => {
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [mensagem, setMensagem] = useState('');
 
+  // Calcula o Total
   const calculateTotal = () => {
     let total = 0;
     cartItems.forEach((item) => {
@@ -33,10 +34,12 @@ const Carrinho = () => {
     setTotal(total);
   };
 
+  // Atualiza o Total
   useEffect(() => {
     calculateTotal();
   }, [cartItems]);
 
+  // Controla mensagem da tela
   useEffect(() => {
     if (cartSuccessMessage) {
       const timer = setTimeout(() => {
@@ -58,13 +61,10 @@ const Carrinho = () => {
     }
   }  
 
+  // Se não estiver logado
   const handleLogin = () => {
     // Lógica para redirecionar para a tela de login
     navigation.navigate('Login');
-    setModalVisible(false); // Fecha o modal
-  };
-
-  const handleCancel = () => {
     setModalVisible(false); // Fecha o modal
   };
 
@@ -222,7 +222,7 @@ const Carrinho = () => {
           transparent={true}
           animationType="slide"
           visible={modalVisible}
-          onRequestClose={handleCancel}
+          onRequestClose={ () => {setModalVisible(false)}}
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
@@ -231,7 +231,7 @@ const Carrinho = () => {
                 <TouchableOpacity style={styles.modalButton} onPress={handleLogin}>
                   <Text style={styles.modalButtonText}>Fazer Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.modalButton} onPress={handleCancel}>
+                <TouchableOpacity style={styles.modalButton} onPress={ () => {setModalVisible(false)}}>
                   <Text style={styles.modalButtonText}>Cancelar</Text>
                 </TouchableOpacity>
               </View>

@@ -94,6 +94,9 @@ const Payment = () => {
     setModalVisible2(false);
   };
 
+  const handleAddCard = () => {
+  };
+
   const styles = StyleSheet.create({
     container: {
       width: '90%',
@@ -215,6 +218,7 @@ const Payment = () => {
       <CardModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        onAddCard={handleAddCard}
       />
       <AlertModal
         visible={modalVisible2}

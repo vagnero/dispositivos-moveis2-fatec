@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback  } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import {
-  Text,
+  Text, BackHandler,
   View,
   TouchableOpacity,
   ScrollView,
@@ -87,7 +87,23 @@ const Home = () => {
       return () => { };
     }, [])
   );
+ 
+  // Impede de voltar uma tela anterior a Home
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {        
+        return true; // Retorne true para indicar que o evento foi tratado
+      };
 
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, [])
+  );
+
+  // Ordena por preço
   const handlePressButton1 = () => {
     setIsPressedButton1(!isPressedButton1);
     if (!isSortedByPrice) {
@@ -110,6 +126,7 @@ const Home = () => {
     setIsPressedButton3(false);
   };
 
+  // Ordena por rating
   const handlePressButton2 = () => {
     setIsPressedButton2(!isPressedButton2);
     if (!isSortedByRating) {
@@ -131,6 +148,7 @@ const Home = () => {
     setIsPressedButton3(false);
   };
 
+  // Ordena por quantidade vendido
   const handlePressButton3 = () => {
     setIsPressedButton3(!isPressedButton3);
 
@@ -155,6 +173,7 @@ const Home = () => {
     setIsPressedButton2(false);
   };
 
+  // Ordena por quantidade vendido
   const handleSearch = (text) => {
     setSearchText(text);
   };

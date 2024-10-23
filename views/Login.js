@@ -54,6 +54,7 @@ const Login = () => {
       setMensagemErro('');
       if (salvarEmail) {
         await SecureStore.setItemAsync('userEmail', email);
+        await SecureStore.setItemAsync('userPassword', senha);
       } else {
         await SecureStore.deleteItemAsync('userEmail');
       }
@@ -67,7 +68,6 @@ const Login = () => {
       setTimeout(() => {setMensagemErro('')}, 2000);
     }
   };
-
 
   useFocusEffect(
     useCallback(() => {

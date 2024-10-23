@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'; // Importando useRoute
-import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, query, where, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
@@ -9,10 +9,10 @@ import Content from '../components/Content';
 import * as SecureStore from 'expo-secure-store';
 import AlertModal from '../components/AlertModal';
 import CardModal from '../components/CardModal';
+import ModalManagerCard from '../components/ModalManagerCard';
 
 const ConfirmPayment = ({ route }) => {
   const { cartItems, setCartItems, currentUser } = useUser();
-  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const { colors } = useContext(ThemeContext);
@@ -26,6 +26,7 @@ const ConfirmPayment = ({ route }) => {
   const [mensagem, setMensagem] = useState('');
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [modalCardVisible, setModalCardVisible] = useState(null);
+  const [modalManagerCardVisible, setModalManagerCardVisible] = useState(null);
   const [modalVisibleAddress, setModalVisibleAddress] = useState(false);
 
   // Recuperando o parâmetro 'total' da rota
@@ -50,6 +51,9 @@ const ConfirmPayment = ({ route }) => {
       if (paymentSnapshot.exists()) {
         const method = paymentSnapshot.data().paymentMethod;
         setPaymentMethod(method); // Atualizar estado com método de pagamento
+        if (paymentMethod === "Cartão") {
+          fetchLoadCards();
+        }
       } else {
         console.log('Nenhum método de pagamento encontrado.');
       }
@@ -112,8 +116,24 @@ const ConfirmPayment = ({ route }) => {
         if (storedWine) {
           // Incrementa a quantidade vendida
           storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
+        } else {
+          // Se o vinho não existir, você pode querer adicioná-lo
+          winesArray.push({
+            wineName: item.wineName,
+            wineSold: item.quantity,
+          });
         }
       });
+
+      // Salva os vinhos atualizados no Firestore
+      const winesCollection = collection(db, 'wines');
+      for (const wine of winesArray) {
+        const wineDoc = doc(winesCollection, wine.wineName);
+        await setDoc(wineDoc, {
+          wineName: wine.wineName,
+          wineSold: wine.wineSold,
+        });
+      }
 
       // Salva os vinhos atualizados de volta ao SecureStore
       await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
@@ -174,7 +194,9 @@ const ConfirmPayment = ({ route }) => {
       if (sortedPurchases.length > 0) {
         const lastPurchase = sortedPurchases[0]; // A compra mais recente
         setPaymentMethod(lastPurchase.paymentMethod);
-        setSelectedCard(lastPurchase.card);
+        if (lastPurchase.card && cards.includes(selectedCard)) {
+          setSelectedCard(lastPurchase.card);
+        }
         setSelectedAddress(lastPurchase.address);
       }
     } catch (error) {
@@ -187,7 +209,8 @@ const ConfirmPayment = ({ route }) => {
 
   useEffect(() => {
     fetchPurchaseHistory();
-  }, []);
+    fetchLoadCards();
+  }, [fetchLoadCards]);
 
   // Função para buscar cartões salvos
   const fetchLoadCards = async () => {
@@ -205,6 +228,7 @@ const ConfirmPayment = ({ route }) => {
       if (userCards.length > 0) {
         setCards(userCards); // Atualiza o estado com todos os cartões
       } else {
+        setCards([]);
         console.log('Nenhum cartão encontrado.');
       }
     } catch (error) {
@@ -216,17 +240,8 @@ const ConfirmPayment = ({ route }) => {
     setModalAlertVisible(false);
   };
 
-  const handleDeleteCard = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'paymentCard', id)); // Deleta o endereço com o id correto
-      setMensagem('Cartão excluído com sucesso!'); // Mensagem de sucesso
-      setModalAlertVisible(true); // Mostra modal de sucesso
-      fetchLoadCards(); // Atualiza a lista de endereços
-    } catch (error) {
-      console.error('Erro ao excluir cartão')
-      setMensagem('Não foi possível excluir o Cartão.'); // Mensagem de sucesso
-      setModalAlertVisible(true); // Mostra modal de sucesso
-    }
+  const handleAddCard = () => {
+    fetchLoadCards();
   };
 
   const styles = StyleSheet.create({
@@ -393,25 +408,6 @@ const ConfirmPayment = ({ route }) => {
     },
   });
 
-  const renderCardItem = ({ item }) => (
-    <View key={item.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <TouchableOpacity
-        onPress={() => {
-          setSelectedCard(item.cardNumber); // Armazena os últimos dígitos
-          setModalVisible(false); // Fecha o modal após a seleção do cartão
-        }}
-        style={styles.buttonAddress}
-      >
-        <Text style={styles.textButtonAddress}>
-          **** **** **** {item.cardNumber.slice(-4)} {/* Exibe apenas os últimos 4 dígitos */}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleDeleteCard(item.id)} style={styles.deleteButton}>
-        <Text style={styles.deleteText}>Deletar</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   const renderAddressItem = ({ item }) => (
     <View key={item.id}>
       <TouchableOpacity
@@ -441,8 +437,8 @@ const ConfirmPayment = ({ route }) => {
             <View>
               {paymentMethod === 'Cartão' && (
                 <View style={{ direction: 'row' }}>
-                  <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.buttonAddress}>
-                    {!selectedCard ? <Text style={{ fontSize: 20 }}>Escolher Cartão</Text> :
+                  <TouchableOpacity onPress={() => setModalManagerCardVisible(true)} style={styles.buttonAddress}>
+                    {!selectedCard || cards.length === 0 ? <Text style={{ fontSize: 20, textAlign: 'center', }}>Escolher Cartão</Text> :
                       <Text style={{ fontSize: 20, textAlign: 'center' }}>**** **** **** {selectedCard.slice(-4)}</Text>}
                   </TouchableOpacity>
                 </View>
@@ -490,31 +486,13 @@ const ConfirmPayment = ({ route }) => {
         modalVisible={modalCardVisible}
         setModalVisible={setModalCardVisible}
       />
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            {cards.length === 0 ? (
-              <Text style={styles.noCardsText}>Não há cartões cadastrados.</Text>
-            ) : (
-              <FlatList
-                data={cards}
-                keyExtractor={(item) => item.id}
-                renderItem={renderCardItem}
-              />
-            )}
-            <TouchableOpacity onPress={() => { setModalCardVisible(true) }} style={styles.confirmCard}>
-              <Text style={styles.closeButtonText}>Adicionar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <ModalManagerCard
+        modalVisible={modalManagerCardVisible}
+        setModalVisible={setModalManagerCardVisible}
+        selectedCard={selectedCard}
+        setSelectedCard={setSelectedCard}
+        onAddCard={handleAddCard}
+      />
       <Modal
         transparent={true}
         visible={modalVisibleAddress}
