@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { Text, View, ScrollView } from 'react-native';
 import Content from '../components/Content';
-import WineItem from '../components/WineItem';
-import Wines from '../components/Wines';
+import Product from '../components/Product';
+import Items from '../components/Items';
 import { handleAddToCart } from '../utils/cartUtils';
 import { useUser } from '../context/UserContext';
 
@@ -11,8 +11,8 @@ const Branco = () => {
   const { colors } = useContext(ThemeContext);
   const { cartItems, setCartItems, cartSuccessMessage, setCartSuccessMessage } = useUser();
 
-  const [filteredWines, setFilteredWines] = useState(
-    Wines.filter((wine) => wine.wineCategory === 'Branco')
+  const [filteredItems, setFilteredItems] = useState(
+    Items.filter((item) => item.itemCategory === 'Branco')
   );
 
   const styles = {
@@ -77,19 +77,19 @@ const Branco = () => {
         {/* Vinhos */}
         <ScrollView vertical showsVerticalScrollIndicator={false}>
           <View>
-            {filteredWines.length === 0 ? (
+            {filteredItems.length === 0 ? (
               <Text style={styles.noResultsText}>Nenhum resultado encontrado</Text>
             ) : (
-              filteredWines.map((wine, index) => (
-                <WineItem
+              filteredItems.map((item, index) => (
+                <Product
                   key={index}
-                  wine={wine} // Passando o objeto wine diretamente
-                  imageSource={wine.imageSource}
-                  wineName={wine.wineName}
-                  price={wine.winePrice}
-                  ml={wine.ml}
+                  item={item} // Passando o objeto item diretamente
+                  imageSource={item.imageSource}
+                  itemName={item.itemName}
+                  price={item.itemPrice}
+                  ml={item.ml}
                   handleAddToCart={() =>
-                    handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
+                    handleAddToCart(item, cartItems, setCartItems, setCartSuccessMessage)
                   }
                 />
               ))

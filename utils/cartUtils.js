@@ -1,14 +1,14 @@
 // src/utils/cartUtils.js
 
 export const handleAddToCart = (item, cartItems, setCartItems, setCartSuccessMessage) => {
-  item.price = item.winePrice || item.price;
-  item.winePrice = item.winePrice || item.price;
-  const existingItem = cartItems.find((i) => i.wineName === item.wineName);
+  item.price = item.itemPrice || item.price;
+  item.itemPrice = item.itemPrice || item.price;
+  const existingItem = cartItems.find((i) => i.itemName === item.itemName);
 
   if (existingItem) {
     // Se o vinho já existe, atualiza a quantidade
     const updatedItems = cartItems.map((i) =>
-      i.wineName === item.wineName
+      i.itemName === item.itemName
         ? { ...i, quantity: i.quantity + 1 } // Incrementa a quantidade
         : i
     );

@@ -60,7 +60,7 @@ const Categorias = () => {
     div_vinho: {
       width: 150,
       height: 215,
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.itemCardBackground,
       alignItems: 'center',
       justifyContent: 'flex-start',
       borderRadius: 10,

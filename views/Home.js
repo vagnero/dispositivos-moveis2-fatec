@@ -1,30 +1,22 @@
-import React, { useState, useEffect, useContext, useCallback  } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
-import {
-  Text, BackHandler,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Platform,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import { Text, BackHandler, View, TouchableOpacity, ScrollView, Image, Platform, StyleSheet, TextInput } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Content from '../components/Content';
-import WineCard from '../components/WineCard';
+import ItemCard from '../components/ItemCard';
 import { useUser } from '../context/UserContext';
-import winesData from '../components/Wines';
-import * as SecureStore from 'expo-secure-store';
+import Items from '../components/Items';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../config/firebaseConfig';
 
 const Home = () => {
   const { colors } = useContext(ThemeContext);
   const [isPressedButton1, setIsPressedButton1] = useState(false);
   const [isPressedButton2, setIsPressedButton2] = useState(false);
   const [isPressedButton3, setIsPressedButton3] = useState(false);
-  const [wines, setWines] = useState([]); // Estado para os vinhos
+  const [items, setItems] = useState([]); // Estado para os items
   const [searchText, setSearchText] = useState('');
-  const [filteredWines, setFilteredWines] = useState(wines);
+  const [filteredItems, setFilteredItems] = useState(items);
   const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage } = useUser();
   const [selectedCategories] = useState([]);
   const [isSortedByPrice, setIsSortedByPrice] = useState(false);
@@ -33,65 +25,77 @@ const Home = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Se o texto de pesquisa estiver vazio, mostra todos os vinhos
+    // Se o texto de pesquisa estiver vazio, mostra todos os items
     if (searchText === '') {
-      setFilteredWines(wines);
+      setFilteredItems(items);
     } else {
-      // Caso contrário, filtra os vinhos com base no texto de pesquisa
-      const filtered = wines.filter((wine) =>
-        wine.wineName.toLowerCase().includes(searchText.toLowerCase()) &&
+      // Caso contrário, filtra os items com base no texto de pesquisa
+      const filtered = items.filter((item) =>
+        item.itemName.toLowerCase().includes(searchText.toLowerCase()) &&
         (selectedCategories.length === 0 ||
-          selectedCategories.some((category) => wine.wineName.includes(category)))
+          selectedCategories.some((category) => item.itemName.includes(category)))
       );
-      setFilteredWines(filtered);
+      setFilteredItems(filtered);
     }
-  }, [searchText, selectedCategories, wines]); // Adicionando wines como dependência
+  }, [searchText, selectedCategories, items]); // Adicionando items como dependência
 
   useFocusEffect(
     React.useCallback(() => {
-      setIsPressedButton1(false);
-      setIsPressedButton2(false);
+      handlePressButton1()
+      setTimeout(() => {
+        setIsPressedButton1(false);
+      }, 400);
+      setIsPressedButton2(false)
       setIsPressedButton3(false);
-      const loadWines = async () => {
+
+      const loadItems = async () => {
         try {
-          // Carrega os valores do SecureStore (wineName, wineSigns e wineSold)
-          const jsonValue = await SecureStore.getItemAsync('wines');
-          const loadedWines = jsonValue != null ? JSON.parse(jsonValue) : [];
+          // Carrega os items estáticos do JSON
+          const loadedItems = Items;
 
-          // Agora vamos mesclar com winesData (que tem os outros atributos)
-          const mergedWines = winesData.map(wineDataItem => {
-            // Procura se este wineDataItem existe no SecureStore carregado
-            const storedWine = loadedWines.find(stored => stored.wineName === wineDataItem.wineName);
+          // Busca os dados do Firestore
+          const itemsCollection = collection(db, 'items'); // Corrigido
+          const snapshot = await getDocs(itemsCollection); // Uso do getDocs
 
-            // Se encontrar no SecureStore, substitui wineName, wineSigns, e wineSold
-            return storedWine
-              ? { ...wineDataItem, ...storedWine } // Mescla dados de winesData com o que veio do storage
-              : wineDataItem; // Caso contrário, mantém o dado original de winesData
+          const firestoreItems = snapshot.docs.map(doc => ({
+            itemName: doc.data().itemName,
+            itemSold: doc.data().itemSold,
+            // Inclua outros campos que precisar
+          }));
+
+          // Mescla os dados do Firestore com os itens estáticos
+          const mergedItems = loadedItems.map(itemData => {
+            const firestoreItem = firestoreItems.find(stored => stored.itemName === itemData.itemName);
+            return {
+              ...itemData, // Mantém todas as propriedades de itemData
+              ...(firestoreItem || {}), // Mescla as propriedades do Firestore se existir
+            };
           });
 
-          // Atualiza os estados com os vinhos mesclados
-          setWines(mergedWines);
-          setFilteredWines(mergedWines); // Atualiza a lista filtrada com os vinhos mesclados
+          // Atualiza os estados com os items mesclados
+          setItems(mergedItems);
+          setFilteredItems(mergedItems); // Atualiza a lista filtrada com os items mesclados
 
         } catch (e) {
-          console.error('Erro ao carregar os vinhos:', e);
-          // Fallback para winesData caso haja erro
-          setWines(winesData);
-          setFilteredWines(winesData);
+          console.error('Erro ao carregar os items:', e);
+          // Fallback para Items caso haja erro
+          setItems(Items);
+          setFilteredItems(Items);
         }
       };
 
-      loadWines(); // Chama a função para carregar e mesclar os vinhos
+      loadItems(); // Chama a função para carregar e mesclar os items
 
       // Retorno opcional para limpar ou desativar algo quando a tela perde o foco
       return () => { };
     }, [])
   );
- 
+
+
   // Impede de voltar uma tela anterior a Home
   useFocusEffect(
     useCallback(() => {
-      const onBackPress = () => {        
+      const onBackPress = () => {
         return true; // Retorne true para indicar que o evento foi tratado
       };
 
@@ -107,16 +111,16 @@ const Home = () => {
   const handlePressButton1 = () => {
     setIsPressedButton1(!isPressedButton1);
     if (!isSortedByPrice) {
-      const sortedWines = [...wines].sort((a, b) => {
-        const priceA = parseFloat(a.winePrice.replace('R$ ', '').replace(',', '.'));
-        const priceB = parseFloat(b.winePrice.replace('R$ ', '').replace(',', '.'));
+      const sortedItems = [...items].sort((a, b) => {
+        const priceA = parseFloat(a.itemPrice.replace('R$ ', '').replace(',', '.'));
+        const priceB = parseFloat(b.itemPrice.replace('R$ ', '').replace(',', '.'));
 
         return priceA - priceB; // Ordena do menor para o maior
       });
 
-      setFilteredWines(sortedWines); // Atualiza a lista filtrada
+      setFilteredItems(sortedItems); // Atualiza a lista filtrada
     } else {
-      setFilteredWines(wines); // Retorna à lista original
+      setFilteredItems(items); // Retorna à lista original
     }
 
     setIsSortedByPrice(!isSortedByPrice); // Alterna o estado do botão
@@ -130,15 +134,15 @@ const Home = () => {
   const handlePressButton2 = () => {
     setIsPressedButton2(!isPressedButton2);
     if (!isSortedByRating) {
-      const sortedWines = [...wines].sort((a, b) => {
-        const ratingA = parseFloat(a.wineSigns);
-        const ratingB = parseFloat(b.wineSigns);
+      const sortedItems = [...items].sort((a, b) => {
+        const ratingA = parseFloat(a.itemSigns);
+        const ratingB = parseFloat(b.itemSigns);
         return ratingB - ratingA; // Ordena do maior para o menor
       });
 
-      setFilteredWines(sortedWines); // Atualiza a lista filtrada
+      setFilteredItems(sortedItems); // Atualiza a lista filtrada
     } else {
-      setFilteredWines(wines); // Retorna à lista original
+      setFilteredItems(items); // Retorna à lista original
     }
 
     setIsSortedByRating(!isSortedByRating); // Alterna o estado do botão
@@ -154,15 +158,15 @@ const Home = () => {
 
     if (!isSortedBySold) {
       // Ordenar por quantidade vendida
-      const sortedWinesBySold = [...wines].sort((a, b) => {
-        const soldA = parseInt(a.wineSold, 10); // Certifica-se de que é um número
-        const soldB = parseInt(b.wineSold, 10); // Certifica-se de que é um número
+      const sortedItemsBySold = [...items].sort((a, b) => {
+        const soldA = parseInt(a.itemSold, 10); // Certifica-se de que é um número
+        const soldB = parseInt(b.itemSold, 10); // Certifica-se de que é um número
         return soldB - soldA; // Ordena do maior para o menor
       });
 
-      setFilteredWines(sortedWinesBySold); // Atualiza a lista filtrada
+      setFilteredItems(sortedItemsBySold); // Atualiza a lista filtrada
     } else {
-      setFilteredWines(wines); // Retorna à lista original
+      setFilteredItems(items); // Retorna à lista original
     }
 
     setIsSortedBySold(!isSortedBySold);
@@ -179,11 +183,11 @@ const Home = () => {
   };
 
   const handleAddToCart = (item) => {
-    const existingItem = cartItems.find((i) => i.wineName === item.wineName);
+    const existingItem = cartItems.find((i) => i.itemName === item.itemName);
     if (existingItem) {
-      // Se o vinho já existe, atualiza a quantidade
+      // Se o item já existe, atualiza a quantidade
       const updatedItems = cartItems.map((i) =>
-        i.wineName === item.wineName
+        i.itemName === item.itemName
           ? { ...i, quantity: i.quantity + 1 } // Incrementa a quantidade
           : i
       );
@@ -193,7 +197,7 @@ const Home = () => {
         setCartSuccessMessage('');
       }, 2000);
     } else {
-      // Se o vinho não existe, adiciona ao carrinho
+      // Se o item não existe, adiciona ao carrinho
       setCartItems([...cartItems, { ...item, quantity: 1 }]);
       setCartSuccessMessage('Produto adicionado ao carrinho com sucesso!');
       setTimeout(() => {
@@ -301,7 +305,7 @@ const Home = () => {
       height: 46,
     },
 
-    div_mosaico_vinhos: {
+    div_mosaico_items: {
       flexDirection: 'row',
       flexWrap: 'wrap',
       alignItems: 'center',
@@ -339,7 +343,7 @@ const Home = () => {
             <Image source={require('../assets/home/search.png')} style={styles.image_pesquisar} />
           </TouchableOpacity>
           <TextInput
-            placeholder="Pesquise por vinhos..."
+            placeholder="Pesquise por items..."
             placeholderTextColor={colors.search}
             value={searchText}
             onChangeText={handleSearch}
@@ -399,14 +403,14 @@ const Home = () => {
           </View>
         )}
 
-        {/* Mosaico de vinhos */}
+        {/* Mosaico de items */}
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View style={styles.div_mosaico_vinhos}>
-            {filteredWines.length === 0 ? (
+          <View style={styles.div_mosaico_items}>
+            {filteredItems.length === 0 ? (
               <Text style={styles.noResultsText}>Nenhum resultado encontrado</Text>
             ) : (
-              filteredWines.map((wine, index) => (
-                <WineCard key={index} wine={wine} onPressAddToCart={handleAddToCart} />
+              filteredItems.map((item, index) => (
+                <ItemCard key={index} item={item} onPressAddToCart={handleAddToCart} />
               ))
             )}
           </View>

@@ -125,7 +125,7 @@ const ManagerAddress = () => {
             marginVertical: 10,
             padding: 10,
             borderRadius: 5,
-            backgroundColor: colors.wineCardBackground,
+            backgroundColor: colors.itemCardBackground,
         },
         detailsContainer: {
             color: colors.text,

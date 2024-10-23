@@ -162,7 +162,7 @@ const User = () => {
     div_conteudo_pref: {
       width: '100%',
       height: '60%',
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.itemCardBackground,
       borderRadius: 25,
       position: 'absolute',
       bottom: 0,

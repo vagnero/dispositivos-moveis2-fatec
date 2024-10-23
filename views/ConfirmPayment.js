@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'; // Importando useRoute
-import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, query, where, setDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, addDoc, setDoc, query, where } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
@@ -105,38 +105,31 @@ const ConfirmPayment = ({ route }) => {
       setModalAlertVisible(true);
       setTimeout(() => { navigation.navigate('AvaliacaoFinal') }, 2000);
     }
-    // Atualizar o wineSold no SecureStore
     try {
-      const winesString = await SecureStore.getItemAsync('wines');
-      const winesArray = winesString ? JSON.parse(winesString) : [];
+      const itemsCollection = collection(db, 'items');
 
-      // Atualiza o wineSold para cada item no carrinho
-      cartItems.forEach(item => {
-        const storedWine = winesArray.find(wine => wine.wineName === item.wineName);
-        if (storedWine) {
-          // Incrementa a quantidade vendida
-          storedWine.wineSold = (storedWine.wineSold || 0) + item.quantity;
+      // Atualiza o itemSold para cada item no carrinho
+      for (const cartItem of cartItems) {
+        const itemDocRef = doc(itemsCollection, cartItem.itemName);
+        const itemSnapshot = await getDoc(itemDocRef);
+
+        if (itemSnapshot.exists()) {
+          const storedItem = itemSnapshot.data();
+          const newSoldCount = (storedItem.itemSold || 0) + cartItem.quantity;
+
+          // Atualiza o item no Firestore
+          await setDoc(itemDocRef, {
+            itemName: storedItem.itemName,
+            itemSold: newSoldCount,
+          });
         } else {
-          // Se o vinho não existir, você pode querer adicioná-lo
-          winesArray.push({
-            wineName: item.wineName,
-            wineSold: item.quantity,
+          // Se o item não existir, crie um novo
+          await setDoc(itemDocRef, {
+            itemName: cartItem.itemName,
+            itemSold: cartItem.quantity,
           });
         }
-      });
-
-      // Salva os vinhos atualizados no Firestore
-      const winesCollection = collection(db, 'wines');
-      for (const wine of winesArray) {
-        const wineDoc = doc(winesCollection, wine.wineName);
-        await setDoc(wineDoc, {
-          wineName: wine.wineName,
-          wineSold: wine.wineSold,
-        });
       }
-
-      // Salva os vinhos atualizados de volta ao SecureStore
-      await SecureStore.setItemAsync('wines', JSON.stringify(winesArray));
 
       await savePurchaseHistory(currentUser, cartItems, total, newStatus);
 

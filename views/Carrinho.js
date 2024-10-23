@@ -21,7 +21,7 @@ const Carrinho = () => {
     let total = 0;
     cartItems.forEach((item) => {
       // Remover caracteres não numéricos, exceto o ponto decimal
-      const priceString = item.winePrice.replace(/[^\d.,-]/g, '').replace(',', '.');
+      const priceString = item.itemPrice.replace(/[^\d.,-]/g, '').replace(',', '.');
       const price = parseFloat(priceString);
       const quantity = item.quantity;
 
@@ -92,7 +92,7 @@ const Carrinho = () => {
       margin: 'auto',
       marginBottom: 20,
       marginTop: 10,
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.itemCardBackground,
       borderRadius: 25,
       padding: 30,
       justifyContent: 'center',
@@ -195,12 +195,12 @@ const Carrinho = () => {
       )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {cartItems.filter((item, index, self) =>
-          index === self.findIndex((i) => i.wineName === item.wineName))
+          index === self.findIndex((i) => i.itemName === item.itemName))
           .map((item, index) => (
             <ItemCarrinho
               key={index}
-              wineName={item.wineName}
-              price={item.winePrice}
+              itemName={item.itemName}
+              price={item.itemPrice}
               imageSource={item.imageSource}
               quantity={item.quantity}
               removeFromCart={removeFromCart}

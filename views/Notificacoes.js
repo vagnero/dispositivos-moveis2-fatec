@@ -241,7 +241,7 @@ const Notificacoes = () => {
             elevation: 2,
         },
         unread: {
-            backgroundColor: colors.wineCardBackground, // Mais escura para lidas
+            backgroundColor: colors.itemCardBackground, // Mais escura para lidas
         },
         read: {
             backgroundColor: '#f0f0f0', // Mais clara para não lidas

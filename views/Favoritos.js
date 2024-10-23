@@ -4,43 +4,43 @@ import { FontAwesome } from '@expo/vector-icons';
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import Content from '../components/Content';
-import WineItem from '../components/WineItem';
+import Product from '../components/Product';
 import { ThemeContext } from '../context/ThemeContext';
 import { useUser } from '../context/UserContext';
 import { handleAddToCart } from '../utils/cartUtils';
 
 const Favoritos = () => {
-  const [favoriteWines, setFavoriteWines] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState([]);
   const { cartItems, setCartItems, setCartSuccessMessage, cartSuccessMessage, currentUser } = useUser();
   const { colors } = useContext(ThemeContext);
 
   // Função para carregar os favoritos salvos do SecureStorage
-  const loadWines = async () => {
+  const loadItems = async () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
     }
 
     try {
-      const wineCollection = collection(db, 'favoriteWines');
-      const querySnapshot = await getDocs(wineCollection);
+      const itemCollection = collection(db, 'favoriteItems');
+      const querySnapshot = await getDocs(itemCollection);
 
       // Verifica se existem documentos na coleção
       if (querySnapshot.empty) {
         console.log('Nenhum vinho favorito encontrado no Firestore.');
-        setFavoriteWines([]); // Define a lista de vinhos favoritos como vazia
+        setFavoriteItems([]); // Define a lista de vinhos favoritos como vazia
         return; // Sai da função se não houver vinhos
       }
 
       // Mapeia os documentos carregados para um array de dados
-      const loadedWines = querySnapshot.docs
+      const loadedItems = querySnapshot.docs
         .map((doc) => ({
           id: doc.id, // Inclui o ID do documento se necessário
           ...doc.data(),
         }))
-        .filter((wine) => wine.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
+        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
 
       // Atualiza o estado com os vinhos carregados
-      setFavoriteWines(loadedWines);
+      setFavoriteItems(loadedItems);
     } catch (error) {
       console.error('Erro ao carregar vinhos do Firestore:', error);
     }
@@ -48,7 +48,7 @@ const Favoritos = () => {
 
   // UseEffect para carregar os favoritos quando a tela for montada
   useEffect(() => {
-    loadWines();
+    loadItems();
   }, []);
 
   const styles = StyleSheet.create({
@@ -94,7 +94,7 @@ const Favoritos = () => {
       width: '60%',
       height: 10,
       marginBottom: 200,
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.itemCardBackground,
       flexDirection: 'row',
       borderRadius: 10,
       alignItems: 'center',
@@ -108,7 +108,7 @@ const Favoritos = () => {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 10,
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.itemCardBackground,
     },
 
     msg: {
@@ -131,19 +131,19 @@ const Favoritos = () => {
         style={{ flex: 1 }}>
         <View style={styles.content}>
           <Text style={styles.title}>Seus Vinhos Favoritos</Text>
-          {!Array.isArray(favoriteWines) || favoriteWines.length === 0 ? (
+          {!Array.isArray(favoriteItems) || favoriteItems.length === 0 ? (
             <Text style={styles.msg}>Você não tem vinhos favoritos ainda.</Text>
           ) : (
-            favoriteWines.map((wine, index) => (
-              <View key={wine.id} style={styles.cards}>
-                <WineItem
-                  wine={wine} // Passando o objeto wine diretamente
-                  imageSource={wine.imageSource}
-                  wineName={wine.wineName}
-                  price={wine.price}
-                  ml={wine.ml}
+            favoriteItems.map((item, index) => (
+              <View key={item.id} style={styles.cards}>
+                <Product
+                  item={item} // Passando o objeto item diretamente
+                  imageSource={item.imageSource}
+                  itemName={item.itemName}
+                  price={item.price}
+                  ml={item.ml}
                   handleAddToCart={() =>
-                    handleAddToCart(wine, cartItems, setCartItems, setCartSuccessMessage)
+                    handleAddToCart(item, cartItems, setCartItems, setCartSuccessMessage)
                   }
                 />
               </View>

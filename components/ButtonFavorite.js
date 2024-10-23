@@ -2,77 +2,77 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
-import Wines from '../components/Wines';
+import Items from '../components/Items';
 
-const ButtonFavorite = ({ wineName }) => {
+const ButtonFavorite = ({ itemName }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
-  const [favoriteWines, setFavoriteWines] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState([]);
 
-  const toggleHeart = async (wineName) => {
-    // Obtenha os detalhes completos do vinho
-    const wine = getWineDetails(wineName);
+  const toggleHeart = async (itemName) => {
+    // Obtenha os detalhes completos do item
+    const item = getItemDetails(itemName);
 
-    if (isWineFavorite(wine.wineName)) {
-      // Remove o vinho dos favoritos
-      const updatedFavorites = favoriteWines.filter(favWine => favWine.wineName !== wine.wineName);
-      setFavoriteWines(updatedFavorites);
-      await saveFavoriteWines(updatedFavorites);
+    if (isItemFavorite(item.itemName)) {
+      // Remove o item dos favoritos
+      const updatedFavorites = favoriteItems.filter(favItem => favItem.itemName !== item.itemName);
+      setFavoriteItems(updatedFavorites);
+      await saveFavoriteItems(updatedFavorites);
     } else {
-      // Adiciona o vinho aos favoritos com os campos essenciais
-      const updatedFavorites = [...favoriteWines, {
-        wineName: wine.wineName,
-        wineSold: wine.wineSold,
-        wineSigns: wine.wineSigns,
+      // Adiciona o item aos favoritos com os campos essenciais
+      const updatedFavorites = [...favoriteItems, {
+        itemName: item.itemName,
+        itemSold: item.itemSold,
+        itemSigns: item.itemSigns,
       }];
-      setFavoriteWines(updatedFavorites);
-      await saveFavoriteWines(updatedFavorites);
+      setFavoriteItems(updatedFavorites);
+      await saveFavoriteItems(updatedFavorites);
     }
 
     setIsHeartFilled(!isHeartFilled);
   };
 
-  const isWineFavorite = (wineName) => {
-    return favoriteWines.some(favWine => favWine.wineName === wineName);
+  const isItemFavorite = (itemName) => {
+    return favoriteItems.some(favItem => favItem.itemName === itemName);
   };
 
-  const saveFavoriteWines = async (wines) => {
+  const saveFavoriteItems = async (items) => {
     try {
-      const jsonValue = JSON.stringify(wines);
-      await SecureStore.setItemAsync('favorite_wines', jsonValue);
+      const jsonValue = JSON.stringify(items);
+      await SecureStore.setItemAsync('favorite_items', jsonValue);
     } catch (e) {
-      console.error('Error saving favorite wines:', e);
+      console.error('Error saving favorite items:', e);
     }
   };
 
-  const loadFavoriteWines = async () => {
+  const loadFavoriteItems = async () => {
     try {
-      const jsonValue = await SecureStore.getItemAsync('favorite_wines');
+      const jsonValue = await SecureStore.getItemAsync('favorite_items');
       return jsonValue != null ? JSON.parse(jsonValue) : [];
     } catch (e) {
-      console.error('Error loading favorite wines:', e);
+      console.error('Error loading favorite items:', e);
       return [];
     }
   };
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      const storedFavorites = await loadFavoriteWines();
-      setFavoriteWines(storedFavorites);
-      setIsHeartFilled(storedFavorites.some(favWine => favWine.wineName === wineName));
+      const storedFavorites = await loadFavoriteItems();
+      setFavoriteItems(storedFavorites);
+      setIsHeartFilled(storedFavorites.some(favItem => favItem.itemName === itemName));
     };
 
     fetchFavorites();
   }, []);
 
-  const getWineDetails = (wineName) => {
-    const staticWine = Wines.find(wine => wine.wineName === wineName);
-    const dynamicWine = favoriteWines.find(favWine => favWine.wineName === wineName);
+  const getItemDetails = (itemName) => {
+    const staticItem = Items.find(item => item.itemName === itemName);
+    const dynamicItem = favoriteItems.find(favItem => favItem.itemName === itemName);
 
-    if (staticWine && dynamicWine) {
-      return { ...staticWine, ...dynamicWine }; // Combina dados estáticos e dinâmicos
+    if (staticItem && dynamicItem) {
+      return { ...staticItem, ...dynamicItem }; // Combina dados estáticos e dinâmicos
     }
 
-    return staticWine || dynamicWine;
+    return staticItem || dynamicItem;
   };
 
   return (
@@ -81,7 +81,7 @@ const ButtonFavorite = ({ wineName }) => {
         name={isHeartFilled ? 'heart' : 'heart-o'}
         size={32}
         color='red'
-        onPress={() => toggleHeart(wineName)} // Usa o wineName passado como prop
+        onPress={() => toggleHeart(itemName)} // Usa o itemName passado como prop
       />
     </View>
   );

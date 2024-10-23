@@ -4,7 +4,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import eventEmitter from './eventEmitter';
 export const cartState = { totalQuantity: 0 }; // Objeto externo para armazenar totalQuantity
 
-const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, setCartItems, cartItems, calculateTotal }) => {
+const ItemCarrinho = ({ itemName, price, imageSource, quantity, removeFromCart, setCartItems, cartItems, calculateTotal }) => {
   const { colors } = useContext(ThemeContext);
   const [totalQuantity, setTotalQuantity] = useState(0);
 
@@ -23,7 +23,7 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
 
   const handleAddQuantity = () => {
     setCartItems(cartItems.map((item) => {
-      if (item.wineName === wineName) {
+      if (item.itemName === itemName) {
         return { ...item, quantity: item.quantity + 1 };
       }
       return item;
@@ -34,7 +34,7 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
   const handleRemoveQuantity = () => {
     if (quantity > 1) {
       setCartItems(cartItems.map((item) => {
-        if (item.wineName === wineName) {
+        if (item.itemName === itemName) {
           return { ...item, quantity: item.quantity - 1 };
         }
         return item;
@@ -44,7 +44,7 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
   };
 
   const handleRemoveFromCart = () => {
-    removeFromCart(wineName);
+    removeFromCart(itemName);
     calculateTotal(); // Recalcula o total
   };  
 
@@ -53,7 +53,7 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
   const styles = {
     div_vinho: {
       flexDirection: 'row',
-      backgroundColor: colors.wineCardBackground,
+      backgroundColor: colors.itemCardBackground,
       borderRadius: 10,
       width: '100%',
       paddingLeft: 20,
@@ -71,12 +71,12 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
       flexDirection: 'column',
       justifyContent: 'space-between'
     },
-    div_winename_x: {
+    div_itemname_x: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center'
     },
-    text_winename: {
+    text_itemname: {
       fontSize: 18,
       fontWeight: 'bold',
       color: '#000'
@@ -112,8 +112,8 @@ const ItemCarrinho = ({ wineName, price, imageSource, quantity, removeFromCart, 
     <View style={styles.div_vinho}>
       <Image source={imageSource} style={styles.image} />
       <View style={styles.infoContainer}>
-        <View style={styles.div_winename_x}>
-          <Text style={styles.text_winename}>{wineName}</Text>
+        <View style={styles.div_itemname_x}>
+          <Text style={styles.text_itemname}>{itemName}</Text>
           <TouchableOpacity onPress={handleRemoveFromCart}>
             <Image source={require('../assets/carrinho/x.png')} style={styles.icon} />
           </TouchableOpacity>

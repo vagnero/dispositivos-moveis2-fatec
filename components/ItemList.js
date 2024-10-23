@@ -1,31 +1,31 @@
 import React from 'react';
 import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
-import Wines from './Wines';
+import Items from './Items';
 
-const WineList = () => {
+const ItemList = () => {
   const renderItem = ({ item }) => (
-    <View style={styles.wineItem}>
+    <View style={styles.item}>
       <Image source={item.imageSource} style={styles.image} resizeMode="contain" />
-      <Text style={styles.wineName}>{item.wineName}</Text>
-      <Text style={styles.wineCategory}>{item.wineCategory}</Text>
-      <Text style={styles.winePrice}>{item.winePrice}</Text>
-      <Text style={styles.wineSigns}>Avaliação: {item.wineSigns}</Text>
-      <Text style={styles.wineDescription}>{item.wineDescription}</Text>
-      <Text style={styles.wineSold}>Vendido: {item.wineSold} unidades</Text>
+      <Text style={styles.itemName}>{item.itemName}</Text>
+      <Text style={styles.itemCategory}>{item.itemCategory}</Text>
+      <Text style={styles.itemPrice}>{item.itemPrice}</Text>
+      <Text style={styles.itemSigns}>Avaliação: {item.itemSigns}</Text>
+      <Text style={styles.itemDescription}>{item.itemDescription}</Text>
+      <Text style={styles.itemSold}>Vendido: {item.itemSold} unidades</Text>
     </View>
   );
 
   return (
     <FlatList
-      data={Wines}
+      data={Items}
       renderItem={renderItem}
-      keyExtractor={(item) => item.wineName} // Chave única para cada item
+      keyExtractor={(item) => item.itemName} // Chave única para cada item
     />
   );
 };
 
 const styles = StyleSheet.create({
-  wineItem: {
+  item: {
     margin: 10,
     padding: 10,
     backgroundColor: '#fff',
@@ -39,31 +39,31 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
   },
-  wineName: {
+  itemName: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  wineCategory: {
+  itemCategory: {
     fontSize: 16,
     color: '#666',
   },
-  winePrice: {
+  itemPrice: {
     fontSize: 16,
     color: '#28a745',
   },
-  wineSigns: {
+  itemSigns: {
     fontSize: 14,
     color: '#f39c12',
   },
-  wineDescription: {
+  itemDescription: {
     fontSize: 14,
     color: '#333',
     marginVertical: 5,
   },
-  wineSold: {
+  itemSold: {
     fontSize: 14,
     color: '#666',
   },
 });
 
-export default WineList;
+export default ItemList;

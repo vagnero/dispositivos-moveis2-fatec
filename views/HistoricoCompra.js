@@ -5,7 +5,7 @@ import { db } from '../config/firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
 import Content from '../components/Content';
-import Wines from '../components/Wines';
+import Items from '../components/Items';
 import { ThemeContext } from '../context/ThemeContext';
 
 const HistoricoCompra = () => {
@@ -46,9 +46,9 @@ const HistoricoCompra = () => {
     }, []);
 
     // Função para buscar a imagem do vinho
-    const getWineImage = (wineName) => {
-        const wine = Wines.find((wine) => wine.wineName === wineName);
-        return wine ? wine.imageSource : null; // Retorna a imagem ou null se não encontrar
+    const getItemImage = (itemName) => {
+        const item = Items.find((item) => item.itemName === itemName);
+        return item ? item.imageSource : null; // Retorna a imagem ou null se não encontrar
     };
 
     const sortedPurchases = purchaseHistory.sort((a, b) => {
@@ -110,9 +110,9 @@ const HistoricoCompra = () => {
                         </Text>
                         <Text style={styles.itemsTitle}>Itens:</Text>
                         {item.items.map((product, index) => {
-                            const imageSource = getWineImage(product.wineName); // Busca a imagem usando o nome do vinho
+                            const imageSource = getItemImage(product.itemName); // Busca a imagem usando o nome do vinho
                             return (
-                                <View key={`${item.id}-${product.wineName}-${index}`} style={styles.itemContainer}>
+                                <View key={`${item.id}-${product.itemName}-${index}`} style={styles.itemContainer}>
                                     {imageSource && ( // Verifica se a imagem existe
                                         <Image
                                             source={imageSource} // Usa a imagem encontrada
@@ -122,13 +122,13 @@ const HistoricoCompra = () => {
                                     )}
                                     <View>
                                         <Text style={styles.itemText}>
-                                            {product.wineName}
+                                            {product.itemName}
                                         </Text>
                                         <Text style={{ marginTop: 10 }}>
                                             Quantidade: {product.quantity}
                                         </Text>
                                         <Text style={{ marginTop: 10 }}>
-                                            {product.winePrice}
+                                            {product.itemPrice}
                                         </Text>
                                     </View>
                                 </View>
@@ -156,7 +156,7 @@ const HistoricoCompra = () => {
         purchaseItem: {
             margin: 10,
             padding: 10,
-            backgroundColor: colors.wineCardBackground,
+            backgroundColor: colors.itemCardBackground,
             borderRadius: 15,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
