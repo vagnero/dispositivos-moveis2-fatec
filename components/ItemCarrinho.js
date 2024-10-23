@@ -1,20 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
-import eventEmitter from './eventEmitter';
-export const cartState = { totalQuantity: 0 }; // Objeto externo para armazenar totalQuantity
 
 const ItemCarrinho = ({ itemName, price, imageSource, quantity, removeFromCart, setCartItems, cartItems, calculateTotal }) => {
   const { colors } = useContext(ThemeContext);
-  const [totalQuantity, setTotalQuantity] = useState(0);
-
-  // Função para calcular a quantidade total de itens no carrinho
-  const calculateItens = () => {
-    const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    setTotalQuantity(total);
-    cartState.totalQuantity = total; // ZEZIN PARA MANDAR QUALQUER COISA PARA OUTRA PAGINA, CRIE UM OBJETO AAAAA
-    eventEmitter.emit('cartUpdated', total);
-  };
 
   useEffect(() => {
     calculateItens(); // Atualiza a quantidade total ao carregar ou modificar o carrinho
@@ -51,7 +40,7 @@ const ItemCarrinho = ({ itemName, price, imageSource, quantity, removeFromCart, 
   // console.log("Total de itens no carrinho:" + totalQuantity);
   
   const styles = {
-    div_vinho: {
+    div_item: {
       flexDirection: 'row',
       backgroundColor: colors.itemCardBackground,
       borderRadius: 10,
@@ -109,7 +98,7 @@ const ItemCarrinho = ({ itemName, price, imageSource, quantity, removeFromCart, 
   };
 
   return (
-    <View style={styles.div_vinho}>
+    <View style={styles.div_item}>
       <Image source={imageSource} style={styles.image} />
       <View style={styles.infoContainer}>
         <View style={styles.div_itemname_x}>

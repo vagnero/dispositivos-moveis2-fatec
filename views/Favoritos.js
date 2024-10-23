@@ -26,9 +26,9 @@ const Favoritos = () => {
 
       // Verifica se existem documentos na coleção
       if (querySnapshot.empty) {
-        console.log('Nenhum vinho favorito encontrado no Firestore.');
-        setFavoriteItems([]); // Define a lista de vinhos favoritos como vazia
-        return; // Sai da função se não houver vinhos
+        console.log('Nenhum item favorito encontrado no Firestore.');
+        setFavoriteItems([]); // Define a lista de items favoritos como vazia
+        return; // Sai da função se não houver items
       }
 
       // Mapeia os documentos carregados para um array de dados
@@ -37,12 +37,12 @@ const Favoritos = () => {
           id: doc.id, // Inclui o ID do documento se necessário
           ...doc.data(),
         }))
-        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
+        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos items do usuário
 
-      // Atualiza o estado com os vinhos carregados
+      // Atualiza o estado com os items carregados
       setFavoriteItems(loadedItems);
     } catch (error) {
-      console.error('Erro ao carregar vinhos do Firestore:', error);
+      console.error('Erro ao carregar items do Firestore:', error);
     }
   };
 
@@ -130,9 +130,9 @@ const Favoritos = () => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}
         style={{ flex: 1 }}>
         <View style={styles.content}>
-          <Text style={styles.title}>Seus Vinhos Favoritos</Text>
+          <Text style={styles.title}>Seus Produtos Favoritos</Text>
           {!Array.isArray(favoriteItems) || favoriteItems.length === 0 ? (
-            <Text style={styles.msg}>Você não tem vinhos favoritos ainda.</Text>
+            <Text style={styles.msg}>Você não tem items favoritos ainda.</Text>
           ) : (
             favoriteItems.map((item, index) => (
               <View key={item.id} style={styles.cards}>

@@ -41,9 +41,9 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
     try {
       const itemDoc = doc(db, 'favoriteItems', `${itemName}_${currentUser.nome}`);
       await deleteDoc(itemDoc);
-      console.log(`Vinho ${itemName} removido dos favoritos no Firestore.`);
+      console.log(`item ${itemName} removido dos favoritos no Firestore.`);
     } catch (error) {
-      console.error('Erro ao remover vinho do Firestore:', error);
+      console.error('Erro ao remover item do Firestore:', error);
     }
   };
 
@@ -60,7 +60,7 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
     try {
       const itemCollection = collection(db, 'favoriteItems');
 
-      // Salva cada vinho como um documento individual
+      // Salva cada item como um documento individual
       for (const item of Items) {
         const itemData = {
           itemName: item.itemName || '',
@@ -72,13 +72,13 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
         // Usando o itemName e o userName como chave para evitar duplicatas
         await setDoc(doc(itemCollection, `${item.itemName}_${currentUser.nome}`), itemData);
       }
-      console.log('Vinhos favoritos salvos no Firestore.');
+      console.log('Items favoritos salvos no Firestore.');
     } catch (error) {
-      console.error('Erro ao salvar vinhos no Firestore:', error);
+      console.error('Erro ao salvar items no Firestore:', error);
     }
   };
 
-  // Função para carregar os vinhos favoritos do usuário atual
+  // Função para carregar os items favoritos do usuário atual
   const loadItems = async () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
@@ -90,9 +90,9 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
 
       // Verifica se existem documentos na coleção
       if (querySnapshot.empty) {
-        console.log('Nenhum vinho favorito encontrado no Firestore.');
-        setFavoriteItems([]); // Define a lista de vinhos favoritos como vazia
-        return; // Sai da função se não houver vinhos
+        console.log('Nenhum item favorito encontrado no Firestore.');
+        setFavoriteItems([]); // Define a lista de items favoritos como vazia
+        return; // Sai da função se não houver items
       }
 
       // Mapeia os documentos carregados para um array de dados
@@ -101,12 +101,12 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
           id: doc.id, // Inclui o ID do documento se necessário
           ...doc.data(),
         }))
-        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
+        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos items do usuário
 
-      // Atualiza o estado com os vinhos carregados
+      // Atualiza o estado com os items carregados
       setFavoriteItems(loadedItems);
     } catch (error) {
-      console.error('Erro ao carregar vinhos do Firestore:', error);
+      console.error('Erro ao carregar items do Firestore:', error);
     }
   };
 
@@ -116,14 +116,14 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
   }, []);
 
   const styles = {
-    div_vinho: {
+    div_item: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       marginBottom: '5%'
     },
 
-    image_vinho: {
+    image_item: {
       width: '30%',
       height: '100%',
       borderRadius: 10
@@ -134,7 +134,7 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       marginLeft: '5%'
     },
 
-    text_vinho: {
+    text_item: {
       fontSize: 17,
       color: colors.primary,
       fontWeight: 'bold',
@@ -185,10 +185,10 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
   };
 
   return (
-    <View style={styles.div_vinho}>
-      <Image source={imageSource} style={styles.image_vinho} />
+    <View style={styles.div_item}>
+      <Image source={imageSource} style={styles.image_item} />
       <View style={styles.div_infos}>
-        <Text style={styles.text_vinho}>{itemName}</Text>
+        <Text style={styles.text_item}>{itemName}</Text>
         <View style={styles.div_preco_tamanho}>
           <Text style={styles.text_preco}>{price}</Text>
           <Text style={styles.text_tamanho}>{ml}</Text>

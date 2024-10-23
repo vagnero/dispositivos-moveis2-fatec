@@ -45,7 +45,7 @@ const HistoricoCompra = () => {
         fetchPurchaseHistory();
     }, []);
 
-    // Função para buscar a imagem do vinho
+    // Função para buscar a imagem do item
     const getItemImage = (itemName) => {
         const item = Items.find((item) => item.itemName === itemName);
         return item ? item.imageSource : null; // Retorna a imagem ou null se não encontrar
@@ -110,7 +110,7 @@ const HistoricoCompra = () => {
                         </Text>
                         <Text style={styles.itemsTitle}>Itens:</Text>
                         {item.items.map((product, index) => {
-                            const imageSource = getItemImage(product.itemName); // Busca a imagem usando o nome do vinho
+                            const imageSource = getItemImage(product.itemName); // Busca a imagem usando o nome do item
                             return (
                                 <View key={`${item.id}-${product.itemName}-${index}`} style={styles.itemContainer}>
                                     {imageSource && ( // Verifica se a imagem existe

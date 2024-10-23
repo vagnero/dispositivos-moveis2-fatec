@@ -3,6 +3,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { Text, BackHandler, View, TouchableOpacity, ScrollView, Image, Platform, StyleSheet, TextInput } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Content from '../components/Content';
+// import MyCarousel from '../components/MyCarousel';
 import ItemCard from '../components/ItemCard';
 import { useUser } from '../context/UserContext';
 import Items from '../components/Items';
@@ -397,6 +398,7 @@ const Home = () => {
             </TouchableOpacity>
           </ScrollView>
         </View>
+        {/* <MyCarousel navigation={navigation} /> */}
         {cartSuccessMessage && (
           <View style={styles.successMessageContainer}>
             <Text style={styles.successMessage}>{cartSuccessMessage}</Text>

@@ -50,14 +50,14 @@ const Categorias = () => {
       color: colors.textColor,
     },
 
-    div_mosaico_vinhos: {
+    div_mosaico_items: {
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'space-between',
       marginBottom: 50
     },
 
-    div_vinho: {
+    div_item: {
       width: 150,
       height: 215,
       backgroundColor: colors.itemCardBackground,
@@ -67,11 +67,11 @@ const Categorias = () => {
       marginBottom: 20
     },
 
-    div_image_text_vinho: {
+    div_image_text_item: {
       alignItems: 'center'
     },
 
-    div_image_vinho: {
+    div_image_item: {
       width: 150,
       height: 140,
       borderTopRightRadius: 10,
@@ -103,12 +103,12 @@ const Categorias = () => {
         </View>
         {/* Mosaico */}
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View style={styles.div_mosaico_vinhos}>
+          <View style={styles.div_mosaico_items}>
             {/* Card Bordeaux */}
-            <View style={styles.div_vinho}>
+            <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Branco')}>
-                <View style={styles.div_image_text_vinho}>
-                  <Image source={require('../assets/categorias/branco.jpg')} style={styles.div_image_vinho} />
+                <View style={styles.div_image_text_item}>
+                  <Image source={require('../assets/categorias/branco.jpg')} style={styles.div_image_item} />
                   <Text style={styles.div_text_subtitle}>Branco</Text>
                   <Text style={styles.div_text_count}>(4)</Text>
                 </View>
@@ -116,10 +116,10 @@ const Categorias = () => {
             </View>
 
             {/* Card Borgonha (Duplicado) */}
-            <View style={styles.div_vinho}>
+            <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Rose')}>
-                <View style={styles.div_image_text_vinho}>
-                  <Image source={require('../assets/categorias/rose.jpg')} style={styles.div_image_vinho} />
+                <View style={styles.div_image_text_item}>
+                  <Image source={require('../assets/categorias/rose.jpg')} style={styles.div_image_item} />
                   <Text style={styles.div_text_subtitle}>Rosé</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>
@@ -127,10 +127,10 @@ const Categorias = () => {
             </View>
 
             {/* Card Tinto (Duplicado) */}
-            <View style={styles.div_vinho}>
+            <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Tinto')}>
-                <View style={styles.div_image_text_vinho}>
-                  <Image source={require('../assets/categorias/tinto-QUADRADO.png')} style={styles.div_image_vinho} />
+                <View style={styles.div_image_text_item}>
+                  <Image source={require('../assets/categorias/tinto-QUADRADO.png')} style={styles.div_image_item} />
                   <Text style={styles.div_text_subtitle}>Tinto</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>
@@ -138,10 +138,10 @@ const Categorias = () => {
             </View>
 
             {/* Card Pasta (Adicionado) */}
-            <View style={styles.div_vinho}>
+            <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Espumante')}>
-                <View style={styles.div_image_text_vinho}>
-                  <Image source={require('../assets/categorias/pasta-QUADRADO.png')} style={styles.div_image_vinho} />
+                <View style={styles.div_image_text_item}>
+                  <Image source={require('../assets/categorias/pasta-QUADRADO.png')} style={styles.div_image_item} />
                   <Text style={styles.div_text_subtitle}>Espumante</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>

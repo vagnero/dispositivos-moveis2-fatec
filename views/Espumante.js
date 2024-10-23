@@ -53,7 +53,7 @@ const Espumante = () => {
       color: colors.primary,
     },
 
-    container_vinhos: {
+    container_items: {
       marginBottom: 50,
     },
 
@@ -76,11 +76,9 @@ const Espumante = () => {
         <View style={styles.div_bordeaux}>
           <Text style={styles.text_bordeaux}>Espumante</Text>
         </View>
-
-
-        {/* Vinhos */}
+        
         <ScrollView vertical showsVerticalScrollIndicator={false}>
-          <View style={styles.container_vinhos}>
+          <View style={styles.container_items}>
             {filteredItems.length === 0 ? (
               <Text style={styles.noResultsText}>Nenhum resultado encontrado</Text>
             ) : (

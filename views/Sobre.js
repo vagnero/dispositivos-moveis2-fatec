@@ -22,7 +22,7 @@ const Sobre = () => {
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [mensagem, setMensagem] = useState('');
 
-  // Função para alternar o vinho favorito
+  // Função para alternar o item favorito
   const toggleHeart = async (item) => {
     if (!currentUser || !currentUser.nome) {
       setMensagem('Para Favoritar é necessário estar logado')
@@ -53,13 +53,13 @@ const Sobre = () => {
     try {
       const itemDoc = doc(db, 'favoriteItems', `${itemName}_${currentUser.nome}`);
       await deleteDoc(itemDoc);
-      console.log(`Vinho ${itemName} removido dos favoritos no Firestore.`);
+      console.log(`Produto ${itemName} removido dos favoritos no Firestore.`);
     } catch (error) {
-      console.error('Erro ao remover vinho do Firestore:', error);
+      console.error('Erro ao remover item do Firestore:', error);
     }
   };
 
-  // Verifica se o vinho já é favorito
+  // Verifica se o item já é favorito
   const isItemFavorite = (item) => {
     return favoriteItems.some((favItem) => favItem.itemName === item.itemName);
   };
@@ -73,7 +73,7 @@ const Sobre = () => {
     try {
       const itemCollection = collection(db, 'favoriteItems');
   
-      // Salva cada vinho como um documento individual
+      // Salva cada item como um documento individual
       for (const item of items) {
         const itemData = {
           itemName: item.itemName || '',
@@ -85,13 +85,13 @@ const Sobre = () => {
         // Usando o itemName e o userName como chave para evitar duplicatas
         await setDoc(doc(itemCollection, `${item.itemName}_${currentUser.nome}`), itemData);
       }
-      console.log('Vinhos favoritos salvos no Firestore.');
+      console.log('Produtos favoritos salvos no Firestore.');
     } catch (error) {
-      console.error('Erro ao salvar vinhos no Firestore:', error);
+      console.error('Erro ao salvar items no Firestore:', error);
     }
   };    
 
-  // Carrega os vinhos favoritos do SecureStore
+  // Carrega os items favoritos do SecureStore
   const loadItems = async () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
@@ -103,9 +103,9 @@ const Sobre = () => {
 
       // Verifica se existem documentos na coleção
       if (querySnapshot.empty) {
-        console.log('Nenhum vinho favorito encontrado no Firestore.');
-        setFavoriteItems([]); // Define a lista de vinhos favoritos como vazia
-        return; // Sai da função se não houver vinhos
+        console.log('Nenhum item favorito encontrado no Firestore.');
+        setFavoriteItems([]); // Define a lista de items favoritos como vazia
+        return; // Sai da função se não houver items
       }
 
       // Mapeia os documentos carregados para um array de dados
@@ -114,12 +114,12 @@ const Sobre = () => {
           id: doc.id, // Inclui o ID do documento se necessário
           ...doc.data(),
         }))
-        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos vinhos do usuário
+        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos items do usuário
 
-      // Atualiza o estado com os vinhos carregados
+      // Atualiza o estado com os items carregados
       setFavoriteItems(loadedItems);      
     } catch (error) {
-      console.error('Erro ao carregar vinhos do Firestore:', error);
+      console.error('Erro ao carregar items do Firestore:', error);
     }
   };
 
@@ -138,7 +138,7 @@ const Sobre = () => {
       alignItems: 'center'
     },
 
-    image_vinho: {
+    image_item: {
       width: 250,
       height: 250
     },
@@ -285,7 +285,7 @@ const Sobre = () => {
       >
         <View style={styles.content}>
           <View style={styles.div_image}>
-            <Image source={imageSource} style={styles.image_vinho} />
+            <Image source={imageSource} style={styles.image_item} />
           </View>
           <View style={styles.container_informacoes}>
             <Text style={styles.text_informacoes}>{itemName}</Text>

@@ -72,9 +72,7 @@ const Branco = () => {
         <View style={styles.div_bordeaux}>
           <Text style={styles.text_bordeaux}>Branco</Text>
         </View>
-
-
-        {/* Vinhos */}
+        
         <ScrollView vertical showsVerticalScrollIndicator={false}>
           <View>
             {filteredItems.length === 0 ? (

@@ -13,16 +13,17 @@ const Avaliacoes = () => {
   const [showFullText, setShowFullText] = useState({});
   const [refreshing, setRefreshing] = useState(false); // Controle do refresh
   const [loading, setLoading] = useState(true);
-  const [avaliacoes, setAvaliacoes] = useState([  
-    { nome: 'Audrey', rate: 4, data: '25/08/2024', texto: 'Minha experiência com o app foi incrível! A navegação é super intuitiva e rápida, com categorias bem organizadas e sugestões personalizadas. Encontrei facilmente um vinho robusto com notas de frutas vermelhas e toque de especiarias, perfeito para harmonizar com carnes e queijos. O processo de compra foi simples e seguro, e recebi atualizações do pedido em tempo real. Com certeza, voltarei a usar o app para futuras compras!' },
-    { nome: 'José Leandro', rate: 4, data: '22/08/2024', texto: 'Fresco e vibrante, com aromas de maçã verde e limão. Perfeito para uma tarde de verão ou para acompanhar pratos leves como saladas e frutos do mar.' },
-    { nome: 'Vagner', rate: 4, data: '01/08/2024', texto: 'Um rosé elegante, com sabor suave de morango e um final refrescante. Ideal para um brunch ou para uma tarde relaxante com amigos.' },
-    { nome: 'Wesley Paulo', rate: 4, data: '20/06/2024', texto: 'Bolhas finas e persistentes com um sabor refrescante de pêssego e maçã. Uma escolha excelente para celebrações e ocasiões especiais.' },
-    { nome: 'Aldo Rosa', rate: 4, data: '20/05/2024', texto: 'Encorpado e complexo, com notas de cereja preta e baunilha. Um vinho sofisticado que envelhece bem e é perfeito para jantares formais.' },
-    { nome: 'João', rate: 4, data: '05/05/2024', texto: 'Leve e agradável, com toques de pêra e mel. Bom para aperitivos e pratos de peixe, mas pode faltar um pouco de corpo para quem prefere vinhos mais robustos.' },
-    { nome: 'Luis', rate: 4, data: '12/04/2024', texto: 'Um vinho leve e refrescante com notas de framboesa e melancia. Perfeito para um dia quente, mas pode ser um pouco simples para paladares mais exigentes.' },
-    { nome: 'Maria', rate: 4, data: '10/02/2024', texto: 'Aromas intensos de ameixa e tabaco, com um paladar rico e bem equilibrado. Excelente para acompanhar pratos de carne e massas com molhos robustos.' },
+  const [avaliacoes, setAvaliacoes] = useState([
+    { nome: 'Audrey', rate: 4, data: '25/08/2024', texto: 'Minha experiência com o app foi incrível! A navegação é super intuitiva e rápida, com categorias bem organizadas e sugestões personalizadas. Encontrei facilmente um produto robusto e o processo de compra foi simples e seguro, com atualizações do pedido em tempo real. Com certeza, voltarei a usar o app para futuras compras!' },
+    { nome: 'José Leandro', rate: 4, data: '22/08/2024', texto: 'O aplicativo é muito fácil de usar, com uma interface agradável. A busca é eficiente, e consegui encontrar produtos para uma tarde de verão sem dificuldades.' },
+    { nome: 'Vagner', rate: 4, data: '01/08/2024', texto: 'Um app elegante e intuitivo, perfeito para descobrir novas opções de produto. A experiência de navegação é suave e descomplicada.' },
+    { nome: 'Wesley Paulo', rate: 4, data: '20/06/2024', texto: 'O aplicativo oferece uma ótima seleção de produtos e a experiência de compra é muito boa. Recomendo para quem quer celebrar ocasiões especiais.' },
+    { nome: 'Aldo Rosa', rate: 4, data: '20/05/2024', texto: 'Interface limpa e organizada, o que torna a busca por produtos sofisticados bem fácil. Adorei como tudo flui no app.' },
+    { nome: 'João', rate: 4, data: '05/05/2024', texto: 'O app é leve e agradável, perfeito para fazer escolhas rápidas. A única sugestão seria ter mais opções de filtragem para quem busca algo mais específico.' },
+    { nome: 'Luis', rate: 4, data: '12/04/2024', texto: 'Um aplicativo leve e refrescante, com uma boa usabilidade. Ideal para dias quentes e para explorar novas opções de produto.' },
+    { nome: 'Maria', rate: 4, data: '10/02/2024', texto: 'A experiência no aplicativo é bem equilibrada. Encontrei ótimos produtos e o app ajudou a facilitar minhas compras de forma eficaz.' },
   ]);
+
 
   const formatDate = (date) => {
     if (date instanceof Date) {
@@ -41,17 +42,17 @@ const Avaliacoes = () => {
       const fetchedComments = querySnapshot.docs.map((doc) => {
         const dados = doc.data();
         let data = dados.date;
-      if (data && data.toDate) {
-        data = data.toDate();
-      } else if (!(data instanceof Date)) {
-        data = new Date(data);
-      }
-      return {
-        id: doc.id,
-        nome: dados.name,
-        rate: dados.rating,
-        texto: dados.comment,
-        data: data // Converte Timestamp para Date
+        if (data && data.toDate) {
+          data = data.toDate();
+        } else if (!(data instanceof Date)) {
+          data = new Date(data);
+        }
+        return {
+          id: doc.id,
+          nome: dados.name,
+          rate: dados.rating,
+          texto: dados.comment,
+          data: data // Converte Timestamp para Date
         }
       });
 

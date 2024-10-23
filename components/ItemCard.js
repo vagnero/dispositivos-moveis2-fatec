@@ -35,7 +35,7 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
           setSoldCount(matchingItem ? matchingItem.itemSold || 0 : 0);
         }
       } catch (error) {
-        console.error('Erro ao carregar vinhos do Firestore:', error);
+        console.error('Erro ao carregar items do Firestore:', error);
       }
     };
 
@@ -48,10 +48,9 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
     setTotalQuantity(newTotalQuantity); // Atualiza o estado com o novo total
     // console.log(`Total de itens no carrinho: ${newTotalQuantity}`);
     onPressAddToCart({ ...item, imageSource: item.imageSource, quantity: 1 }, updateCartItems); // Passa 1 como quantidade do item adicionado
-    cartState = newTotalQuantity;
   };
 
-  // Função para salvar os vinhos
+  // Função para salvar os items
   const saveItems = async (Items) => {
     try {
       const filteredData = Items.map(({ itemName, itemSigns, itemSold }) => ({ itemName, itemSigns, itemSold }));
@@ -68,13 +67,13 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
         }, { merge: true }); // merge: true para não sobrescrever os dados existentes
       }));
     } catch (error) {
-      console.error('Erro ao salvar os vinhos:', error);
+      console.error('Erro ao salvar os items:', error);
     }
   };
 
 
   const styles = {
-    div_vinho: {
+    div_item: {
       width: 150,
       height: 210,
       backgroundColor: colors.itemCardBackground,
@@ -97,15 +96,15 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
         },
       }),
     },
-    div_image_text_vinho: {
+    div_image_text_item: {
       alignItems: 'center',
       flexDirection: 'row',
     },
-    div_image_vinho: {
+    div_image_item: {
       width: 50,
       height: 120,
     },
-    div_text_vinho: {
+    div_text_item: {
       width: '90%',
       textAlign: 'center',
       fontSize: 15,
@@ -114,7 +113,7 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
       marginTop: 10,
       marginHorizontal: 1,
     },
-    div_text_button_vinho: {
+    div_text_button_item: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -131,11 +130,11 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
   };
 
   return (
-    <View style={styles.div_vinho}>
-      <Text style={styles.div_text_vinho} onPress={() => navigation.navigate('Sobre', item)}>{item.itemName}</Text>
+    <View style={styles.div_item}>
+      <Text style={styles.div_text_item} onPress={() => navigation.navigate('Sobre', item)}>{item.itemName}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Sobre', item)}>
-        <View style={styles.div_image_text_vinho}>
-          <Image source={item.imageSource} style={styles.div_image_vinho} />
+        <View style={styles.div_image_text_item}>
+          <Image source={item.imageSource} style={styles.div_image_item} />
           <View>
             <Text>Vendidos: {soldCount}</Text>
             <Text>Rate: {item.itemSigns}
@@ -144,7 +143,7 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
           </View>
         </View>
       </TouchableOpacity>
-      <View style={styles.div_text_button_vinho}>
+      <View style={styles.div_text_button_item}>
         <Text style={styles.div_text_preco}>{item.itemPrice}</Text>
         <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
           <Image source={require('../assets/home/plus.png')} style={{ marginBottom: 10 }} />
