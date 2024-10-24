@@ -25,23 +25,16 @@ const styles = {
     marginTop: 12,
     justifyContent: 'center'
   },
-
   button_pref: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-
-  icon_pref: {
-    marginLeft: 30,
-  },
-
   text_pref: {
     fontSize: 16,
     color: '#2D0C57',
     marginLeft: 20,
   },
-
   icon_v2_pref: {
     width: 6,
     height: 10,

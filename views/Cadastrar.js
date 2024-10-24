@@ -119,7 +119,6 @@ const Cadastrar = () => {
       height: '100%',
       backgroundColor: colors.background,
     },
-
     headerText: {
       fontSize: 35,
       fontWeight: 'bold',
@@ -129,18 +128,15 @@ const Cadastrar = () => {
       marginBottom: 20,
       color: colors.textColor,
     },
-
     inputContainer: {
       width: "80%",
       marginBottom: 30
     },
-
     label: {
       marginBottom: 5,
       fontSize: 14,
       color: colors.textColor,
     },
-
     textInput: {
       width: "100%",
       height: 50,
@@ -150,7 +146,6 @@ const Cadastrar = () => {
       borderWidth: 1,
       paddingLeft: 10
     },
-
     button: {
       width: 240,
       height: 60,
@@ -160,31 +155,26 @@ const Cadastrar = () => {
       borderRadius: 30,
       marginTop: 10
     },
-
     buttonText: {
       color: 'white',
       fontSize: 16,
       fontWeight: 'bold'
     },
-
     buttonLogin: {
       flexDirection: 'row',
       marginTop: 30
     },
-
     textLogin1: {
       fontSize: 14,
       fontWeight: 'bold',
       color: '#5B5B5E',
       marginRight: 5
     },
-
     textLogin2: {
       fontSize: 14,
       fontWeight: 'bold',
       color: colors.textColor,
     },
-
     mensagemErro: {
       position: 'absolute',
       top: -50,

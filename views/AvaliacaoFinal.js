@@ -190,27 +190,6 @@ const AvaliacaoFinal = () => {
       fontSize: 16,
       fontWeight: 'bold'
     },
-    modalOverlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0,0,0,0.5)'
-    },
-    modalContent: {
-      width: '80%',
-      padding: 10,
-      backgroundColor: 'white',
-      borderRadius: 10,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    modalText: {
-      fontSize: 20,
-      padding: 10,
-      textAlign: 'center',
-      fontWeight: 'bold',
-      color: '#2D0C57'
-    },
     modalContainer: {
       flex: 1,
       justifyContent: 'center',

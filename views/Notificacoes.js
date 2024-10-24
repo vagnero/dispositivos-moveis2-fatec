@@ -214,14 +214,6 @@ const Notificacoes = () => {
             flex: 1,
             padding: 10,
         },
-        rowFront: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 15,
-            backgroundColor: '#f2f2f2',
-            borderRadius: 10,
-            marginBottom: 10,
-        },
         rowBack: {
             alignItems: 'center',
             backgroundColor: colors.background,
@@ -304,7 +296,6 @@ const Notificacoes = () => {
         },
         textButtonModal: {
             color: 'white',
-
         },
     });
 

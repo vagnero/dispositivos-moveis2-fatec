@@ -112,14 +112,12 @@ const AddressRegistrationScreen = () => {
             width: '100%',
             height: '100%',
             alignItems: 'center',
-            marginTop: 40,
             backgroundColor: colors.background,
         },
         title: {
             fontSize: 25,
             fontWeight: 'bold',
             textAlign: 'center',
-            marginTop: 30,
             marginLeft: 33,
             marginBottom: 10,
             color: colors.textColor,
@@ -128,13 +126,11 @@ const AddressRegistrationScreen = () => {
             width: "80%",
             marginBottom: 10
         },
-
         label: {
             marginBottom: 5,
             fontSize: 14,
             color: colors.textColor,
         },
-
         textInput: {
             width: "100%",
             height: 50,
@@ -153,11 +149,6 @@ const AddressRegistrationScreen = () => {
             borderRadius: 30,
             marginTop: 10,
             marginBottom: 20,
-          },
-        buttonText: {
-            color: 'white',
-            fontSize: 16,
-            fontWeight: 'bold'
           },
     });
 

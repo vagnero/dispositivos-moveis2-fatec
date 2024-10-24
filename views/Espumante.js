@@ -42,21 +42,18 @@ const Espumante = () => {
       fontWeight: 'bold',
       textAlign: 'center',
     },
-    div_bordeaux: {
+    div_categoria: {
       marginBottom: 15,
     },
-
-    text_bordeaux: {
+    text_categoria: {
       fontSize: 34,
       fontWeight: 'bold',
       textAlign: 'center',
       color: colors.primary,
     },
-
     container_items: {
       marginBottom: 50,
     },
-
     noResultsText: {
       fontSize: 18,
       color: '#2D0C57',
@@ -73,8 +70,8 @@ const Espumante = () => {
             <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
           </View>
         )}        
-        <View style={styles.div_bordeaux}>
-          <Text style={styles.text_bordeaux}>Espumante</Text>
+        <View style={styles.div_categoria}>
+          <Text style={styles.text_categoria}>Espumante</Text>
         </View>
         
         <ScrollView vertical showsVerticalScrollIndicator={false}>

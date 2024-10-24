@@ -42,11 +42,11 @@ const Tinto = () => {
       fontWeight: 'bold',
       textAlign: 'center',
     },
-    div_bordeaux: {
+    div_categoria: {
       marginBottom: 15,
     },
 
-    text_bordeaux: {
+    text_categoria: {
       fontSize: 34,
       fontWeight: 'bold',
       textAlign: 'center',
@@ -73,8 +73,8 @@ const Tinto = () => {
             <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
           </View>
         )}        
-        <View style={styles.div_bordeaux}>
-          <Text style={styles.text_bordeaux}>Tinto</Text>
+        <View style={styles.div_categoria}>
+          <Text style={styles.text_categoria}>Tinto</Text>
         </View>
         
         <ScrollView vertical showsVerticalScrollIndicator={false}>

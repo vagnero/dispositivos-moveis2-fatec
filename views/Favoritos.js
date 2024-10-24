@@ -61,7 +61,6 @@ const Favoritos = () => {
       flex: 1,
       padding: 10
     },
-
     title: {
       fontSize: 24,
       fontWeight: 'bold',
@@ -69,7 +68,6 @@ const Favoritos = () => {
       color: colors.textColor,
       textAlign: 'center',
     },
-
     successMessageContainer: {
       position: 'absolute',
       top: '10%',
@@ -90,18 +88,6 @@ const Favoritos = () => {
       fontWeight: 'bold',
       textAlign: 'center',
     },
-    card: {
-      width: '60%',
-      height: 10,
-      marginBottom: 200,
-      backgroundColor: colors.itemCardBackground,
-      flexDirection: 'row',
-      borderRadius: 10,
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: 10,
-    },
-
     cards: {
       width: '60%',
       borderRadius: 10,
@@ -110,7 +96,6 @@ const Favoritos = () => {
       marginBottom: 10,
       backgroundColor: colors.itemCardBackground,
     },
-
     msg: {
       fontSize: 24,
       fontWeight: 'bold',

@@ -35,19 +35,16 @@ const RedefinirSenha = () => {
       margin: 'auto',
       backgroundColor: colors.background,
     },
-
     content: {
       alignItems: 'center',
       position: 'relative',
     },
-
     text_title: {
       marginTop: 50,
       fontSize: 35,
       fontWeight: 'bold',
       color: colors.textColor,
     },
-
     text_subtitle: {
       width: '80%',
       marginTop: 25,
@@ -55,7 +52,6 @@ const RedefinirSenha = () => {
       color: colors.textColor,
       textAlign: 'center'
     },
-
     text_email: {
       marginTop: 25,
       marginBottom: 10,
@@ -63,7 +59,6 @@ const RedefinirSenha = () => {
       color: colors.textColor,
       textAlign: 'start'
     },
-
     textInput: {
       width: 300,
       height: 50,
@@ -73,7 +68,6 @@ const RedefinirSenha = () => {
       borderWidth: 1,
       paddingLeft: 10
     },
-
     button_senha: {
       width: 240,
       height: 60,

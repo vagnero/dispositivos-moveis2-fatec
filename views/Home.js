@@ -213,7 +213,6 @@ const Home = () => {
       flex: 1,
       padding: 5,
     },
-
     div_pesquisar: {
       width: 320,
       height: 40,
@@ -226,30 +225,16 @@ const Home = () => {
       borderRadius: 15,
       backgroundColor: 'transparent',
     },
-
     image_pesquisar: {
       width: 20,
       height: 20,
       tintColor: colors.search,
       marginHorizontal: 15,
     },
-
-    div_categorias: {
-      marginBottom: 15,
-    },
-
-    text_categorias: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: colors.textColor,
-      marginLeft: 10,
-    },
-
     div_categorias_opcoes: {
       flexDirection: 'row',
       flexWrap: 'nowrap',
     },
-
     button_categorias: {
       width: 150,
       height: 40,
@@ -271,41 +256,21 @@ const Home = () => {
         },
       }),
     },
-
     buttonPressed: {
       backgroundColor: colors.buttonPressed,
     },
-
     textButtonPressed: {
       color: colors.secondary,
     },
-
     div_categorias_image_text: {
       flexDirection: 'row',
       alignItems: 'center',
     },
-
     text_categorias_v2: {
       color: colors.textColor,
       fontWeight: 'bold',
       marginLeft: 5,
     },
-
-    image_todos: {
-      width: 52,
-      height: 46,
-    },
-
-    image_bordeaux: {
-      width: 49,
-      height: 46,
-    },
-
-    image_borgonha: {
-      width: 46,
-      height: 46,
-    },
-
     div_mosaico_items: {
       flexDirection: 'row',
       flexWrap: 'wrap',

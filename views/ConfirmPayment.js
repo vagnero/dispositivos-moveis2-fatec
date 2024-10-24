@@ -238,12 +238,17 @@ const ConfirmPayment = ({ route }) => {
   };
 
   const styles = StyleSheet.create({
+    loading: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     container: {
       alignItems: 'center',
       marginTop: 20,
       justifyContent: 'center',
     },
-    content: {
+    container_paymentMethod: {
       width: 350,
       height: 150,
       padding: 20,
@@ -338,26 +343,10 @@ const ConfirmPayment = ({ route }) => {
       backgroundColor: '#e74c3c',
       marginTop: 10,
     },
-    noCardsText: {
-      color: 'black',
-    },
-    confirmCard: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: 48,
-      borderRadius: 5,
-      backgroundColor: '#2196F3',
-      marginTop: 10,
-    },
     closeButtonText: {
       color: '#fff',
       fontWeight: 'bold',
       fontSize: 16,
-    },
-    loading: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
     },
     buttonAddress: {
       marginBottom: 20,
@@ -388,17 +377,6 @@ const ConfirmPayment = ({ route }) => {
       margin: 'auto',
       marginTop: 250,
     },
-    deleteButton: {
-      width: 100,
-      backgroundColor: 'red',
-      marginBottom: 20,
-      padding: 10,
-      borderRadius: 5,
-    },
-    deleteText: {
-      color: 'white',
-      textAlign: 'center',
-    },
   });
 
   const renderAddressItem = ({ item }) => (
@@ -421,7 +399,7 @@ const ConfirmPayment = ({ route }) => {
         <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
       ) : (
         <View style={styles.container}>
-          <View style={styles.content}>
+          <View style={styles.container_paymentMethod}>
             <Text style={styles.title}>Forma de pagamento</Text>
             <TouchableOpacity onPress={() => { navigation.navigate('Payment') }}>
               {paymentMethod ? <Text style={styles.titlePaymentMethod}>{paymentMethod}</Text> :
@@ -468,46 +446,46 @@ const ConfirmPayment = ({ route }) => {
               <Text style={styles.closeButtonText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
+          <AlertModal
+            visible={modalAlertVisible}
+            message={mensagem}
+            onClose={handleCloseModalAlert}
+          />
+          <CardModal
+            modalVisible={modalCardVisible}
+            setModalVisible={setModalCardVisible}
+          />
+          <ModalManagerCard
+            modalVisible={modalManagerCardVisible}
+            setModalVisible={setModalManagerCardVisible}
+            selectedCard={selectedCard}
+            setSelectedCard={setSelectedCard}
+            onAddCard={handleAddCard}
+          />
+          <Modal
+            transparent={true}
+            visible={modalVisibleAddress}
+            onRequestClose={() => setModalVisibleAddress(false)}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                {addresses.length === 0 ? (
+                  <Text style={styles.noAddressesText}>Não há endereços cadastrados.</Text>
+                ) : (
+                  <FlatList
+                    data={addresses}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderAddressItem}
+                  />
+                )}
+                <TouchableOpacity onPress={() => setModalVisibleAddress(false)} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Fechar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
       )}
-      <AlertModal
-        visible={modalAlertVisible}
-        message={mensagem}
-        onClose={handleCloseModalAlert}
-      />
-      <CardModal
-        modalVisible={modalCardVisible}
-        setModalVisible={setModalCardVisible}
-      />
-      <ModalManagerCard
-        modalVisible={modalManagerCardVisible}
-        setModalVisible={setModalManagerCardVisible}
-        selectedCard={selectedCard}
-        setSelectedCard={setSelectedCard}
-        onAddCard={handleAddCard}
-      />
-      <Modal
-        transparent={true}
-        visible={modalVisibleAddress}
-        onRequestClose={() => setModalVisibleAddress(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            {addresses.length === 0 ? (
-              <Text style={styles.noAddressesText}>Não há endereços cadastrados.</Text>
-            ) : (
-              <FlatList
-                data={addresses}
-                keyExtractor={(item) => item.id}
-                renderItem={renderAddressItem}
-              />
-            )}
-            <TouchableOpacity onPress={() => setModalVisibleAddress(false)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </Content>
   );
 };

@@ -128,28 +128,23 @@ const Sobre = () => {
     loadItems();
   }, []);
 
-
   const styles = {
     content: {
       flex: 1,
     },
-
     div_image: {
       alignItems: 'center'
     },
-
     image_item: {
       width: 250,
       height: 250
     },
-
     container_informacoes: {
       width: '100%',
       height: '100%',
       // backgroundColor: '#F6F5F5',
       borderRadius: 25
     },
-
     text_informacoes: {
       width: '90%',
       fontSize: 30,
@@ -157,90 +152,54 @@ const Sobre = () => {
       color: colors.textColor,
       marginLeft: '7%',
     },
-
     div_avaliacoes: {
       flexDirection: 'row',
       alignItems: 'center'
     },
-
     image_signs: {
       marginLeft: '7%',
       marginRight: '1%'
     },
-
     text_avaliacoes: {
       fontSize: 15,
       fontWeight: 'bold',
       color: '#111719',
       marginRight: '5%'
     },
-
     button_avaliacoes: {
       fontSize: 15,
       textDecorationLine: 'underline',
       color: '#6C30EB'
     },
-
     text_preco: {
       fontSize: 30,
       fontWeight: 'bold',
       marginLeft: '7%',
       color: colors.textColor,
     },
-
     text_sobre: {
       marginLeft: '7%',
       fontSize: 22,
       fontWeight: 'bold',
       color: '#2D0C57'
     },
-
     text_sobre_2: {
       marginLeft: '7%',
       width: '90%',
       fontSize: 16,
       color: '#9586A8'
     },
-
     div_buttons: {
       marginTop: '5%',
       marginLeft: '7%',
       flexDirection: 'row',
     },
-
-    button_favorite: {
-      width: 78,
-      height: 56,
-      backgroundColor: '#FFFFFF',
-      borderWidth: 1,
-      borderColor: '#D9D0E3',
-      borderRadius: 10,
-      marginBottom: '10%',
-      marginRight: '4%',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-
-    button_carrinho: {
-      width: 230,
-      height: 56,
-      backgroundColor: '#6C30EB',
-      borderWidth: 1,
-      borderColor: '#D9D0E3',
-      borderRadius: 10,
-      marginBottom: '10%',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-
     text_button_carrinho: {
       fontSize: 14,
       color: '#FFFFFF',
       fontWeight: 'bold',
       marginLeft: 5
     },
-
     button_carrinho: {
       width: 230,
       height: 56,
@@ -253,7 +212,6 @@ const Sobre = () => {
       alignItems: 'center',
       justifyContent: 'center'
     },
-
     successMessageContainer: {
       position: 'absolute',
       top: '15%',

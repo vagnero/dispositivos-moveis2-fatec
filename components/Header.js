@@ -24,12 +24,10 @@ const Header = () => {
             width: '100%',
             backgroundColor: colors.background,
         },
-
         div_saudacao_pesquisar: {
             alignItems: 'center',
             marginTop: 15,
         },
-
         icon: {
             color: colors.iconColor,
             fontSize: 24, // Tamanho do ícone

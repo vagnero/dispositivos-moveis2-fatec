@@ -122,7 +122,6 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       justifyContent: 'space-between',
       marginBottom: '5%'
     },
-
     image_item: {
       width: '30%',
       height: '100%',
@@ -133,35 +132,29 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       width: '100%',
       marginLeft: '5%'
     },
-
     text_item: {
       fontSize: 17,
       color: colors.primary,
       fontWeight: 'bold',
       width: '40%'
     },
-
     div_preco_tamanho: {
       flex: 1,
       flexDirection: 'row',
       marginTop: '2%'
     },
-
     text_preco: {
       fontSize: 20,
       color: colors.primary,
     },
-
     text_tamanho: {
       fontSize: 14,
       color: colors.textColor,
       marginLeft: '5%'
     },
-
     div_buttons: {
       flexDirection: 'row',
     },
-
     button_favorite: {
       width: 70,
       height: 40,
@@ -172,7 +165,6 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       justifyContent: 'center',
       alignItems: 'center'
     },
-
     button_carrinho: {
       width: 70,
       height: 40,

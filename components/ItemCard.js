@@ -71,7 +71,6 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
     }
   };
 
-
   const styles = {
     div_item: {
       width: 150,

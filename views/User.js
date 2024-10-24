@@ -119,7 +119,6 @@ const User = () => {
     container: {
       flex: 1,
     },
-
     div_perfil: {
       width: '100%',
       height: '25%',
@@ -127,20 +126,11 @@ const User = () => {
       alignItems: 'center',
       justifyContent: 'space-evenly'
     },
-
     image_perfil: {
       width: 100,
       height: 100,
       borderRadius: 50,
     },
-
-    text_perfil: {
-      color: colors.textColor,
-      textAlign: 'left',
-      fontSize: 25,
-      width: 250,
-    },
-
     text_nome: {
       fontSize: 20,
       maxWidth: 200,
@@ -148,17 +138,10 @@ const User = () => {
       marginLeft: 10,
       color: colors.textColor
     },
-
-    text_desc: {
-      marginTop: 10,
-      fontSize: 14,
-      color: '#A0A5BA'
-    },
     image: {
       width: 20,
       height: 20,
     },
-
     div_conteudo_pref: {
       width: '100%',
       height: '60%',

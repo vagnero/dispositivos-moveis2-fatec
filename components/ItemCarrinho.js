@@ -1,9 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
+export const cartState = { totalQuantity: 0 }; // Objeto externo para armazenar totalQuantity
 
 const ItemCarrinho = ({ itemName, price, imageSource, quantity, removeFromCart, setCartItems, cartItems, calculateTotal }) => {
   const { colors } = useContext(ThemeContext);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+
+  // Função para calcular a quantidade total de itens no carrinho
+  const calculateItens = () => {
+    const total = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    setTotalQuantity(total);
+    cartState.totalQuantity = total; // ZEZIN PARA MANDAR QUALQUER COISA PARA OUTRA PAGINA, CRIE UM OBJETO AAAAA
+  };
 
   useEffect(() => {
     calculateItens(); // Atualiza a quantidade total ao carregar ou modificar o carrinho
@@ -35,9 +44,7 @@ const ItemCarrinho = ({ itemName, price, imageSource, quantity, removeFromCart, 
   const handleRemoveFromCart = () => {
     removeFromCart(itemName);
     calculateTotal(); // Recalcula o total
-  };  
-
-  // console.log("Total de itens no carrinho:" + totalQuantity);
+  };
   
   const styles = {
     div_item: {

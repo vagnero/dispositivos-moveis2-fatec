@@ -75,8 +75,6 @@ const Login = () => {
 
       }
       const onBackPress = () => {
-        // Aqui você pode exibir um alerta se necessário ou simplesmente desativar a ação
-        // Exemplo de um alerta que confirma a saída do app
         Alert.alert(
           'Atenção',
           'Você quer sair do aplicativo?',
@@ -104,7 +102,6 @@ const Login = () => {
       height: '100%',
       backgroundColor: colors.background,
     },
-
     headerText: {
       fontSize: 35,
       fontWeight: 'bold',
@@ -113,19 +110,16 @@ const Login = () => {
       marginBottom: 40,
       color: colors.textColor,
     },
-
     inputContainer: {
       width: "80%",
       podition: 'absolute',
       marginBottom: 30
     },
-
     label: {
       marginBottom: 5,
       fontSize: 14,
       color: colors.textColor,
     },
-
     textInput: {
       width: "100%",
       height: 50,
@@ -135,20 +129,17 @@ const Login = () => {
       borderWidth: 1,
       paddingLeft: 10
     },
-
     checkboxContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 20
     },
-
     textEsqueceuSenha: {
       marginBottom: 15,
       fontSize: 14,
       fontWeight: 'bold',
       color: colors.textColor,
     },
-
     button: {
       width: 240,
       height: 60,
@@ -158,31 +149,26 @@ const Login = () => {
       borderRadius: 30,
       marginTop: 10
     },
-
     buttonText: {
       color: 'white',
       fontSize: 16,
       fontWeight: 'bold'
     },
-
     buttonLogin: {
       flexDirection: 'row',
       marginTop: 30
     },
-
     textLogin1: {
       fontSize: 14,
       fontWeight: 'bold',
       color: '#5B5B5E',
       marginRight: 5
     },
-
     textLogin2: {
       fontSize: 14,
       fontWeight: 'bold',
       color: colors.textColor,
     },
-
     mensagemErro: {
       position: 'absolute',
       top: 160,
@@ -195,7 +181,6 @@ const Login = () => {
       padding: 20,
       zIndex: 999
     },
-
     mensagemSucesso: {
       position: 'absolute',
       top: 170,

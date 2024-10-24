@@ -22,8 +22,7 @@ const Greeting = ({ name }) => {
       flexWrap: 'nowrap',
       marginBottom: 10,
       color: colors.textColor,
-    },
-  
+    },  
     text_get_greeting: {
       color: colors.textColor,
       fontWeight: 'bold'

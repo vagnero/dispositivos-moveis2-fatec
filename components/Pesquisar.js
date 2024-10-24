@@ -21,15 +21,13 @@ const Pesquisar = ({ onSearch }) => {
       borderColor: colors.search,
       borderRadius: 15,
       backgroundColor: 'transparent',
-    },
-  
+    },  
     image_pesquisar: {
       width: 20, 
       height: 20,
       tintColor: colors.search,
       marginHorizontal: 15,
-    },
-  
+    },  
     textinput_pesquisar: {
       flex: 1, 
       paddingVertical: 5,

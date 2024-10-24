@@ -69,10 +69,6 @@ const Carrinho = () => {
   };
 
   const styles = {
-    container: {
-      backgroundColor: '#F6F5F5',
-      alignItems: 'center'
-    },
     text_title: {
       fontSize: 30,
       fontWeight: 'bold',
@@ -98,27 +94,23 @@ const Carrinho = () => {
       justifyContent: 'center',
       alignItems: 'center'
     },
-
     div_text_price_total: {
       flexDirection: 'row',
       alignItems: 'center', // Garantir que o texto e o valor estejam alinhados verticalmente
       justifyContent: 'center', // Adiciona alinhamento horizontal para o centro
       marginBottom: 1,
     },
-
     text_total: {
       fontSize: 20,
       fontWeight: 'bold',
       color: '#000',
       marginRight: 5 // Reduzir a margem entre o texto e o valor
     },
-
     text_price: {
       fontSize: 20,
       fontWeight: 'bold',
       color: '#000'
     },
-
     button_finalizar_pedido: {
       width: 180,
       height: 50,
@@ -129,14 +121,12 @@ const Carrinho = () => {
       alignItems: 'center',
       justifyContent: 'center'
     },
-
     text_pedido: {
       fontSize: 15,
       color: '#FFFFFF',
       fontWeight: 'bold',
       marginLeft: 5
     },
-
     successMessageContainer: {
       position: 'absolute',
       top: '74%',
@@ -157,26 +147,29 @@ const Carrinho = () => {
       fontWeight: 'bold',
       textAlign: 'center',
     },
-
     modalOverlay: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fundo do modal
-    }, modalContent: {
+    }, 
+    modalContent: {
       width: 300,
       padding: 20,
       backgroundColor: 'white',
       borderRadius: 10,
       alignItems: 'center',
-    }, modalText: {
+    }, 
+    modalText: {
       marginBottom: 20,
       textAlign: 'center',
-    }, modalButtons: {
+    }, 
+    modalButtons: {
       flexDirection: 'row',
       justifyContent: 'space-around',
       width: '100%',
-    }, modalButton: {
+    }, 
+    modalButton: {
       padding: 10,
       backgroundColor: '#2196F3',
       borderRadius: 5,

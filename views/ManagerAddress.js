@@ -106,15 +106,6 @@ const ManagerAddress = () => {
             padding: 10,
             backgroundColor: colors.card,
         },
-        addressItem: {
-            padding: 10,
-            backgroundColor: colors.cardBackground,
-            borderRadius: 10,
-            marginVertical: 5,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
         textAddress: {
             color: colors.text,
         },
@@ -140,16 +131,6 @@ const ManagerAddress = () => {
         deleteText: {
             color: 'white',
             textAlign: 'center',
-        },
-        detailsButton: {
-            backgroundColor: colors.button,
-            padding: 10,
-            borderRadius: 5,
-        },
-        buttonText: {
-            color: 'white',
-            fontSize: 16,
-            fontWeight: 'bold',
         },
         newAddress: {
             flexDirection: 'row',
