@@ -137,7 +137,7 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
           <View>
             <Text>Vendidos: {soldCount}</Text>
             <Text>Rate: {item.itemSigns}
-              <Image source={require('../assets/info/signs.png')} style={styles.image_signs} />
+              <Image source={require('../assets/info/signs.png')}/>
             </Text>
           </View>
         </View>

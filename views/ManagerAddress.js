@@ -173,7 +173,7 @@ const ManagerAddress = () => {
                 <View style={styles.addressList}>
                     <Text style={styles.text}>Endereços Salvos</Text>
                     {addresses.length === 0 ? ( // Verifica se não há endereços
-                        <Text style={styles.noAddressesText}>Não há endereços salvos.</Text> // Mensagem informativa
+                        <Text>Não há endereços salvos.</Text> // Mensagem informativa
                     ) : (
                         <FlatList
                             data={addresses}

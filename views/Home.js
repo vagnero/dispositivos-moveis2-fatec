@@ -374,7 +374,7 @@ const Home = () => {
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={styles.div_mosaico_items}>
             {filteredItems.length === 0 ? (
-              <Text style={styles.noResultsText}>Nenhum resultado encontrado</Text>
+              <Text>Nenhum resultado encontrado</Text>
             ) : (
               filteredItems.map((item, index) => (
                 <ItemCard key={index} item={item} onPressAddToCart={handleAddToCart} />

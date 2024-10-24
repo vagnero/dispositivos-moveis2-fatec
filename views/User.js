@@ -246,7 +246,7 @@ const User = () => {
                 <Image source={require('../assets/user/perfil.png')} style={styles.image} />
                 <Text style={styles.text_pref}>Informações pessoais</Text>
               </View>
-              <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')} />
+              <Image source={require('../assets/user/SETA.png')} />
             </View>
           </TouchableOpacity>
           <PrefItem
@@ -288,7 +288,7 @@ const User = () => {
                 <Image source={require('../assets/user/Logout.png')} style={styles.image} />
                 <Text style={styles.text_pref}>Sair</Text>
               </View>
-              <Image style={styles.icon_v2_pref} source={require('../assets/user/SETA.png')} />
+              <Image source={require('../assets/user/SETA.png')} />
             </View>
           </TouchableOpacity>
         </View>

@@ -158,13 +158,13 @@ const Login = () => {
       flexDirection: 'row',
       marginTop: 30
     },
-    textLogin1: {
+    text: {
       fontSize: 14,
       fontWeight: 'bold',
       color: '#5B5B5E',
       marginRight: 5
     },
-    textLogin2: {
+    textCadastrar: {
       fontSize: 14,
       fontWeight: 'bold',
       color: colors.textColor,
@@ -251,8 +251,8 @@ const Login = () => {
         )}
 
         <TouchableOpacity onPress={() => navigation.navigate('Cadastrar')} style={styles.buttonLogin}>
-          <Text style={styles.textLogin1}>Não tem uma conta?</Text>
-          <Text style={styles.textLogin2}>Cadastrar</Text>
+          <Text style={styles.text}>Não tem uma conta?</Text>
+          <Text style={styles.textCadastrar}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
       <Menu2 />

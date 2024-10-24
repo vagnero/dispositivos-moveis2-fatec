@@ -107,13 +107,13 @@ const Avaliacoes = () => {
       textAlign: 'center',
       color: colors.primary,
     },
-    link: {
+    showMoreScreen: {
       color: '#007BFF',
       marginBottom: '20%',
       textAlign: 'center',
       fontWeight: 'bold',
     },
-    link2: {
+    showMoreContent: {
       color: '#003BFF',
       textAlign: 'center',
       fontWeight: 'bold',
@@ -156,7 +156,7 @@ const Avaliacoes = () => {
                 />
                 {item.texto.length > 150 && (
                   <TouchableOpacity onPress={() => toggleShowFullText(index)}>
-                    <Text style={styles.link2}>
+                    <Text style={styles.showMoreContent}>
                       {showFullText[index] ? 'Mostrar menos' : 'Mostrar mais'}
                     </Text>
                   </TouchableOpacity>
@@ -165,7 +165,7 @@ const Avaliacoes = () => {
             ))}
             {visibleCount < allAvaliacoes.length && (
               <TouchableOpacity onPress={loadMoreComments}>
-                <Text style={styles.link}>Mostrar mais</Text>
+                <Text style={styles.showMoreScreen}>Mostrar mais</Text>
               </TouchableOpacity>
             )}
           </ScrollView>

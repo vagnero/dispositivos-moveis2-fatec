@@ -236,7 +236,7 @@ const AddressRegistrationScreen = () => {
                         />
                     </View>
                     <TouchableOpacity onPress={handleSaveAddress} style={styles.button} >
-                        <Text style={styles.textButton} >Salvar Endereço</Text>
+                        <Text>Salvar Endereço</Text>
                     </TouchableOpacity>
                 </View>
                 <AlertModal

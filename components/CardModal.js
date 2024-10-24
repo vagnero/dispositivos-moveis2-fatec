@@ -161,7 +161,7 @@ const CardModal = ({ modalVisible, setModalVisible, onAddCard }) => {
   });
 
   return (
-    <View style={styles.container}>
+    <View>
       <Modal
         transparent={true}
         visible={modalVisible}
