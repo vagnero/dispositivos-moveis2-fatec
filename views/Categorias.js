@@ -72,7 +72,6 @@ const Categorias = () => {
         {/* Mosaico */}
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={styles.div_mosaico_items}>
-            {/* Card Bordeaux */}
             <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Branco')}>
                 <View style={styles.div_image_text_item}>

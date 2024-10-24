@@ -197,7 +197,7 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button_carrinho} onPress={handleAddToCart}>
-            <Image source={require('../assets/bordeaux/shopping-cart.png')} />
+            <Image source={require('../assets/categoria/shopping-cart.png')} />
           </TouchableOpacity>
         </View>
       </View>

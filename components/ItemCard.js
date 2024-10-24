@@ -102,6 +102,8 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
     div_image_item: {
       width: 50,
       height: 120,
+      // width: 40,
+      // height: 70,
     },
     div_text_item: {
       width: '90%',

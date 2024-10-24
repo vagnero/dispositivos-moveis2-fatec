@@ -6,7 +6,7 @@ const Roupas = [
     itemSigns: '4.5',
     ml: 'N/A',
     itemDescription: 'Camisa polo clássica em algodão, perfeita para um visual casual e elegante.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/camisa_polo_azul.png'),
     itemSold: 230,
   },
   {
@@ -16,7 +16,7 @@ const Roupas = [
     itemSigns: '4.8',
     ml: 'N/A',
     itemDescription: 'Vestido leve e arejado com estampa floral, ideal para dias ensolarados.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/vestido_floral.png'),
     itemSold: 145,
   },
   {
@@ -26,7 +26,7 @@ const Roupas = [
     itemSigns: '4.3',
     ml: 'N/A',
     itemDescription: 'Calça jeans slim fit, combina conforto e estilo para o dia a dia.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/calca_jeans_slim.png'),
     itemSold: 200,
   },
   {
@@ -36,7 +36,7 @@ const Roupas = [
     itemSigns: '4.0',
     ml: 'N/A',
     itemDescription: 'Saia midi versátil, perfeita para compor looks elegantes e casuais.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/saia_midi_preta.png'),
     itemSold: 60,
   },
   {
@@ -46,7 +46,7 @@ const Roupas = [
     itemSigns: '4.7',
     ml: 'N/A',
     itemDescription: 'Jaqueta de couro sintético, adiciona um toque rocker ao seu visual.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/jaqueta_couro.png'),
     itemSold: 30,
   },
   {
@@ -56,7 +56,7 @@ const Roupas = [
     itemSigns: '4.2',
     ml: 'N/A',
     itemDescription: 'Tênis branco confortável, ideal para o dia a dia e para passeios.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/tenis_casual_branco.png'),
     itemSold: 90,
   },
   {
@@ -66,7 +66,7 @@ const Roupas = [
     itemSigns: '4.6',
     ml: 'N/A',
     itemDescription: 'Bolsa tote espaçosa e prática, perfeita para o uso diário.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/bolsa_tote_verde.png'),
     itemSold: 75,
   },
   {
@@ -76,7 +76,7 @@ const Roupas = [
     itemSigns: '4.1',
     ml: 'N/A',
     itemDescription: 'Relógio esportivo resistente à água, ideal para atividades ao ar livre.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/relogio_esportivo.png'),
     itemSold: 45,
   },
   {
@@ -86,7 +86,7 @@ const Roupas = [
     itemSigns: '4.4',
     ml: 'N/A',
     itemDescription: 'Cinto de couro genuíno, um clássico que complementa qualquer look.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/cinto_couro.png'),
     itemSold: 120,
   },
   {
@@ -96,7 +96,7 @@ const Roupas = [
     itemSigns: '4.9',
     ml: 'N/A',
     itemDescription: 'Óculos de sol com proteção UV, estilo e conforto para seus passeios.',
-    imageSource: require('../assets/home/champagne.png'),
+    imageSource: require('../assets/imagensRoupas/oculos_sol.png'),
     itemSold: 65,
   },
 ];
