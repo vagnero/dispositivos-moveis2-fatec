@@ -3,7 +3,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { Text, BackHandler, View, TouchableOpacity, ScrollView, Image, Platform, StyleSheet, TextInput } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Content from '../components/Content';
-// import MyCarousel from '../components/MyCarousel';
+import MyCarousel from '../components/MyCarousel';
 import ItemCard from '../components/ItemCard';
 import { useUser } from '../context/UserContext';
 import Items from '../components/Items';
@@ -42,10 +42,7 @@ const Home = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      handlePressButton1()
-      setTimeout(() => {
-        setIsPressedButton1(false);
-      }, 400);
+      setIsPressedButton1(false);
       setIsPressedButton2(false)
       setIsPressedButton3(false);
 
@@ -353,35 +350,36 @@ const Home = () => {
                 <Text style={[styles.text_categorias_v2, isPressedButton2 && styles.textButtonPressed]}>Melhor Avaliados</Text>
               </View>
             </TouchableOpacity>
-
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigation.navigate('Categorias')}
               style={styles.button_categorias}>
               <View style={styles.div_categorias_image_text}>
                 <Text style={styles.text_categorias_v2}>Por Categorias</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </ScrollView>
         </View>
-        {/* <MyCarousel navigation={navigation} /> */}
         {cartSuccessMessage && (
           <View style={styles.successMessageContainer}>
             <Text style={styles.successMessage}>{cartSuccessMessage}</Text>
           </View>
         )}
 
-        {/* Mosaico de items */}
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View style={styles.div_mosaico_items}>
-            {filteredItems.length === 0 ? (
-              <Text>Nenhum resultado encontrado</Text>
-            ) : (
-              filteredItems.map((item, index) => (
-                <ItemCard key={index} item={item} onPressAddToCart={handleAddToCart} />
-              ))
-            )}
-          </View>
-        </ScrollView>
+        {!isPressedButton1 && !isPressedButton2 && !isPressedButton3 && searchText === '' ? (
+          <MyCarousel category={Items.itemCategory} handleAddToCart={handleAddToCart} />
+        ) : (
+          <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            <View style={styles.div_mosaico_items}>
+              {filteredItems.length === 0 ? (
+                <Text>Nenhum resultado encontrado</Text>
+              ) : (
+                filteredItems.map((item, index) => (
+                  <ItemCard key={index} item={item} onPressAddToCart={handleAddToCart} />
+                ))
+              )}
+            </View>
+          </ScrollView>
+        )}
       </View>
     </Content>
   );
