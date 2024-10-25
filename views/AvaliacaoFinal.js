@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Modal, Animated, KeyboardAvoidingView, Platform, BackHandler  } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, Modal, Animated, KeyboardAvoidingView, Platform, BackHandler } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
@@ -111,6 +111,7 @@ const AvaliacaoFinal = () => {
     setModalAlertVisible(false);
   };
 
+  // Impede de voltar a tela anterior
   useEffect(() => {
     const backAction = () => {
       navigation.navigate('Home'); // Altere para o nome da sua tela Home

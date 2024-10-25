@@ -38,7 +38,7 @@ const Pesquisar = ({ onSearch }) => {
  return (
     <View style={styles.div_pesquisar}>
       <TouchableOpacity onPress={handleSearch}>
-        <Image source={require('../assets/home/search.png')} style={styles.image_pesquisar} />
+        <Image source={require('../assets/info/search.png')} style={styles.image_pesquisar} />
       </TouchableOpacity>
       <TextInput
         style={styles.textinput_pesquisar}

@@ -89,7 +89,6 @@ const Home = () => {
     }, [])
   );
 
-
   // Impede de voltar uma tela anterior a Home
   useFocusEffect(
     useCallback(() => {
@@ -303,7 +302,7 @@ const Home = () => {
         {/* Filtro */}
         <View style={styles.div_pesquisar} >
           <TouchableOpacity >
-            <Image source={require('../assets/home/search.png')} style={styles.image_pesquisar} />
+            <Image source={require('../assets/info/search.png')} style={styles.image_pesquisar} />
           </TouchableOpacity>
           <TextInput
             placeholder="Pesquise por items..."
@@ -366,7 +365,7 @@ const Home = () => {
         )}
 
         {!isPressedButton1 && !isPressedButton2 && !isPressedButton3 && searchText === '' ? (
-          <MyCarousel category={Items.itemCategory} handleAddToCart={handleAddToCart} />
+          <MyCarousel handleAddToCart={handleAddToCart} />
         ) : (
           <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View style={styles.div_mosaico_items}>

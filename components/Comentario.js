@@ -14,12 +14,10 @@ const Comentario = ({ nome, rate, data, texto }) => {
       padding: 10,
       borderRadius: 10,
     },
-
     div_text_comentario: {
       flexDirection: 'row',
       justifyContent: 'space-between'
     },
-
     text_nome: {
       width: '63%',
       fontSize: 15,
@@ -32,18 +30,15 @@ const Comentario = ({ nome, rate, data, texto }) => {
       marginLeft: 10,
       marginBottom: '2%',
     },
-
     text_data: {
       fontSize: 13,
       color: colors.text,
     },
-
     star: {
       marginLeft: 5,
       marginRight: 15,
       marginTop: 2,
     },
-
     text_coment: {
       fontSize: 13,
       color: colors.text,

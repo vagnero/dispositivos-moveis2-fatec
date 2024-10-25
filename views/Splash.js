@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
-import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { useUser } from '../context/UserContext';
 import LoadingBar from '../components/LoadingBar';
 import * as SecureStore from 'expo-secure-store';
@@ -31,20 +31,7 @@ const Splash = () => {
 
   useEffect(() => {
     checkUserLogin();
-  }, []);  
-
-  // const { registerUser, setCurrentUser } = useUser();
-  // const [nome] = useState('Dev');
-  // const [email] = useState('dev');
-  // const [senha] = useState('');
-
-  // useEffect(() => {
-  //   if (registerUser) {
-  //     registerUser({ nome, email, senha });
-  //   }
-  //   setCurrentUser(null)
-  // }, []);
-
+  }, []);
 
   const styles = StyleSheet.create({
     container: {

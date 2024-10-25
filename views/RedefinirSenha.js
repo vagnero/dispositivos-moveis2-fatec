@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Header2 from '../components/Header2';
-import Menu2 from '../components/Menu2';
+import HeaderUnlogged from '../components/HeaderUnlogged';
+import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
 
 const RedefinirSenha = () => {
@@ -120,7 +120,7 @@ const RedefinirSenha = () => {
 
   return (
     <View style={styles.div_container}>
-      <Header2 />
+      <HeaderUnlogged />
       <View style={styles.content}>
         <Text style={styles.text_title}>Redefinir Senha</Text>
         {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
@@ -146,7 +146,7 @@ const RedefinirSenha = () => {
           <Text style={styles.textVoltar}>Voltar</Text>
         </TouchableOpacity>
       </View>
-      <Menu2 />
+      <MenuUnlogged />
     </View>
   );
 };

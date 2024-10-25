@@ -67,11 +67,8 @@ export const UserProvider = ({ children }) => {
 
   const updateCartItems = (items) => {
     const itemNames = items.map(item => item.itemName);
-    console.log('Atualizando itens do Carrinho:', itemNames);
     const updatedItems = items.map((item) => {
       const existingItem = cartItems.find((i) => {
-        console.log('iName: ', i.itemName);
-        console.log('itemName: ', item.itemName);
         return i.itemName === item.itemName;
       });
       if (existingItem) {
@@ -80,7 +77,6 @@ export const UserProvider = ({ children }) => {
       return item;
     });
     setCartItems(updatedItems);
-    // console.log('Atualizado itens do Carrinho:', updatedItems);
   };
 
   const addToCart = (item) => {

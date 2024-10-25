@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native'; // Importando useRoute
+import { useNavigation } from '@react-navigation/native'; // Importando useRoute
 import Content from '../components/Content'; // Importando useRoute
 
 

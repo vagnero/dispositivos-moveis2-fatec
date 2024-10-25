@@ -3,7 +3,7 @@ import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity, FlatList } 
 import AlertModal from '../components/AlertModal';
 import { useUser } from '../context/UserContext';
 import { db } from '../config/firebaseConfig';
-import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import CardModal from '../components/CardModal';
 import { useFocusEffect } from '@react-navigation/native'; // Importando useRoute
 import { ThemeContext } from '../context/ThemeContext';
@@ -66,11 +66,6 @@ const ModalManagerCard = ({ modalVisible, setModalVisible, selectedCard, setSele
 
     const handleAddCard = () => {
         fetchLoadCards(); // Atualiza a lista de cartões
-    };
-
-    const handleCloseModalManagerCard = () => {
-        setModalVisible(false)
-        onAddCard();
     };
 
     const styles = StyleSheet.create({

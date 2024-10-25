@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Greeting from '../components/Greeting';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUser } from '../context/UserContext';

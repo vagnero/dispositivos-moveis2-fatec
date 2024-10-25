@@ -2,10 +2,9 @@ import React, { useState, useContext } from 'react';
 import {
     View,
     Text,
-    StyleSheet,
-    FlatList,
+    StyleSheet,    
     TouchableOpacity,
-    Animated, Modal, Button
+    Modal
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import Content from '../components/Content';
@@ -188,7 +187,6 @@ const Notificacoes = () => {
                 return <MaterialIcons name="notifications" size={24} color="gray" />;
         }
     };
-
 
     const renderModalContent = () => {
         if (!selectedNotification) return null;

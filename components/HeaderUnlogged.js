@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { ThemeContext } from '../context/ThemeContext';
 
-const Header2 = () => {
+const HeaderUnlogged = () => {
     const { theme, toggleTheme, colors } = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -52,6 +52,6 @@ const Header2 = () => {
     );
 };
 
-export default Header2;
+export default HeaderUnlogged;
 
 

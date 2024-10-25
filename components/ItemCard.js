@@ -50,27 +50,6 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
     onPressAddToCart({ ...item, imageSource: item.imageSource, quantity: 1 }, updateCartItems); // Passa 1 como quantidade do item adicionado
   };
 
-  // Função para salvar os items
-  const saveItems = async (Items) => {
-    try {
-      const filteredData = Items.map(({ itemName, itemSigns, itemSold }) => ({ itemName, itemSigns, itemSold }));
-
-      // Salvar no SecureStore
-      await SecureStore.setItemAsync('items', JSON.stringify(filteredData));
-
-      // Salvar no Firestore
-      await Promise.all(filteredData.map(async (item) => {
-        const itemRef = doc(db, 'items', item.itemName); // ou qualquer outro ID único
-        await setDoc(itemRef, {
-          itemSold: item.itemSold,
-          itemSigns: item.itemSigns,
-        }, { merge: true }); // merge: true para não sobrescrever os dados existentes
-      }));
-    } catch (error) {
-      console.error('Erro ao salvar os items:', error);
-    }
-  };
-
   const styles = {
     div_item: {
       width: 150,
@@ -147,7 +126,7 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
       <View style={styles.div_text_button_item}>
         <Text style={styles.div_text_preco}>{item.itemPrice}</Text>
         <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
-          <Image source={require('../assets/home/plus.png')} style={{ marginBottom: 10 }} />
+          <Image source={require('../assets/carrinho/plus.png')} style={{ marginBottom: 10 }} />
         </TouchableOpacity>
       </View>
     </View>

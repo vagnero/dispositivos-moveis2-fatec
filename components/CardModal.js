@@ -86,10 +86,6 @@ const CardModal = ({ modalVisible, setModalVisible, onAddCard }) => {
     }
   };
 
-  const validateHolderName = (text) => {
-    setCardHolder(text.replace(/[^a-zA-Z\s]/g, ''));
-  };
-
   const validateCVV = (text) => {
     setCvv(text.replace(/[^0-9]/g, ''));
   };

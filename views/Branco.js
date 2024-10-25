@@ -4,7 +4,6 @@ import { Text, View, ScrollView } from 'react-native';
 import Content from '../components/Content';
 import Product from '../components/Product';
 import Items from '../components/Items';
-import { handleAddToCart } from '../utils/cartUtils';
 import { useUser } from '../context/UserContext';
 
 const Branco = () => {

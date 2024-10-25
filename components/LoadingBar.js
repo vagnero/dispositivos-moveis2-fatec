@@ -7,7 +7,7 @@ const LoadingBar = () => {
   useEffect(() => {
     Animated.timing(progressAnim, {
       toValue: 1, // O valor final da animação
-      duration: 2000, // Duração de 3 segundos
+      duration: 2000, // Duração de 2 segundos
       useNativeDriver: false, // Desativa o Native Driver para propriedades que não são suportadas
     }).start();
   }, []);

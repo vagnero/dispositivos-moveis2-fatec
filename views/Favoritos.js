@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import Content from '../components/Content';
 import Product from '../components/Product';

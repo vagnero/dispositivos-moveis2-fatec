@@ -29,8 +29,7 @@ const User = () => {
 
       // Limpa informações armazenadas no SecureStore
       await SecureStore.deleteItemAsync('userEmail');
-      await SecureStore.deleteItemAsync('userPassword'); // Caso tenha armazenado a senha
-      // Adicione outras chaves que você deseja limpar, se necessário
+      await SecureStore.deleteItemAsync('userPassword');
 
       // Redireciona para a tela de login
       navigation.reset({
@@ -62,6 +61,7 @@ const User = () => {
     loadProfileImage(); // Carrega a imagem ao iniciar o componente
   }, []);
 
+// Função qeu altera iamgem de usuário
   const handleImagePicker = async () => {
     // Solicita permissão para acessar a galeria
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -257,7 +257,7 @@ const User = () => {
           <PrefItem
             iconSource={<Image source={require('../assets/user/cartao.png')} style={styles.image} />}
             text="Forma de pagamento"
-            view="Payment"
+            view="MethodPayment"
           />
           <PrefItem
             iconSource={<Image source={require('../assets/user/sino.png')} style={styles.image} />}
@@ -293,6 +293,7 @@ const User = () => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* Modal para alterao nome de visualização */}
       <Modal
         transparent={true}
         animationType="slide"
@@ -316,6 +317,7 @@ const User = () => {
           </View>
         </View>
       </Modal>
+      {/* Modal que mostra as informações de usuário */}
       <Modal
         animationType="slide"
         transparent={true}

@@ -1,22 +1,21 @@
 import React, { useRef, useState, useContext } from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Image, Platform, ScrollView } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Platform, ScrollView } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { ThemeContext } from '../context/ThemeContext';
 import Items from '../components/Items';
 import ItemCard from '../components/ItemCard';
 
-const MyCarousel = ({ category, handleAddToCart }) => {
+const MyCarousel = ({ handleAddToCart }) => {
   const { colors } = useContext(ThemeContext);
   const isCarousel = useRef(null);
   const [index, setIndex] = useState(0);
-  const [soldCount, setSoldCount] = useState(0); // Inicializa como 0
 
-  const filteredItems = [
-    Items.filter(item => item.numberCategory === 1),
-    Items.filter(item => item.numberCategory === 2),
-    Items.filter(item => item.numberCategory === 3),
-    Items.filter(item => item.numberCategory === 4),
-  ];
+  // Obter todas as categorias únicas
+  const uniqueCategories = [...new Set(Items.map(item => item.numberCategory))];
+
+  const filteredItems = uniqueCategories.map(category =>
+    Items.filter(item => item.numberCategory === category)
+  );
 
   const styles = StyleSheet.create({
     itemContainer: {
@@ -89,12 +88,12 @@ const MyCarousel = ({ category, handleAddToCart }) => {
   const renderItem = ({ item }) => (
     <View>
       {filteredItems.length === 0 ? (
-                <Text>Nenhum resultado encontrado</Text>
-              ) : (
-                <View key={index}>
-                  <ItemCard key={index} item={item} onPressAddToCart={handleAddToCart} />
-                </View>
-              )}
+        <Text>Nenhum resultado encontrado</Text>
+      ) : (
+        <View key={index}>
+          <ItemCard key={index} item={item} onPressAddToCart={handleAddToCart} />
+        </View>
+      )}
     </View>
   );
 

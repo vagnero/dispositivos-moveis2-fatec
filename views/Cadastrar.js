@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
-import Header2 from '../components/Header2';
-import Menu2 from '../components/Menu2';
+import HeaderUnlogged from '../components/HeaderUnlogged';
+import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
@@ -203,7 +203,7 @@ const Cadastrar = () => {
 
   return (
     <View style={styles.container}>
-      <Header2 />
+      <HeaderUnlogged />
       <Text style={styles.headerText}>Cadastrar</Text>
       <View style={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
@@ -250,7 +250,7 @@ const Cadastrar = () => {
         message={mensagemModal}
         onClose={handleCloseModal}
       />
-      <Menu2 />
+      <MenuUnlogged />
     </View>
   );
 }

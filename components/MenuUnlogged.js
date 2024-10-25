@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { FontAwesome } from 'react-native-vector-icons';
 import { useUser } from '../context/UserContext';
 
-const Menu2 = () => {
+const MenuUnlogged = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { colors } = useContext(ThemeContext);
@@ -43,4 +43,4 @@ const Menu2 = () => {
   );
 };
 
-export default Menu2;
+export default MenuUnlogged;

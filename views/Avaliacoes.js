@@ -24,7 +24,6 @@ const Avaliacoes = () => {
     { nome: 'Maria', rate: 4, data: '10/02/2024', texto: 'A experiência no aplicativo é bem equilibrada. Encontrei ótimos produtos e o app ajudou a facilitar minhas compras de forma eficaz.' },
   ]);
 
-
   const formatDate = (date) => {
     if (date instanceof Date) {
       const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if necessary
@@ -92,8 +91,6 @@ const Avaliacoes = () => {
       [index]: !prev[index],
     }));
   };
-
-  const displayedAvaliacoes = allAvaliacoes.slice(0, visibleCount);
 
   const styles = {
     container: {

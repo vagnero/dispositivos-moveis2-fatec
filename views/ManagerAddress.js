@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { doc, deleteDoc, getDocs, collection, query, where } from 'firebase/firestore';
+import { doc, deleteDoc, getDocs, collection } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig'; // Importa sua configuração do Firebase
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
@@ -49,7 +49,6 @@ const ManagerAddress = () => {
         }
     };
 
-
     const handleDeleteAddress = async (recipientName, zipCode) => {
         // Gera o id baseado no nome do usuário e nos dados do endereço
         const id = `${currentUser.nome}-${recipientName}-${zipCode}`;
@@ -66,7 +65,6 @@ const ManagerAddress = () => {
             setModalVisible(true); // Mostra modal de sucesso
         }
     };
-
 
     const toggleVisibility = (addressId) => {
         setVisibleAddresses((prevState) => ({

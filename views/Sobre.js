@@ -91,7 +91,7 @@ const Sobre = () => {
     }
   };    
 
-  // Carrega os items favoritos do SecureStore
+  // Carrega os items favoritos
   const loadItems = async () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido

@@ -20,7 +20,7 @@ import Home from './views/Home';
 import Login from './views/Login';
 import ManagerAddress from './views/ManagerAddress';
 import Notificacoes from './views/Notificacoes';
-import Payment from './views/Payment';
+import MethodPayment from './views/MethodPayment';
 import PixPayment from './views/PixPayment';
 import RedefinirSenha from './views/RedefinirSenha';
 import Splash from './views/Splash';
@@ -72,7 +72,7 @@ const MainNavigator = ({ isSplashReady }) => {
       }}>
 
       {isSplashReady ? (
-        <>        
+        <>
           <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
@@ -90,7 +90,7 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
           <Stack.Screen name="Notificacoes" component={Notificacoes} />
-          <Stack.Screen name="Payment" component={Payment} />
+          <Stack.Screen name="MethodPayment" component={MethodPayment} />
           <Stack.Screen name="PixPayment" component={PixPayment} />
           <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
           <Stack.Screen name="Tinto" component={Tinto} />

@@ -6,7 +6,6 @@ import { db } from '../config/firebaseConfig';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
-import * as SecureStore from 'expo-secure-store';
 import AlertModal from '../components/AlertModal';
 import CardModal from '../components/CardModal';
 import ModalManagerCard from '../components/ModalManagerCard';
@@ -16,7 +15,6 @@ const ConfirmPayment = ({ route }) => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const { colors } = useContext(ThemeContext);
-  const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -180,8 +178,6 @@ const ConfirmPayment = ({ route }) => {
       }));
 
       const sortedPurchases = purchases.sort((a, b) => b.timestamp - a.timestamp);
-
-      setPurchaseHistory(sortedPurchases);
 
       // Se houver compras, seta os valores do cartão e endereço da compra mais recente
       if (sortedPurchases.length > 0) {
@@ -351,6 +347,9 @@ const ConfirmPayment = ({ route }) => {
     buttonAddress: {
       marginBottom: 20,
     },
+    buttonCards: {
+      marginBottom: 20,
+    },
     textButtonAddress: {
       fontSize: 20,
       textAlign: 'center',
@@ -401,14 +400,14 @@ const ConfirmPayment = ({ route }) => {
         <View style={styles.container}>
           <View style={styles.container_paymentMethod}>
             <Text style={styles.title}>Forma de pagamento</Text>
-            <TouchableOpacity onPress={() => { navigation.navigate('Payment') }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('MethodPayment') }}>
               {paymentMethod ? <Text style={styles.titlePaymentMethod}>{paymentMethod}</Text> :
                 <Text style={{ fontSize: 20, color: 'blue', marginTop: 20, textAlign: 'center' }}>Selecionar</Text>}
             </TouchableOpacity>
             <View>
               {paymentMethod === 'Cartão' && (
                 <View style={{ direction: 'row' }}>
-                  <TouchableOpacity onPress={() => setModalManagerCardVisible(true)} style={styles.buttonAddress}>
+                  <TouchableOpacity onPress={() => setModalManagerCardVisible(true)} style={styles.buttonCards}>
                     {!selectedCard || cards.length === 0 ? <Text style={{ fontSize: 20, textAlign: 'center', }}>Escolher Cartão</Text> :
                       <Text style={{ fontSize: 20, textAlign: 'center' }}>**** **** **** {selectedCard.slice(-4)}</Text>}
                   </TouchableOpacity>
@@ -451,10 +450,12 @@ const ConfirmPayment = ({ route }) => {
             message={mensagem}
             onClose={handleCloseModalAlert}
           />
+          {/* Modal para cadastro de cartão */}
           <CardModal
             modalVisible={modalCardVisible}
             setModalVisible={setModalCardVisible}
           />
+          {/* Modal que gerencia cartões */}
           <ModalManagerCard
             modalVisible={modalManagerCardVisible}
             setModalVisible={setModalManagerCardVisible}
@@ -462,6 +463,7 @@ const ConfirmPayment = ({ route }) => {
             setSelectedCard={setSelectedCard}
             onAddCard={handleAddCard}
           />
+          {/* Modal de endereços salvos */}
           <Modal
             transparent={true}
             visible={modalVisibleAddress}

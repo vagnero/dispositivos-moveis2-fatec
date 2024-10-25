@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useUser } from '../context/UserContext'; // ajuste o caminho conforme necessário
 import { FontAwesome } from 'react-native-vector-icons';
 import { useRoute } from '@react-navigation/native';

@@ -9,7 +9,7 @@ import { useUser } from '../context/UserContext';
 import CardModal from '../components/CardModal';
 import AlertModal from '../components/AlertModal';
 
-const Payment = () => {
+const MethodPayment = () => {
   const [selectedPayment, setSelectedPayment] = useState(null); // Estado para forma de pagamento
   const [modalVisible, setModalVisible] = useState(null); // Estado para forma de pagamento
   const { colors } = useContext(ThemeContext);
@@ -229,4 +229,4 @@ const Payment = () => {
   );
 };
 
-export default Payment;
+export default MethodPayment;

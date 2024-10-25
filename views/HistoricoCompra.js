@@ -78,8 +78,7 @@ const HistoricoCompra = () => {
 
     // Converte o objeto em um array
     const groupedPurchasesArray = Object.values(groupedPurchases);
-
-
+    
     const renderItem = ({ item }) => {
         const toggleVisibility = () => {
             setVisibleItems(prevState => ({

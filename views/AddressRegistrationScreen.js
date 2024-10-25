@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, ScrollView, StyleSheet, Alert } from 'react-native';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig'; // Importa sua configuração do Firebase
 import Content from '../components/Content';
@@ -73,7 +73,7 @@ const AddressRegistrationScreen = () => {
             console.error('Erro ao registrar endereço no Firestore:', error);
         }
     };
-
+// Buscador de CEP
     const fetchAddressData = async (cep) => {
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);

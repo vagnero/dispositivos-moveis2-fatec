@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { BackHandler, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
-import Header2 from '../components/Header2';
-import Menu2 from '../components/Menu2';
+import HeaderUnlogged from '../components/HeaderUnlogged';
+import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
 import * as SecureStore from 'expo-secure-store';
 
@@ -69,11 +69,9 @@ const Login = () => {
     }
   };
 
+  // Impede o usuário de sair do aplicativo sem intenção
   useFocusEffect(
     useCallback(() => {
-      if (salvarEmail) {
-
-      }
       const onBackPress = () => {
         Alert.alert(
           'Atenção',
@@ -197,7 +195,7 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Header2 />
+      <HeaderUnlogged />
       <Text style={styles.headerText}>Login</Text>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <View style={styles.inputContainer}>
@@ -255,7 +253,7 @@ const Login = () => {
           <Text style={styles.textCadastrar}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
-      <Menu2 />
+      <MenuUnlogged />
     </View >
   );
 }
