@@ -1,7 +1,11 @@
-import React, { createContext, useState, useContext } from 'react';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
+import * as SQLite from 'expo-sqlite/legacy';
 import * as Crypto from 'expo-crypto';
+
+
+// Abre ou cria o banco de dados
+const db = SQLite.openDatabase('users.db');
 
 const UserContext = createContext();
 
@@ -10,6 +14,15 @@ export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [cartSuccessMessage, setCartSuccessMessage] = useState('');
+
+  useEffect(() => {
+    // Cria a tabela de usuários ao inicializar
+    db.transaction(tx => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, nome TEXT, senha TEXT);'
+      );
+    });
+  }, []);
 
   const registerUser = async (user) => {
     const newUser = { ...user }; // Cria um novo usuário
@@ -24,22 +37,28 @@ export const UserProvider = ({ children }) => {
     };
 
     try {
-      newUser.senha = await hashPassword(newUser.senha); // 10 é o número de "salts"
-      // Cria um documento no Firestore com o ID do usuário baseado no e-mail ou um ID único
-      await setDoc(doc(db, 'users', newUser.email), newUser);
+      newUser.senha = await hashPassword(newUser.senha); // Cria o hash da senha
 
-      // Se quiser, pode manter a lista de usuários em memória
-      setUsers([...users, newUser]); // Adiciona o novo usuário à lista      
-      console.log('Usuário registrado com sucesso no Firestore.');
+      // Insere o novo usuário no SQLite
+      db.transaction(tx => {
+        tx.executeSql(
+          'INSERT INTO users (email, nome, senha) VALUES (?, ?, ?);',
+          [newUser.email, newUser.nome, newUser.senha],
+          () => {
+            setUsers([...users, newUser]); // Atualiza a lista de usuários
+            console.log('Usuário registrado com sucesso no SQLite.');
+          },
+          (tx, error) => {
+            console.error('Erro ao registrar usuário no SQLite:', error);
+          }
+        );
+      });
     } catch (error) {
-      console.error('Erro ao registrar usuário no Firestore:', error);
+      console.error('Erro ao registrar usuário:', error);
     }
   };
 
   const findUser = async (email, senha) => {
-    const userDoc = doc(db, 'users', email); // Acessa o documento do usuário baseado no e-mail
-    const userSnapshot = await getDoc(userDoc);
-
     const hashPassword = async (password) => {
       return await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
@@ -48,21 +67,32 @@ export const UserProvider = ({ children }) => {
       );
     };
 
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
-      let hashedInputPassword;
-      if (userData.nome === 'Dev') {
-        hashedInputPassword = senha
-      } else {
-        hashedInputPassword = await hashPassword(senha);
-      }
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM users WHERE email = ?;',
+          [email],
+          async (tx, results) => {
+            if (results.rows.length > 0) {
+              const userData = results.rows.item(0);
+              const hashedInputPassword = await hashPassword(senha);
 
-      // Compara o hash gerado com o hash armazenado
-      if (hashedInputPassword === userData.senha) {
-        return userData; // Retorna os dados do usuário se a senha estiver correta
-      }
-    }
-    return null; // Retorna null se não encontrar o usuário ou se a senha estiver incorreta
+              // Compara o hash gerado com o hash armazenado
+              if (hashedInputPassword === userData.senha) {
+                resolve(userData); // Retorna os dados do usuário se a senha estiver correta
+              } else {
+                resolve(null); // Senha incorreta
+              }
+            } else {
+              resolve(null); // Usuário não encontrado
+            }
+          },
+          (tx, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
   };
 
   const updateCartItems = (items) => {
@@ -82,7 +112,7 @@ export const UserProvider = ({ children }) => {
   const addToCart = (item) => {
     const existingItem = cartItems.find((i) => i.itemName === item.itemName);
     if (existingItem) {
-      updateCartItems()
+      updateCartItems();
     } else {
       setCartItems([...cartItems, item]);
       setCartSuccessMessage('Produto adicionado ao carrinho com sucesso!');

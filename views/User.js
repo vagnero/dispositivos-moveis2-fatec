@@ -7,11 +7,11 @@ import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { db, storage } from '../config/firebaseConfig';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as SQLite from 'expo-sqlite/legacy';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
+
+const db = SQLite.openDatabase('app.db'); // Inicializa o banco de dados SQLite
 
 const User = () => {
   const { colors } = useContext(ThemeContext);
@@ -21,6 +21,26 @@ const User = () => {
   const [modalProfileVisible, setModalProfileVisible] = useState(false);
   const [nickname, setNickname] = useState('');
   const [profileImage, setProfileImage] = useState("");
+
+  // Função para criar a tabela de usuários se não existir
+  const createUserTable = () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS users (
+          email TEXT PRIMARY KEY NOT NULL,
+          nome TEXT,
+          nick TEXT,
+          profileImage TEXT
+        );`
+      );
+    });
+  };
+
+  // Chama a função para criar a tabela na inicialização
+  useEffect(() => {
+    createUserTable();
+    loadProfileImage(); // Carrega a imagem ao iniciar o componente
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -38,32 +58,32 @@ const User = () => {
       });
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
-      // Você pode mostrar um alerta ou notificação ao usuário, se desejado
     }
   };
 
   const loadProfileImage = async () => {
     try {
-      const userDoc = await getDoc(doc(db, 'users', currentUser.email));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData.profileImage) {
-          setProfileImage(userData.profileImage);
-        }
-      }
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT profileImage FROM users WHERE email = ?',
+          [currentUser.email],
+          (_, { rows }) => {
+            if (rows.length > 0) {
+              setProfileImage(rows.item(0).profileImage);
+            }
+          },
+          (t, error) => {
+            console.error('Erro ao carregar a imagem:', error);
+            Alert.alert('Erro', 'Não foi possível carregar a imagem do perfil.');
+          }
+        );
+      });
     } catch (error) {
       console.error('Erro ao carregar a imagem:', error);
-      Alert.alert('Erro', 'Não foi possível carregar a imagem do perfil.');
     }
   };
 
-  useEffect(() => {
-    loadProfileImage(); // Carrega a imagem ao iniciar o componente
-  }, []);
-
-// Função qeu altera iamgem de usuário
   const handleImagePicker = async () => {
-    // Solicita permissão para acessar a galeria
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
@@ -71,26 +91,29 @@ const User = () => {
       return;
     }
 
-    // Abre o seletor de imagens
     const result = await ImagePicker.launchImageLibraryAsync();
 
     if (result.canceled) {
-      return; // O usuário cancelou a seleção
+      return;
     }
 
     if (result.assets && result.assets.length > 0) {
-      const selectedAsset = result.assets[0]; // Acessa o primeiro asset
-      setProfileImage(selectedAsset.uri); // Atualiza o estado com o URI da imagem
-      // Upload da imagem para o Firebase Storage
-      const response = await fetch(selectedAsset.uri);
-      const blob = await response.blob();
-      const storageRef = ref(storage, `profileImages/${currentUser.email}.jpg`);
+      const selectedAsset = result.assets[0];
+      setProfileImage(selectedAsset.uri);
 
-      await uploadBytes(storageRef, blob);
-      const downloadURL = await getDownloadURL(storageRef);
-
-      // Salva a URL no Firestore
-      await setDoc(doc(db, 'users', currentUser.email), { profileImage: downloadURL }, { merge: true });
+      // Salva a URL no SQLite
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE users SET profileImage = ? WHERE email = ?',
+          [selectedAsset.uri, currentUser.email],
+          (_, result) => {
+            console.log('Imagem de perfil atualizada no SQLite.');
+          },
+          (t, error) => {
+            console.error('Erro ao atualizar imagem no SQLite:', error);
+          }
+        );
+      });
     }
   };
 
@@ -101,16 +124,24 @@ const User = () => {
     }
 
     try {
-      // Atualiza o apelido no Firestore, substituindo apenas o campo 'nick'
-      await setDoc(doc(db, 'users', currentUser.email), { nick: nickname }, { merge: true });
-
-      // Atualiza o contexto com o novo nick
-      setCurrentUser({ ...currentUser, nick: nickname });
-
-      setModalVisible(false); // Fecha o modal
-      setNickname(''); // Limpa o input
+      // Atualiza o apelido no SQLite
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE users SET nick = ? WHERE email = ?',
+          [nickname, currentUser.email],
+          (_, result) => {
+            setCurrentUser({ ...currentUser, nick: nickname });
+            setModalVisible(false); // Fecha o modal
+            setNickname(''); // Limpa o input
+          },
+          (t, error) => {
+            console.error('Erro ao salvar o apelido no SQLite:', error);
+            Alert.alert('Erro', 'Ocorreu um erro ao salvar o apelido.');
+          }
+        );
+      });
     } catch (error) {
-      console.error(error); // Log do erro para depuração
+      console.error(error);
       Alert.alert('Erro', 'Ocorreu um erro ao salvar o apelido.');
     }
   };
@@ -157,7 +188,7 @@ const User = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.8)', // Background semi-transparente
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
     modalContent: {
       width: '80%',
@@ -236,109 +267,42 @@ const User = () => {
         </View>
 
         <View style={styles.div_conteudo_pref}>
-
-          <TouchableOpacity onPress={() => { setModalProfileVisible(true) }}>
-            <View style={{
-              width: '87%', flexDirection: 'row', marginLeft: 20, alignItems: 'center',
-              justifyContent: 'space-between', marginTop: 20,
-            }}>
-              <View style={{ flexDirection: 'row', }}>
-                <Image source={require('../assets/user/perfil.png')} style={styles.image} />
-                <Text style={styles.text_pref}>Informações pessoais</Text>
-              </View>
-              <Image source={require('../assets/user/SETA.png')} />
-            </View>
-          </TouchableOpacity>
-          <PrefItem
-            iconSource={<Image source={require('../assets/user/map.png')} style={styles.image} />}
-            text="Endereços"
-            view="ManagerAddress"
-          />
-          <PrefItem
-            iconSource={<Image source={require('../assets/user/cartao.png')} style={styles.image} />}
-            text="Forma de pagamento"
-            view="MethodPayment"
-          />
-          <PrefItem
-            iconSource={<Image source={require('../assets/user/sino.png')} style={styles.image} />}
-            text="Notificações"
-            view="Notificacoes"
-          />
-          <PrefItem2
-            iconSource={<Image source={require('../assets/user/grid.png')} style={styles.image} />}
-            text="Ver avaliações"
-            view="Avaliacoes"
-          />
-          <PrefItem2
-            iconSource={<FontAwesome name="history" size={20} color="green" />}
-            text="Histórico de Compras"
-            view="HistoricoCompra"
-          />
-          {/* <PrefItem
-            iconSource={<Image source={require('../assets/user/config.png')} style={styles.image} />}
-            text="Configurações"
-            view="Home"
-          /> */}
-          <TouchableOpacity onPress={handleLogout}>
-            <View style={{
-              width: '87%', flexDirection: 'row', marginLeft: 20, alignItems: 'center',
-              justifyContent: 'space-between', marginTop: 20,
-            }}>
-              <View style={{ flexDirection: 'row', }}>
-                <Image source={require('../assets/user/Logout.png')} style={styles.image} />
-                <Text style={styles.text_pref}>Sair</Text>
-              </View>
-              <Image source={require('../assets/user/SETA.png')} />
-            </View>
-          </TouchableOpacity>
+          <PrefItem icon='bi-chat-left' text='Minhas Conversas' />
+          <PrefItem2 icon='bi-person-circle' text='Perfil' onPress={() => { setModalProfileVisible(true) }} />
+          <PrefItem2 icon='bi-chat-left-text' text='Chats' />
+          <PrefItem2 icon='bi-box-arrow-right' text='Sair' onPress={handleLogout} />
         </View>
       </View>
-      {/* Modal para alterao nome de visualização */}
+
       <Modal
-        transparent={true}
         animationType="slide"
+        transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => { setModalVisible(!modalVisible) }}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Altere seu apelido</Text>
             <TextInput
               style={styles.input}
-              placeholder="Digite o NickName"
               value={nickname}
               onChangeText={setNickname}
+              placeholder="Digite seu apelido"
             />
-            <TouchableOpacity onPress={handleSaveNickname} style={styles.buttomChangeName}>
-              <Text style={styles.textButtom}>Alterar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.buttomCancel}>
-              <Text style={styles.textButtom}>Cancelar</Text>
-            </TouchableOpacity>
+            <Button title="Salvar" onPress={handleSaveNickname} />
+            <Button title="Cancelar" onPress={() => setModalVisible(false)} />
           </View>
         </View>
       </Modal>
-      {/* Modal que mostra as informações de usuário */}
+
+      {/* Modal de perfil pode ser implementado aqui */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalProfileVisible}
-        onRequestClose={() => { setModalProfileVisible(false) }}
+        onRequestClose={() => { setModalProfileVisible(!modalProfileVisible) }}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Informações Pessoais</Text>
-            {currentUser ? (
-                <View>
-                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Nome: {currentUser.nome}</Text>
-                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Email: {currentUser.email}</Text>
-                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>
-                </View>
-              ) : (
-                <Text style={{ marginVertical: 10, fontSize: 17 }}>Usuário não encontrado.</Text>
-              )}
-            <Button title="Fechar" onPress={() => { setModalProfileVisible(false) }} />
-          </View>
-        </View>
+        {/* Conteúdo do Modal */}
       </Modal>
     </Content>
   );
