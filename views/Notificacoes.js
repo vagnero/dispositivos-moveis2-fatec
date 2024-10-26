@@ -5,6 +5,7 @@ import Content from '../components/Content';
 import { ThemeContext } from '../context/ThemeContext';
 import { SwipeRow, SwipeListView } from 'react-native-swipe-list-view';
 import { useNotifications } from '../context/NotificationContext';
+import { format } from 'date-fns';
 
 const Notificacoes = () => {
     const { colors } = useContext(ThemeContext);
@@ -99,7 +100,7 @@ const Notificacoes = () => {
     //     },
     // ]);
 
-    const unreadCount = countUnreadNotifications();
+    const currentDate = new Date();
 
     const handleOpenModal = (notification) => {
         handleMarkAsRead(notification.id); // Marca como lida
@@ -149,7 +150,7 @@ const Notificacoes = () => {
                 <View style={styles.content}>
                     <Text style={styles.title}>{item.title}</Text>
                     <Text style={styles.message}>{item.message}</Text>
-                    <Text style={styles.date}>{item.date}</Text>
+                    <Text style={styles.date}>{format(currentDate, 'dd/MM/yyyy')}</Text>
                 </View>
                 <TouchableOpacity onPress={() => handleMarkAsRead(item.id)}>
                     <MaterialIcons name={item.read ? "done" : "mark-as-unread"} size={24} color="green" />

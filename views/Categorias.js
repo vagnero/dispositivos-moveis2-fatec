@@ -97,7 +97,7 @@ const Categorias = () => {
             <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Tinto')}>
                 <View style={styles.div_image_text_item}>
-                  <Image source={require('../assets/categorias/tinto-QUADRADO.png')} style={styles.div_image_item} />
+                  <Image source={require('../assets/categorias/tinto.png')} style={styles.div_image_item} />
                   <Text style={styles.div_text_subtitle}>Tinto</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>
@@ -108,7 +108,7 @@ const Categorias = () => {
             <View style={styles.div_item}>
               <TouchableOpacity onPress={() => navigation.navigate('Espumante')}>
                 <View style={styles.div_image_text_item}>
-                  <Image source={require('../assets/categorias/pasta-QUADRADO.png')} style={styles.div_image_item} />
+                  <Image source={require('../assets/categorias/espumante.png')} style={styles.div_image_item} />
                   <Text style={styles.div_text_subtitle}>Espumante</Text>
                   <Text style={styles.div_text_count}>(2)</Text>
                 </View>
