@@ -6,11 +6,15 @@ import { useUser } from '../context/UserContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { ThemeContext } from '../context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
+import NotificationsIconWithBadge from './NotificationsIconWithBadge';
+import { useNotifications } from '../context/NotificationContext';
 
 const Header = () => {
     const { theme, toggleTheme, colors } = useContext(ThemeContext);
     const { currentUser } = useUser();
     const navigation = useNavigation();
+    const { countUnreadNotifications } = useNotifications();
+    const unreadCount = countUnreadNotifications();
 
     const styles = StyleSheet.create({
         content: {
@@ -57,7 +61,8 @@ const Header = () => {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
-                                <Image source={require('../assets/user/sino.png')} style={{ tintColor: colors.iconColor }} />
+                                {/* <Image source={require('../assets/user/sino.png')} style={{ tintColor: colors.iconColor }} /> */}
+                                <NotificationsIconWithBadge unreadCount={unreadCount} />
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity onPress={toggleTheme}>

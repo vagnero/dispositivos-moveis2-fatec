@@ -38,9 +38,7 @@ const Menu = () => {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Carrinho')}>
-        {/* <FontAwesome name="shopping-cart" size={24} color={getIconColor('Carrinho')} /> */}
         <CartIconWithBadge />
-
       </TouchableOpacity>
 
       {currentUser ? (

@@ -29,6 +29,7 @@ import Tinto from './views/Tinto';
 import User from './views/User';
 import { UserProvider } from './context/UserContext';
 import { ThemeContext } from './context/ThemeContext';
+import { NotificationProvider } from './context/NotificationContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,9 +48,11 @@ function App() {
   return (
     <UserProvider >
       <ThemeProvider>
-        <NavigationContainer>
-          <MainNavigator isSplashReady={isSplashReady} />
-        </NavigationContainer>
+        <NotificationProvider>
+          <NavigationContainer>
+            <MainNavigator isSplashReady={isSplashReady} />
+          </NavigationContainer>
+        </NotificationProvider>
       </ThemeProvider>
     </UserProvider>
   );
