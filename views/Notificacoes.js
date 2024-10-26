@@ -1,11 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    Modal
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import Content from '../components/Content';
 import { ThemeContext } from '../context/ThemeContext';

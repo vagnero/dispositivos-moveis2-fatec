@@ -61,7 +61,6 @@ const Header = () => {
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
-                                {/* <Image source={require('../assets/user/sino.png')} style={{ tintColor: colors.iconColor }} /> */}
                                 <NotificationsIconWithBadge unreadCount={unreadCount} />
                             </TouchableOpacity>
                         </View>
