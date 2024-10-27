@@ -38,24 +38,7 @@ const User = () => {
       console.error('Erro ao fazer logout:', error);
       // Você pode mostrar um alerta ou notificação ao usuário, se desejado
     }
-  };
-
-  // const loadProfileImage = async () => {
-  //   try {
-  //     const userData = await dbContext.getById('users', currentUser.email); // Busca os dados do usuário pelo email
-  //     if (userData.profileImage) {
-  //       console.log('True')
-  //       setProfileImage(userData.profileImage); // Atualiza o estado com a imagem do perfil
-  //     }
-  //   } catch (error) {
-  //     console.error('Erro ao carregar a imagem:', error);
-  //     Alert.alert('Erro', 'Não foi possível carregar a imagem do perfil.');
-  //   }
-  // };
-  
-  // useEffect(() => {
-  //   loadProfileImage(); // Carrega a imagem ao iniciar o componente
-  // }, []);  
+  };  
 
   // Função qeu altera iamgem de usuário
   const handleImagePicker = async () => {
