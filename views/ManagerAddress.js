@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { doc, deleteDoc, getDocs, collection } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig'; // Importa sua configuração do Firebase
+import dbContext from '../context/dbContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -35,14 +34,13 @@ const ManagerAddress = () => {
         }
 
         try {
-            const addressCollection = collection(db, 'addresses');
-            const addressSnapshot = await getDocs(addressCollection);
+            // Obtém todos os endereços do dbContext
+            const allAddresses = dbContext.getAll('addresses');
 
             // Filtra os endereços para incluir apenas os do currentUser
-            const addressList = addressSnapshot.docs
-                .map(doc => ({ id: doc.id, ...doc.data() }))
-                .filter(address => address.id.startsWith(currentUser.nome)); // Filtra pelo nome do usuário
+            const addressList = allAddresses.filter(address => address.id.startsWith(currentUser.nome));
 
+            // Atualiza o estado com a lista filtrada de endereços
             setAddresses(addressList);
         } catch (error) {
             console.error('Erro ao buscar endereços:', error);
@@ -55,7 +53,7 @@ const ManagerAddress = () => {
         console.log('ID para deletar:', id);
 
         try {
-            await deleteDoc(doc(db, 'addresses', id)); // Deleta o endereço com o id correto
+            dbContext.removeItem('addresses', id); // Remove o endereço com o ID correto
             setMensagem('Endereço excluído com sucesso!'); // Mensagem de sucesso
             setModalVisible(true); // Mostra modal de sucesso
             fetchAddresses(); // Atualiza a lista de endereços

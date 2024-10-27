@@ -9,6 +9,7 @@ import HeaderUnlogged from '../components/HeaderUnlogged';
 import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
 import * as SecureStore from 'expo-secure-store';
+import dbContext from '../context/dbContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -46,6 +47,14 @@ const Login = () => {
       setTimeout(() => {setMensagemErro('')}, 2000);
       return;
     }
+
+    const devUser = {
+      nome: 'Dev',
+      email: 'dev',
+      senha: '',
+      nick: '',
+    };
+    dbContext.addItem('users', devUser);
 
     const user = await findUser(email, senha); // Aguarde a busca do usuário
     if (user) {

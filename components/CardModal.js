@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import AlertModal from '../components/AlertModal';
 import { useUser } from '../context/UserContext';
-import { db } from '../config/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import dbContext from '../context/dbContext';
 
 const CardModal = ({ modalVisible, setModalVisible, onAddCard }) => {
   const [cardNumber, setCardNumber] = useState('');
@@ -50,7 +49,7 @@ const CardModal = ({ modalVisible, setModalVisible, onAddCard }) => {
     // Permite letras (incluindo acentuadas), números e espaços
     if (/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]*$/.test(cardHolder)) {
       const formattedNome = formatValue(cardHolder);
-      setCardHolder(formattedNome); 
+      setCardHolder(formattedNome);
     }
   };
 
@@ -73,8 +72,14 @@ const CardModal = ({ modalVisible, setModalVisible, onAddCard }) => {
 
     try {
       const cardData = { cardNumber, cardHolder, data, cvv };
-      const userDocRef = doc(db, 'paymentCard', `${currentUser.nome}_${cardNumber.slice(-4)}`);
-      await setDoc(userDocRef, cardData);
+      const cardKey = `${currentUser.nome}_${cardData.cardNumber.slice(-4)}`; // Chave única do cartão
+
+      // Adiciona o cartão ao dbContext
+      dbContext.addItem('paymentCards', {
+        ...cardData, // Inclui todos os dados do cartão
+        id: cardKey, // Define a chave única
+      });
+
       setMensagem('Cartão Salvo!'); // Mensagem de sucesso
       setModalAlertVisible(true);
       setModalVisible(false);

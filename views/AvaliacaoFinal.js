@@ -4,8 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Content from '../components/Content';
 import { ThemeContext } from '../context/ThemeContext';
-import { db } from '../config/firebaseConfig';
-import { Timestamp, collection, addDoc, getDocs } from 'firebase/firestore';
+import dbContext from '../context/dbContext';
 import { useUser } from '../context/UserContext';
 import AlertModal from '../components/AlertModal';
 
@@ -22,27 +21,21 @@ const AvaliacaoFinal = () => {
   const [mensagem, setMensagem] = useState('');
   const scaleValue = useRef(new Animated.Value(0)).current;
 
-  const addComment = async () => {
+  const addComment = () => {
     try {
-      // Adiciona o comentário ao Firestore
-      const docRef = await addDoc(collection(db, 'comments'), {
-        name: name,
-        comment: comment,
-        date: Timestamp.now(), // Usa Timestamp corretamente
-        rating: rating,
-      });
-
-      // Cria um novo comentário localmente, com o mesmo timestamp
+      // Cria um novo comentário
       const newComment = {
-        id: docRef.id,
         name: name,
         comment: comment,
-        date: Timestamp.now().toDate(), // Converte para Date para uso no frontend
+        date: new Date(), // Usa o objeto Date diretamente
         rating: rating,
       };
 
+      // Adiciona o comentário ao dbContext
+      dbContext.addItem('comments', newComment);
+
       // Atualiza os comentários no estado
-      setComments((prevComments) => [newComment, ...prevComments]);
+      setComments((prevComments) => [{ id: Date.now().toString(), ...newComment }, ...prevComments]);
 
       // Limpa os campos
       setName('');
@@ -57,11 +50,11 @@ const AvaliacaoFinal = () => {
   // Função para buscar comentários
   const fetchComments = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'comments'));
-      const fetchedComments = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        return { id: doc.id, ...data, date: data.date ? data.date : { seconds: Date.now() / 1000 } }; // Verifique se 'date' existe
-      });
+      const fetchedComments = dbContext.getAll('comments').map(comment => ({
+        id: comment.id, // Assumindo que você tenha um campo 'id' no comentário
+        ...comment,
+        date: comment.date ? comment.date : { seconds: Date.now() / 1000 }, // Verifica se 'date' existe
+      }));
 
       // Exibe apenas o último comentário
       if (fetchedComments.length > 0) {
@@ -255,7 +248,7 @@ const AvaliacaoFinal = () => {
             <View style={styles.modalContainer}>
               <Animated.View style={[styles.alertBox, { transform: [{ scale: scaleValue }] }]}>
                 <Text style={styles.alertMessage}>
-                Obrigado por sua Avaliação, sua opnião é muito importante para nós!
+                  Obrigado por sua Avaliação, sua opnião é muito importante para nós!
                 </Text>
               </Animated.View>
             </View>

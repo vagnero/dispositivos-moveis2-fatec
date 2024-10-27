@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, Alert } from 'react-native';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig'; // Importa sua configuração do Firebase
-import Content from '../components/Content';
+import dbContext from '../context/dbContext';
 import { ThemeContext } from '../context/ThemeContext';
 import { TouchableOpacity } from 'react-native';
 import { useUser } from '../context/UserContext';
 import AlertModal from '../components/AlertModal';
+import Content from '../components/Content';
 import { useNavigation } from '@react-navigation/native';
 
 const AddressRegistrationScreen = () => {
@@ -60,20 +59,24 @@ const AddressRegistrationScreen = () => {
         }
     };
 
-    const registerAddress = async (address) => {
+    const registerAddress = (address) => {
         const newAddress = { ...address }; // Cria um novo endereço
 
         try {
-            // Cria um documento no Firestore com um ID único baseado no nome do destinatário e no CEP
+            // Cria um ID único baseado no nome do destinatário e no CEP
             const addressId = `${currentUser.nome}-${newAddress.recipientName}-${newAddress.zipCode}`;
-            await setDoc(doc(db, 'addresses', addressId), newAddress);
+            newAddress.id = addressId; // Adiciona o ID ao novo endereço
 
-            console.log('Endereço registrado com sucesso no Firestore.');
+            // Adiciona o novo endereço ao dbContext
+            dbContext.addItem('addresses', newAddress);
+
+            console.log('Endereço registrado com sucesso no dbContext.');
         } catch (error) {
-            console.error('Erro ao registrar endereço no Firestore:', error);
+            console.error('Erro ao registrar endereço no dbContext:', error);
         }
     };
-// Buscador de CEP
+
+    // Buscador de CEP
     const fetchAddressData = async (cep) => {
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -149,7 +152,7 @@ const AddressRegistrationScreen = () => {
             borderRadius: 30,
             marginTop: 10,
             marginBottom: 20,
-          },
+        },
     });
 
     return (

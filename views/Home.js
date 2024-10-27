@@ -7,8 +7,7 @@ import MyCarousel from '../components/MyCarousel';
 import ItemCard from '../components/ItemCard';
 import { useUser } from '../context/UserContext';
 import Items from '../components/Items';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
 
 const Home = () => {
   const { colors } = useContext(ThemeContext);
@@ -51,22 +50,15 @@ const Home = () => {
           // Carrega os items estáticos do JSON
           const loadedItems = Items;
 
-          // Busca os dados do Firestore
-          const itemsCollection = collection(db, 'items'); // Corrigido
-          const snapshot = await getDocs(itemsCollection); // Uso do getDocs
-
-          const firestoreItems = snapshot.docs.map(doc => ({
-            itemName: doc.data().itemName,
-            itemSold: doc.data().itemSold,
-            // Inclua outros campos que precisar
-          }));
+          // Busca os dados do dbContext
+          const dbContextItems = dbContext.data.items;
 
           // Mescla os dados do Firestore com os itens estáticos
           const mergedItems = loadedItems.map(itemData => {
-            const firestoreItem = firestoreItems.find(stored => stored.itemName === itemData.itemName);
+            const dbContextItem = dbContextItems.find(stored => stored.itemName === itemData.itemName);
             return {
               ...itemData, // Mantém todas as propriedades de itemData
-              ...(firestoreItem || {}), // Mescla as propriedades do Firestore se existir
+              ...(dbContextItem || {}), // Mescla as propriedades do Firestore se existir
             };
           });
 

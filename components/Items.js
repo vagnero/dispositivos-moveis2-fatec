@@ -19,7 +19,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Vinho fresco, cítrico, e herbáceo, ideal para refeições leves.',
     imageSource: require('../assets/home/sauvignon_blanc.png'),
-    itemSold: 0,
+    itemSold: 1,
   },
   {
     itemName: 'Riesling',
@@ -30,7 +30,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Branco aromático, com leve dulçor e acidez vibrante.',
     imageSource: require('../assets/home/riesling.png'),
-    itemSold: 0,
+    itemSold: 2,
   },
   {
     itemName: 'Pinot Grigio',
@@ -41,7 +41,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Vinho leve e refrescante, com toques cítricos e minerais.',
     imageSource: require('../assets/home/pinot_grigio.png'),
-    itemSold: 0,
+    itemSold: 3,
   },
   {
     itemName: 'Provence Rosé',
@@ -52,7 +52,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Refrescante, com notas de frutas vermelhas e florais.',
     imageSource: require('../assets/home/provence_rose.png'),
-    itemSold: 0,
+    itemSold: 4,
   },
   {
     itemName: 'White Zinfandel',
@@ -63,7 +63,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Levemente adocicado, com frutas vermelhas e acidez sutil.',
     imageSource: require('../assets/home/white_zinfandel.png'),
-    itemSold: 0,
+    itemSold: 5,
   },
   {
     itemName: 'Cabernet Sauvignon',
@@ -74,7 +74,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Tinto encorpado, com notas de frutas escuras e taninos marcantes.',
     imageSource: require('../assets/home/cabernet_sauvignon.png'),
-    itemSold: 0,
+    itemSold: 6,
   },
   {
     itemName: 'Merlot',
@@ -85,7 +85,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Macio e elegante, com toques de ameixa e chocolate.',
     imageSource: require('../assets/home/merlot.png'),
-    itemSold: 0,
+    itemSold: 7,
   },
   {
     itemName: 'Prosecco',
@@ -96,7 +96,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Espumante leve, com notas de pêssego e maçã verde.',
     imageSource: require('../assets/home/prosecco.png'),
-    itemSold: 0,
+    itemSold: 8,
   },
   {
     itemName: 'Champagne',
@@ -107,7 +107,7 @@ const Items = [
     ml: '750ml',
     itemDescription: 'Clássico espumante francês, com sabor complexo e final elegante.',
     imageSource: require('../assets/home/champagne.png'),
-    itemSold: 0,
+    itemSold: 9,
   },
 ];
 

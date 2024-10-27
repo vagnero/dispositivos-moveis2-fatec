@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Modal, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'; // Importando useRoute
-import { collection, getDocs, doc, getDoc, addDoc, setDoc, query, where } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
 import { useUser } from '../context/UserContext';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
@@ -32,35 +31,29 @@ const ConfirmPayment = ({ route }) => {
 
   const fetchPaymentMethod = useCallback(async () => {
     try {
-      // Buscar endereços do usuário atual
-      const addressCollection = collection(db, 'addresses');
-      const addressSnapshot = await getDocs(addressCollection);
-
-      const addressList = addressSnapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(address => address.id.startsWith(currentUser.nome));
+      // Buscar endereços do usuário atual do dbContext
+      const allAddresses = dbContext.getAll('addresses');
+      const addressList = allAddresses.filter(address => address.id.startsWith(currentUser.nome));
 
       setAddresses(addressList); // Atualizar estado com endereços
 
       // Buscar método de pagamento do usuário atual
-      const userDocRef = doc(db, 'paymentMethods', currentUser.nome);
-      const paymentSnapshot = await getDoc(userDocRef);
+      const paymentMethodData = dbContext.getById('paymentMethods', currentUser.nome);
 
-      if (paymentSnapshot.exists()) {
-        const method = paymentSnapshot.data().paymentMethod;
+      if (paymentMethodData) {
+        const method = paymentMethodData.paymentMethod;
         setPaymentMethod(method); // Atualizar estado com método de pagamento
-        if (paymentMethod === "Cartão") {
+        if (method === "Cartão") {
           fetchLoadCards();
         }
       } else {
         console.log('Nenhum método de pagamento encontrado.');
       }
-
       setLoading(false); // Finaliza o carregamento
     } catch (error) {
-      console.error('Erro ao buscar dados:', error); // Captura erros
+      console.error('Erro ao buscar método de pagamento:', error);
     }
-  }, [currentUser]);
+  }, [currentUser.nome]);
 
   useFocusEffect(
     useCallback(() => {
@@ -70,10 +63,18 @@ const ConfirmPayment = ({ route }) => {
   );
 
   const pagamentoAprovado = async () => {
-    if (paymentMethod === 'Cartão' && !selectedCard) {
-      setMensagem('Selecione um Cartão')
+    if (!paymentMethod) {
+      setMensagem('Selecione uma Forma de Pagamento')
       setModalAlertVisible(true);
       return
+    }
+
+    if (paymentMethod === 'Cartão') {
+      if (cards.length === 0 || !selectedCard) {
+        setMensagem('Selecione um Cartão')
+        setModalAlertVisible(true);
+        return
+      }
     }
 
     if (!selectedAddress) {
@@ -103,36 +104,34 @@ const ConfirmPayment = ({ route }) => {
       setModalAlertVisible(true);
       setTimeout(() => { navigation.navigate('AvaliacaoFinal') }, 2000);
     }
-    try {
-      const itemsCollection = collection(db, 'items');
 
+    try {
       // Atualiza o itemSold para cada item no carrinho
       for (const cartItem of cartItems) {
-        const itemDocRef = doc(itemsCollection, cartItem.itemName);
-        const itemSnapshot = await getDoc(itemDocRef);
+        const existingItem = dbContext.getById('items', cartItem.itemName);
 
-        if (itemSnapshot.exists()) {
-          const storedItem = itemSnapshot.data();
-          const newSoldCount = (storedItem.itemSold || 0) + cartItem.quantity;
+        if (existingItem) {
+          const newSoldCount = (existingItem.itemSold || 0) + cartItem.quantity;
 
-          // Atualiza o item no Firestore
-          await setDoc(itemDocRef, {
-            itemName: storedItem.itemName,
-            itemSold: newSoldCount,
-          });
+          // Atualiza o item no dbContext
+          dbContext.updateItem('items', existingItem.id, { itemSold: newSoldCount }, { merge: true });
         } else {
           // Se o item não existir, crie um novo
-          await setDoc(itemDocRef, {
+          const newItem = {
             itemName: cartItem.itemName,
             itemSold: cartItem.quantity,
-          });
+            // Adicione outros atributos necessários
+          };
+          dbContext.addItem('items', newItem);
         }
       }
 
-      await savePurchaseHistory(currentUser, cartItems, total, newStatus);
+      // Salva o histórico de compras
+      savePurchaseHistory(currentUser, cartItems, total, newStatus);
 
       // Limpa o carrinho
       setCartItems([]);
+      console.log('Carrinho atualizado e histórico de compras registrado com sucesso.');
     } catch (error) {
       console.error('Erro ao atualizar o carrinho:', error);
       Alert.alert("Erro", "Ocorreu um erro ao finalizar seu pedido. Tente novamente.");
@@ -152,8 +151,8 @@ const ConfirmPayment = ({ route }) => {
         card: selectedCard,
       };
 
-      const purchaseCollection = collection(db, 'purchaseHistory');
-      await addDoc(purchaseCollection, purchaseData);
+      // Adiciona a nova compra ao dbContext
+      dbContext.addItem('purchaseHistory', purchaseData);
       console.log('Compra registrada com sucesso.');
     } catch (error) {
       console.error('Erro ao salvar a compra no Firestore:', error);
@@ -166,16 +165,10 @@ const ConfirmPayment = ({ route }) => {
         throw new Error("Usuário não encontrado");
       }
 
-      const q = query(
-        collection(db, 'purchaseHistory'),
-        where('userId', '==', currentUser.nome) // Filtra pelo usuário atual
-      );
+      const allPurchases = dbContext.getAll('purchaseHistory');
 
-      const querySnapshot = await getDocs(q);
-      const purchases = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      // Filtra as compras pelo usuário atual
+      const purchases = allPurchases.filter(purchase => purchase.userId === currentUser.nome);
 
       const sortedPurchases = purchases.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -204,15 +197,8 @@ const ConfirmPayment = ({ route }) => {
   // Função para buscar cartões salvos
   const fetchLoadCards = async () => {
     try {
-      const userCardsCollection = collection(db, 'paymentCard'); // Coleção de cartões
-      const userCardDocs = await getDocs(userCardsCollection);
-      const userCards = [];
-
-      userCardDocs.forEach(doc => {
-        if (doc.id.startsWith(`${currentUser.nome}_`)) {
-          userCards.push({ id: doc.id, ...doc.data() }); // Adiciona cartões ao array
-        }
-      });
+      const allCards = dbContext.getAll('paymentCards'); // Obtém todos os cartões do dbContext
+      const userCards = allCards.filter(card => card.id.startsWith(`${currentUser.nome}_`)); // Filtra pelos cartões do usuário
 
       if (userCards.length > 0) {
         setCards(userCards); // Atualiza o estado com todos os cartões

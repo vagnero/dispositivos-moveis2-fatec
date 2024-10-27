@@ -5,9 +5,8 @@ import { useUser } from '../context/UserContext';
 import HeaderUnlogged from '../components/HeaderUnlogged';
 import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
 import AlertModal from '../components/AlertModal';
+import dbContext from '../context/dbContext';
 
 const Cadastrar = () => {
   const [nome, setNome] = useState('');
@@ -37,46 +36,32 @@ const Cadastrar = () => {
     }
   };
 
-  const doesNomeExist = async (nome) => {
-    const q = query(collection(db, 'users'), where('nome', '==', nome));
-    const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty; // Retorna true se existir, false se não existir
-  };
-
-  const doesEmailExist = async (email) => {
-    const q = query(collection(db, 'users'), where('email', '==', email));
-    const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty; // Retorna true se existir, false se não existir
-  };
-
   const handleRegister = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email
-
-    const nomeExists = await doesNomeExist(nome);
-    const emailExists = await doesEmailExist(email);
-    if (nomeExists) {
-      handleOpenModal(nome)
-      return;
-    }
-
-    if (emailExists) {
-      handleOpenModal(email)
-      return;
-    }
-
-    // Verificar se os campos estão vazios após remover espaços em branco
-    if (!nome || !email || !senha) {
-      setMensagemErro('Por favor, preencha todos os campos.');
-      return;
-    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email    
 
     if (nome.length < 3) {
       setMensagemErro('O nome deve ter no mínimo 3 letras.');
       return;
     }
 
+    if (dbContext.doesNomeExist(nome)) {
+      handleOpenModal(nome)
+      return;
+    }    
+
     if (!emailRegex.test(email)) {
       setMensagemErro('Por favor, insira um email válido.');
+      return;
+    }
+
+    if (dbContext.doesEmailExist(email)) {
+      handleOpenModal(email)
+      return;
+    }
+    
+    // Verificar se os campos estão vazios após remover espaços em branco
+    if (!nome || !email || !senha) {
+      setMensagemErro('Por favor, preencha todos os campos.');
       return;
     }
 

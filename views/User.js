@@ -7,9 +7,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { db, storage } from '../config/firebaseConfig';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import dbContext from '../context/dbContext';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 
@@ -20,7 +18,7 @@ const User = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalProfileVisible, setModalProfileVisible] = useState(false);
   const [nickname, setNickname] = useState('');
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage, setProfileImage] = useState('');
 
   const handleLogout = async () => {
     try {
@@ -42,32 +40,30 @@ const User = () => {
     }
   };
 
-  const loadProfileImage = async () => {
-    try {
-      const userDoc = await getDoc(doc(db, 'users', currentUser.email));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData.profileImage) {
-          setProfileImage(userData.profileImage);
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao carregar a imagem:', error);
-      Alert.alert('Erro', 'Não foi possível carregar a imagem do perfil.');
-    }
-  };
+  // const loadProfileImage = async () => {
+  //   try {
+  //     const userData = await dbContext.getById('users', currentUser.email); // Busca os dados do usuário pelo email
+  //     if (userData.profileImage) {
+  //       console.log('True')
+  //       setProfileImage(userData.profileImage); // Atualiza o estado com a imagem do perfil
+  //     }
+  //   } catch (error) {
+  //     console.error('Erro ao carregar a imagem:', error);
+  //     Alert.alert('Erro', 'Não foi possível carregar a imagem do perfil.');
+  //   }
+  // };
+  
+  // useEffect(() => {
+  //   loadProfileImage(); // Carrega a imagem ao iniciar o componente
+  // }, []);  
 
-  useEffect(() => {
-    loadProfileImage(); // Carrega a imagem ao iniciar o componente
-  }, []);
-
-// Função qeu altera iamgem de usuário
+  // Função qeu altera iamgem de usuário
   const handleImagePicker = async () => {
     // Solicita permissão para acessar a galeria
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      Alert.alert('Erro', 'Permissão para acessar a galeria é necessária!');
+      Alert.alert('Erro', 'Permisso para acessar a galeria é necessária!');
       return;
     }
 
@@ -81,36 +77,47 @@ const User = () => {
     if (result.assets && result.assets.length > 0) {
       const selectedAsset = result.assets[0]; // Acessa o primeiro asset
       setProfileImage(selectedAsset.uri); // Atualiza o estado com o URI da imagem
-      // Upload da imagem para o Firebase Storage
+
+      // Lê a imagem como base64
       const response = await fetch(selectedAsset.uri);
       const blob = await response.blob();
-      const storageRef = ref(storage, `profileImages/${currentUser.email}.jpg`);
+      const reader = new FileReader();
 
-      await uploadBytes(storageRef, blob);
-      const downloadURL = await getDownloadURL(storageRef);
+      reader.onloadend = async () => {
+        const base64data = reader.result; // Converte a imagem para base64
+        
+        // Salva a imagem no dbContext
+        const updatedUser = { profileImage: base64data };
 
-      // Salva a URL no Firestore
-      await setDoc(doc(db, 'users', currentUser.email), { profileImage: downloadURL }, { merge: true });
+        dbContext.updateItem('users', currentUser.email, updatedUser, { merge: true });
+
+        // Atualiza o estado do currentUser, se necessário
+        setCurrentUser(prev => ({ ...prev, profileImage: base64data }));
+      };
+
+      reader.readAsDataURL(blob); // Converte o blob para base64
     }
   };
 
   const handleSaveNickname = async () => {
-    if (nickname.trim() === '') {
-      Alert.alert('Erro', 'O apelido não pode estar vazio.');
-      return;
-    }
 
     try {
-      // Atualiza o apelido no Firestore, substituindo apenas o campo 'nick'
-      await setDoc(doc(db, 'users', currentUser.email), { nick: nickname }, { merge: true });
+      // Verifica se o nickname não está vazio
+      if (!nickname) {
+        Alert.alert('Erro', 'O apelido não pode ser vazio.');
+        return;
+      }
+
+      // Atualiza o apelido no dbContext
+      dbContext.updateItem('users', currentUser.email, { nick: nickname }, { merge: true });
 
       // Atualiza o contexto com o novo nick
-      setCurrentUser({ ...currentUser, nick: nickname });
+      setCurrentUser(prev => ({ ...prev, nick: nickname }));
 
       setModalVisible(false); // Fecha o modal
       setNickname(''); // Limpa o input
     } catch (error) {
-      console.error(error); // Log do erro para depuração
+      console.error('Erro ao salvar o apelido:', error); // Log do erro para depuração
       Alert.alert('Erro', 'Ocorreu um erro ao salvar o apelido.');
     }
   };
@@ -328,14 +335,14 @@ const User = () => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Informações Pessoais</Text>
             {currentUser ? (
-                <View>
-                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Nome: {currentUser.nome}</Text>
-                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Email: {currentUser.email}</Text>
-                  <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>
-                </View>
-              ) : (
-                <Text style={{ marginVertical: 10, fontSize: 17 }}>Usuário não encontrado.</Text>
-              )}
+              <View>
+                <Text style={{ marginVertical: 10, fontSize: 17 }}>Nome: {currentUser.nome}</Text>
+                <Text style={{ marginVertical: 10, fontSize: 17 }}>Email: {currentUser.email}</Text>
+                <Text style={{ marginVertical: 10, fontSize: 17 }}>Apelido: {currentUser.nick || 'Não definido'}</Text>
+              </View>
+            ) : (
+              <Text style={{ marginVertical: 10, fontSize: 17 }}>Usuário não encontrado.</Text>
+            )}
             <Button title="Fechar" onPress={() => { setModalProfileVisible(false) }} />
           </View>
         </View>

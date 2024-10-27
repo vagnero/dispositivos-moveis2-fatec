@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
 import * as Crypto from 'expo-crypto';
 
 const UserContext = createContext();
@@ -24,21 +23,20 @@ export const UserProvider = ({ children }) => {
     };
 
     try {
-      newUser.senha = await hashPassword(newUser.senha); // 10 é o número de "salts"
-      // Cria um documento no Firestore com o ID do usuário baseado no e-mail ou um ID único
-      await setDoc(doc(db, 'users', newUser.email), newUser);
-
-      // Se quiser, pode manter a lista de usuários em memória
-      setUsers([...users, newUser]); // Adiciona o novo usuário à lista      
-      console.log('Usuário registrado com sucesso no Firestore.');
+      newUser.senha = await hashPassword(newUser.senha); // Criptografa a senha
+      // Salva o novo usuário no dbContext
+      dbContext.addItem('users', newUser);
+      
+      // Atualiza a lista de usuários em memória
+      setUsers([...users, newUser]);
+      console.log('Usuário registrado com sucesso no banco de dados.');
     } catch (error) {
-      console.error('Erro ao registrar usuário no Firestore:', error);
+      console.error('Erro ao registrar usuário:', error);
     }
   };
 
   const findUser = async (email, senha) => {
-    const userDoc = doc(db, 'users', email); // Acessa o documento do usuário baseado no e-mail
-    const userSnapshot = await getDoc(userDoc);
+    const userData = dbContext.getById('users', email); // Busca o usuário pelo e-mail
 
     const hashPassword = async (password) => {
       return await Crypto.digestStringAsync(
@@ -48,11 +46,10 @@ export const UserProvider = ({ children }) => {
       );
     };
 
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
+    if (userData) {
       let hashedInputPassword;
       if (userData.nome === 'Dev') {
-        hashedInputPassword = senha
+        hashedInputPassword = senha;
       } else {
         hashedInputPassword = await hashPassword(senha);
       }

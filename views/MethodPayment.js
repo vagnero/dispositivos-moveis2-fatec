@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { db } from '../config/firebaseConfig'; // Importe a configuração do Firebase
-import { doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore'; // Importa métodos do Firestore
+import dbContext from '../context/dbContext';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Content from '../components/Content';
@@ -20,10 +19,16 @@ const MethodPayment = () => {
   useEffect(() => {
     const fetchPaymentMethod = async () => {
       try {
-        const userDocRef = doc(db, 'paymentMethods', currentUser.nome);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          setSelectedPayment(userDoc.data().paymentMethod);
+        // Obtém todos os métodos de pagamento
+        const allPaymentMethods = dbContext.getAll('paymentMethods');
+
+        // Busca o método de pagamento do usuário atual
+        const userPaymentMethod = allPaymentMethods.find(method => method.id === currentUser.nome);
+
+        if (userPaymentMethod) {
+          setSelectedPayment(userPaymentMethod.paymentMethod); // Atualiza o estado com o método de pagamento
+        } else {
+          console.log('Nenhum método de pagamento encontrado para o usuário.');
         }
       } catch (error) {
         console.error("Erro ao carregar a forma de pagamento: ", error);
@@ -43,15 +48,12 @@ const MethodPayment = () => {
     if (selectedPayment === 'Cartão') {
       // Verifica se há um cartão registrado
       try {
-        const userCardsCollection = collection(db, 'paymentCard'); // Coleção de cartões
-        const userCardDocs = await getDocs(userCardsCollection);
-        const userCards = [];
+        // Obtém todos os cartões da coleção
+        const allCards = dbContext.getAll('paymentCards');
 
-        userCardDocs.forEach(doc => {
-          if (doc.id.startsWith(`${currentUser.nome}_`)) {
-            userCards.push({ id: doc.id, ...doc.data() }); // Adiciona cartões ao array
-          }
-        });
+        // Filtra os cartões que pertencem ao usuário atual
+        const userCards = allCards.filter(card => card.id.startsWith(`${currentUser.nome}_`));
+
         if (userCards.length === 0) {
           setMensagem('Nenhum cartão cadastrado. Por favor, cadastre um cartão antes de salvar.');
           setModalVisible2(true);
@@ -66,18 +68,32 @@ const MethodPayment = () => {
     }
 
     try {
-      const userDocRef = doc(db, 'paymentMethods', currentUser.nome); // Referência ao documento do usuário
+      const existingPaymentMethod = dbContext.getById('paymentMethods', currentUser.nome);
 
-      // Atualiza o documento com a nova forma de pagamento (substituindo a anterior)
-      await setDoc(
-        userDocRef,
-        { paymentMethod: selectedPayment }, // Campo a ser atualizado
-        { merge: true } // Garante que outros dados do usuário não sejam sobrescritos
-      );
+      if (existingPaymentMethod) {
+        // Se o método de pagamento já existir, atualiza mantendo outros dados
+        const updatedPaymentMethod = {
+          ...existingPaymentMethod,
+          paymentMethod: selectedPayment,
+        };
 
-      setMensagem(`Forma de pagamento atualizada para ${selectedPayment}!`); // Mensagem de sucesso
+        // Atualiza no dbContext
+        dbContext.updateItem('paymentMethods', currentUser.nome, updatedPaymentMethod, { merge: true });
+
+        setMensagem(`Forma de pagamento atualizada para ${selectedPayment}!`); // Mensagem de sucesso
+      } else {
+        // Se não existir, cria um novo método de pagamento
+        const newPaymentMethod = {
+          paymentMethod: selectedPayment,
+        };
+
+        // Adiciona o novo método de pagamento no dbContext
+        dbContext.addItem('paymentMethods', { id: currentUser.nome, ...newPaymentMethod });
+
+        setMensagem(`Forma de pagamento adicionada: ${selectedPayment}!`); // Mensagem de sucesso
+      }
+
       setModalVisible2(true);
-
     } catch (error) {
       console.error('Erro ao atualizar forma de pagamento:', error);
       setMensagem('Não foi possível atualizar a forma de pagamento.');

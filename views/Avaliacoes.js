@@ -3,8 +3,7 @@ import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator, RefreshCon
 import Comentario from '../components/Comentario';
 import { ThemeContext } from '../context/ThemeContext';
 import Content from '../components/Content';
-import { db } from '../config/firebaseConfig'; // Certifique-se de que o caminho para o seu arquivo firebase está correto
-import { collection, getDocs } from 'firebase/firestore';
+import dbContext from '../context/dbContext';
 
 const Avaliacoes = () => {
   const { colors } = useContext(ThemeContext);
@@ -34,26 +33,16 @@ const Avaliacoes = () => {
     return ''; // Return an empty string if not a valid date
   };
 
-  const fetchComments = async () => {
+  const fetchComments = () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'comments'));
-
-      const fetchedComments = querySnapshot.docs.map((doc) => {
-        const dados = doc.data();
-        let data = dados.date;
-        if (data && data.toDate) {
-          data = data.toDate();
-        } else if (!(data instanceof Date)) {
-          data = new Date(data);
-        }
-        return {
-          id: doc.id,
-          nome: dados.name,
-          rate: dados.rating,
-          texto: dados.comment,
-          data: data // Converte Timestamp para Date
-        }
-      });
+      // Obtém todos os comentários do dbContext
+      const fetchedComments = dbContext.getAll('comments').map((comment, index) => ({
+        id: index.toString(), // Gera um ID temporário se necessário
+        nome: comment.name,
+        rate: comment.rating,
+        texto: comment.comment,
+        data: comment.date // Presume que já é um objeto Date
+      }));
 
       // Ordena os comentários por data/hora decrescente
       const sortedComments = fetchedComments.sort((a, b) =>

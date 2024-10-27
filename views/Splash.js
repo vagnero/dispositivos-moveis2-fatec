@@ -4,15 +4,39 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { useUser } from '../context/UserContext';
 import LoadingBar from '../components/LoadingBar';
 import * as SecureStore from 'expo-secure-store';
+import dbContext from '../context/dbContext';
 
 const Splash = () => {
   const { colors } = useContext(ThemeContext);
   const { findUser, setCurrentUser } = useUser(); // Remova registerUser do destructuring
 
+  useEffect(() => {
+    const initializeUser = async () => {
+      const devUser = {
+        nome: 'Dev',
+        email: 'dev', // E-mail deve ser válido
+        senha: '', // A senha deve ser definida
+        nick: '', // Nickname ou outro campo que você queira
+      };
+
+      // Verifica se o usuário já está registrado
+      const existingUser = await findUser(devUser.email, devUser.senha);
+      if (!existingUser) {
+        // Se o usuário não existir, adiciona ao contexto
+        dbContext.addItem('users', devUser);
+        console.log('Usuário registrado:', devUser);
+      } else {
+        console.log('Usuário já existe:', existingUser);
+      }      
+    };
+    initializeUser();
+  }, [findUser]);
+
   const checkUserLogin = async () => {
     try {
       const storedEmail = await SecureStore.getItemAsync('userEmail');
       const storedSenha = await SecureStore.getItemAsync('userPassword');
+      
       if (storedEmail && storedSenha) {
         const user = await findUser(storedEmail, storedSenha); // Supondo que você tenha uma função para buscar o usuário pelo email
         if (user) {

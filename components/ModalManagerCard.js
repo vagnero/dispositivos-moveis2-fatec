@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import AlertModal from '../components/AlertModal';
 import { useUser } from '../context/UserContext';
-import { db } from '../config/firebaseConfig';
-import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import dbContext from '../context/dbContext';
 import CardModal from '../components/CardModal';
 import { useFocusEffect } from '@react-navigation/native'; // Importando useRoute
 import { ThemeContext } from '../context/ThemeContext';
@@ -30,15 +29,8 @@ const ModalManagerCard = ({ modalVisible, setModalVisible, selectedCard, setSele
 
     const fetchLoadCards = async () => {
         try {
-            const userCardsCollection = collection(db, 'paymentCard'); // Coleção de cartões
-            const userCardDocs = await getDocs(userCardsCollection);
-            const userCards = [];
-
-            userCardDocs.forEach(doc => {
-                if (doc.id.startsWith(`${currentUser.nome}_`)) {
-                    userCards.push({ id: doc.id, ...doc.data() }); // Adiciona cartões ao array
-                }
-            });
+            const allCards = dbContext.getAll('paymentCards'); // Obtém todos os cartões do dbContext
+            const userCards = allCards.filter(card => card.id.startsWith(`${currentUser.nome}_`)); // Filtra pelos cartões do usuário
 
             if (userCards.length > 0) {
                 setCards(userCards); // Atualiza o estado com todos os cartões
@@ -50,17 +42,20 @@ const ModalManagerCard = ({ modalVisible, setModalVisible, selectedCard, setSele
         }
     };
 
-    const handleDeleteCard = async (id) => {
+    const handleDeleteCard = (id) => {
         try {
-            await deleteDoc(doc(db, 'paymentCard', id)); // Deleta o endereço com o id correto
+            // Remove o cartão do dbContext
+            dbContext.removeItem('paymentCards', id);
+
             setMensagem('Cartão excluído com sucesso!'); // Mensagem de sucesso
             setModalAlertVisible(true); // Mostra modal de sucesso
+
+            // Atualiza a lista de cartões no estado
             setCards((prevCards) => prevCards.filter(card => card.id !== id));
-            fetchLoadCards(); // Atualiza a lista de endereços
         } catch (error) {
-            console.error('Erro ao excluir cartão')
-            setMensagem('Não foi possível excluir o Cartão.'); // Mensagem de sucesso
-            setModalAlertVisible(true); // Mostra modal de sucesso
+            console.error('Erro ao excluir cartão:', error);
+            setMensagem('Não foi possível excluir o Cartão.'); // Mensagem de erro
+            setModalAlertVisible(true); // Mostra modal de erro
         }
     };
 
@@ -181,7 +176,7 @@ const ModalManagerCard = ({ modalVisible, setModalVisible, selectedCard, setSele
             <AlertModal
                 visible={modalAlertVisible}
                 message={mensagem}
-                onClose={() => {setModalAlertVisible(false)}}
+                onClose={() => { setModalAlertVisible(false) }}
             />
             <CardModal
                 modalVisible={modalCardVisible}

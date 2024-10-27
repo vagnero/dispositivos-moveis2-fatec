@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Alert, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
 import Content from '../components/Content';
@@ -22,16 +21,13 @@ const HistoricoCompra = () => {
                 throw new Error("Usuário não encontrado");
             }
 
-            const q = query(
-                collection(db, 'purchaseHistory'),
-                where('userId', '==', currentUser.nome) // Filtra pelo usuário atual
-            );
+            // Obtém todos os registros de compras do dbContext
+            const allPurchases = dbContext.getAll('purchaseHistory');
 
-            const querySnapshot = await getDocs(q);
-            const purchases = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
+            // Filtra as compras para incluir apenas as do usuário atual
+            const purchases = allPurchases.filter(purchase => purchase.userId === currentUser.nome);
+
+            // Atualiza o estado com o histórico de compras filtrado
             setPurchaseHistory(purchases);
         } catch (error) {
             console.error('Erro ao buscar histórico de compras:', error);
@@ -52,33 +48,50 @@ const HistoricoCompra = () => {
     };
 
     const sortedPurchases = purchaseHistory.sort((a, b) => {
-        return b.timestamp.toMillis() - a.timestamp.toMillis(); // Ordena por timestamp decrescente
-    });
+        return b.timestamp - a.timestamp; // Ordena por timestamp decrescente
+    });    
 
     const groupedPurchases = purchaseHistory.reduce((acc, purchase) => {
-        const dateKey = purchase.timestamp.toDate().toISOString();
-        const displayDate = purchase.timestamp.toDate().toLocaleDateString('pt-BR');
-        if (!acc[dateKey]) {
-            acc[dateKey] = {
-                id: dateKey,
-                date: displayDate,
-                totalAmount: purchase.totalAmount,
-                items: purchase.items,
-                paymentMethod: purchase.paymentMethod,
-                status: purchase.status,
-                address: purchase.address,
-                visible: false, // Estado para controlar a visibilidade dos itens
-            };
+        const timestamp = purchase.timestamp;
+    
+        // Verifica se o timestamp é uma string ou um objeto Date
+        const purchaseDate = (typeof timestamp === 'string') 
+            ? new Date(timestamp) 
+            : (timestamp instanceof Date) 
+                ? timestamp 
+                : null;
+    
+        // Se purchaseDate for válido, continua
+        if (purchaseDate) {
+            const dateKey = purchaseDate.toISOString();
+            const displayDate = purchaseDate.toLocaleDateString('pt-BR');
+    
+            if (!acc[dateKey]) {
+                acc[dateKey] = {
+                    id: dateKey,
+                    date: displayDate,
+                    totalAmount: purchase.totalAmount,
+                    items: purchase.items,
+                    paymentMethod: purchase.paymentMethod,
+                    status: purchase.status,
+                    address: purchase.address,
+                    visible: false, // Estado para controlar a visibilidade dos itens
+                };
+            } else {
+                acc[dateKey].totalAmount += purchase.totalAmount;
+                acc[dateKey].items.push(...purchase.items); // Adiciona os itens ao grupo existente
+            }
         } else {
-            acc[dateKey].totalAmount += purchase.totalAmount;
-            acc[dateKey].items.push(...purchase.items); // Adiciona os itens ao grupo existente
+            console.warn("Timestamp inválido para a compra:", purchase);
         }
+    
         return acc;
     }, {});
+    
 
     // Converte o objeto em um array
     const groupedPurchasesArray = Object.values(groupedPurchases);
-    
+
     const renderItem = ({ item }) => {
         const toggleVisibility = () => {
             setVisibleItems(prevState => ({

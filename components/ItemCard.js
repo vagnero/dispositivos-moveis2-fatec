@@ -2,9 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
-import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
 import Items from './Items';
 
 const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
@@ -16,16 +14,10 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Referência à coleção de itens no Firestore
-        const itemsRef = collection(db, 'items');
-        const querySnapshot = await getDocs(itemsRef);
+        // Carregar os itens do dbContext
+        const itemsArray = dbContext.data.items;
 
-        // Criar um array com os dados dos itens
-        const itemsArray = querySnapshot.docs.map(doc => ({
-          ...doc.data(),
-          itemName: doc.id, // usa o ID do documento como itemName
-        }));
-
+        // Encontrar o item correspondente pelo itemName
         const storedItem = itemsArray.find(i => i.itemName === item.itemName);
 
         if (storedItem) {
@@ -41,7 +33,6 @@ const ItemCard = ({ item, onPressAddToCart, updateCartItems }) => {
 
     fetchItems();
   }, [item.itemName]);
-
 
   const handleAddToCart = () => {
     const newTotalQuantity = totalQuantity + 1; // Incrementa o total

@@ -2,10 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import Items from './Items';
 import { useUser } from '../context/UserContext';
-import { collection, setDoc, doc, getDocs, deleteDoc } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
+import Items from '../components/Items';
 
 const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) => {
   const { colors } = useContext(ThemeContext);
@@ -25,91 +24,102 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       updatedFavorites = favoriteItems.filter((favItem) => favItem.itemName !== item.itemName);
 
       // Remove do Firestore
-      await removeFavoriteItem(item.itemName);
+      removeFavoriteItem(item.itemName);
     } else {
       // Adiciona aos favoritos
       updatedFavorites = [...favoriteItems, item];
 
       // Salva no Firestore
-      await saveFavoriteItems(updatedFavorites);
+      saveFavoriteItems(updatedFavorites);
     }
 
     setFavoriteItems(updatedFavorites); // Atualiza o estado
   };
 
-  const removeFavoriteItem = async (itemName) => {
+  const removeFavoriteItem = (itemName) => {
     try {
-      const itemDoc = doc(db, 'favoriteItems', `${itemName}_${currentUser.nome}`);
-      await deleteDoc(itemDoc);
-      console.log(`item ${itemName} removido dos favoritos no Firestore.`);
+      // Define o ID único do item
+      const itemId = `${itemName}_${currentUser.nome}`;
+  
+      // Remove o item do dbContext
+      dbContext.removeItem('favoriteItems', itemId);
+  
+      // Atualiza o estado
+      setFavoriteItems((prevFavorites) => 
+        prevFavorites.filter((favItem) => favItem.itemName !== itemName)
+      );
+  
+      console.log(`Item ${itemName} removido dos favoritos.`);
     } catch (error) {
-      console.error('Erro ao remover item do Firestore:', error);
+      console.error('Erro ao remover item dos favoritos:', error);
     }
   };
-
+  
   const isItemFavorite = (item) => {
     return favoriteItems.some((favItem) => favItem.itemName === item.itemName);
   };
 
-  const saveFavoriteItems = async (items) => {
-    // Verifica se currentUser e currentUser.nome estão definidos
+  const saveFavoriteItems = (items) => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
     }
-
+  
     try {
-      const itemCollection = collection(db, 'favoriteItems');
-
-      // Salva cada item como um documento individual
-      for (const item of Items) {
-        const itemData = {
-          itemName: item.itemName || '',
-          price: item.itemPrice || item.price,
-          ml: item.ml || '',
-          imageSource: item.imageSource || '',
+      items.forEach((item) => {
+        const favoriteItem = {
+          itemName: item.itemName, // Apenas o itemName é salvo
+          id: `${item.itemName}_${currentUser.nome}`, // Usando itemName e nome do usuário como chave
         };
-
-        // Usando o itemName e o userName como chave para evitar duplicatas
-        await setDoc(doc(itemCollection, `${item.itemName}_${currentUser.nome}`), itemData);
-      }
-      console.log('Items favoritos salvos no Firestore.');
+  
+        // Adiciona o item ao dbContext
+        dbContext.addItem('favoriteItems', favoriteItem);
+      });
+  
+      // Atualiza o estado com todos os itens favoritos (apenas com itemName)
+      setFavoriteItems((prevFavorites) => [
+        ...prevFavorites,
+        ...items.map((item) => ({
+          itemName: item.itemName,
+          id: `${item.itemName}_${currentUser.nome}`,
+        })),
+      ]);
+  
+      console.log('Itens favoritos salvos.');
     } catch (error) {
-      console.error('Erro ao salvar items no Firestore:', error);
+      console.error('Erro ao salvar itens favoritos:', error);
     }
   };
-
+  
   // Função para carregar os items favoritos do usuário atual
-  const loadItems = async () => {
+  const loadItems = () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
     }
-
+  
     try {
-      const itemCollection = collection(db, 'favoriteItems');
-      const querySnapshot = await getDocs(itemCollection);
-
-      // Verifica se existem documentos na coleção
-      if (querySnapshot.empty) {
-        console.log('Nenhum item favorito encontrado no Firestore.');
-        setFavoriteItems([]); // Define a lista de items favoritos como vazia
-        return; // Sai da função se não houver items
-      }
-
-      // Mapeia os documentos carregados para um array de dados
-      const loadedItems = querySnapshot.docs
-        .map((doc) => ({
-          id: doc.id, // Inclui o ID do documento se necessário
-          ...doc.data(),
-        }))
-        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos items do usuário
-
-      // Atualiza o estado com os items carregados
-      setFavoriteItems(loadedItems);
+      const allFavoriteItems = dbContext.getAll('favoriteItems'); // Acesse todos os itens favoritos do dbContext
+  
+      // Filtra pelos itens do usuário
+      const loadedItems = allFavoriteItems.filter((item) => 
+        item.id.endsWith(`_${currentUser.nome}`)
+      );
+  
+      // Mapeia os itens carregados para incluir todos os atributos
+      const detailedItems = loadedItems.map((favItem) => {
+        const originalItem = Items.find((item) => item.itemName === favItem.itemName);
+        return {
+          ...favItem,
+          ...originalItem, // Adiciona os atributos do item original
+        };
+      });
+  
+      // Atualiza o estado com os itens carregados
+      setFavoriteItems(detailedItems);
     } catch (error) {
-      console.error('Erro ao carregar items do Firestore:', error);
+      console.error('Erro ao carregar itens favoritos:', error);
     }
   };
-
+  
   // Chama a função ao montar o componente
   useEffect(() => {
     loadItems();

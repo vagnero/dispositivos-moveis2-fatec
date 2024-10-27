@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebaseConfig';
+import dbContext from '../context/dbContext';
+import Items from '../components/Items';
 import Content from '../components/Content';
 import Product from '../components/Product';
 import { ThemeContext } from '../context/ThemeContext';
@@ -14,37 +14,35 @@ const Favoritos = () => {
   const { colors } = useContext(ThemeContext);
 
   // Função para carregar os favoritos salvos do SecureStorage
-  const loadItems = async () => {
+  const loadItems = () => {
     if (!currentUser || !currentUser.nome) {
       return; // Sai da função se o usuário não estiver definido
     }
-
+  
     try {
-      const itemCollection = collection(db, 'favoriteItems');
-      const querySnapshot = await getDocs(itemCollection);
-
-      // Verifica se existem documentos na coleção
-      if (querySnapshot.empty) {
-        console.log('Nenhum item favorito encontrado no Firestore.');
-        setFavoriteItems([]); // Define a lista de items favoritos como vazia
-        return; // Sai da função se não houver items
-      }
-
-      // Mapeia os documentos carregados para um array de dados
-      const loadedItems = querySnapshot.docs
-        .map((doc) => ({
-          id: doc.id, // Inclui o ID do documento se necessário
-          ...doc.data(),
-        }))
-        .filter((item) => item.id.endsWith(`_${currentUser.nome}`)); // Filtra pelos items do usuário
-
-      // Atualiza o estado com os items carregados
-      setFavoriteItems(loadedItems);
+      const allFavoriteItems = dbContext.getAll('favoriteItems'); // Acesse todos os itens favoritos do dbContext
+  
+      // Filtra pelos itens do usuário
+      const loadedItems = allFavoriteItems.filter((item) => 
+        item.id.endsWith(`_${currentUser.nome}`)
+      );
+  
+      // Mapeia os itens carregados para incluir todos os atributos
+      const detailedItems = loadedItems.map((favItem) => {
+        const originalItem = Items.find((item) => item.itemName === favItem.itemName);
+        return {
+          ...favItem,
+          ...originalItem, // Adiciona os atributos do item original
+        };
+      });
+  
+      // Atualiza o estado com os itens carregados
+      setFavoriteItems(detailedItems);
     } catch (error) {
-      console.error('Erro ao carregar items do Firestore:', error);
+      console.error('Erro ao carregar itens favoritos:', error);
     }
   };
-
+  
   // UseEffect para carregar os favoritos quando a tela for montada
   useEffect(() => {
     loadItems();
@@ -124,7 +122,7 @@ const Favoritos = () => {
                   item={item} // Passando o objeto item diretamente
                   imageSource={item.imageSource}
                   itemName={item.itemName}
-                  price={item.price}
+                  price={item.itemPrice}
                   ml={item.ml}
                   handleAddToCart={() =>
                     handleAddToCart(item, cartItems, setCartItems, setCartSuccessMessage)
