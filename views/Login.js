@@ -64,8 +64,6 @@ const Login = () => {
       if (salvarEmail) {
         await SecureStore.setItemAsync('userEmail', email);
         await SecureStore.setItemAsync('userPassword', senha);
-      } else {
-        await SecureStore.deleteItemAsync('userEmail');
       }
       setTimeout(() => {
         navigation.navigate('Home');
