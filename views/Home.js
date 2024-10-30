@@ -213,7 +213,7 @@ const Home = () => {
       borderColor: colors.search,
       borderRadius: 15,
       backgroundColor: 'transparent',
-      marginTop: 40,
+      marginTop: 60,
     },
     image_pesquisar: {
       width: 20,

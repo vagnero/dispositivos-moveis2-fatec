@@ -27,7 +27,7 @@ const Header = () => {
         header: {
             width: '100%',
             backgroundColor: colors.background,
-            minHeight: 80,
+            minHeight: 100,
             justifyContent: 'center', // Centraliza verticalmente
             alignItems: 'center', // Centraliza horizontalmente
             
@@ -37,7 +37,7 @@ const Header = () => {
             alignItems: 'center', // Centraliza verticalmente os itens
             width: '90%', // Pode ajustar a largura como preferir
             justifyContent: 'space-between', // Espaça os elementos igualmente
-           // marginTop: 50, // Aumente este valor para mais espaço
+            marginTop: 60, // Aumente este valor para mais espaço
         },
         icon: {
             color: colors.iconColor,
