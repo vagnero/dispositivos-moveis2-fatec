@@ -8,17 +8,20 @@ const Greeting = ({ name }) => {
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) {
-      return 'Bom dia';
+      return 'Bom dia, bem vindo(a) ';
     } else if (hour >= 12 && hour < 18) {
-      return 'Boa tarde';
+      return 'Boa tarde, bem vindo(a) ';
     } else {
-      return 'Boa noite';
+      return 'Boa noite , bem vindo(a) ';
     }
   };
 
   const styles = {
     text_saudacao: {
       fontSize: 16,
+      borderBottomWidth: 2,
+      paddingBottom: 4,
+      borderBottomColor: 'white', // Você pode mudar a cor da linha
       flexWrap: 'nowrap',
       marginBottom: 10,
       color: colors.textColor,

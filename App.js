@@ -62,17 +62,18 @@ const MainNavigator = ({ isSplashReady }) => {
   const { colors } = useContext(ThemeContext); // Aqui você pode usar o useContext
 
   return (
-    <Stack.Navigator initialRouteName="Home"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: colors.primary, // Cor de fundo da barra
-        },
-        headerTintColor: 'white', // Cor do texto (e ícones) na barra
-        headerTitleStyle: {
-          fontWeight: 'bold', // Estilos adicionais para o título
-        },
-        headerShown: false,
-      }}>
+   <Stack.Navigator initialRouteName="Home"
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: colors.primary, // Cor de fundo da barra
+      height: 5, // Ajuste a altura para o valor desejado
+    },
+    headerTintColor: 'white', // Cor do texto (e ícones) na barra
+    headerTitleStyle: {
+      fontWeight: 'bold', // Estilos adicionais para o título
+    },
+    headerShown: false,
+  }}>
 
       {isSplashReady ? (
         <>
