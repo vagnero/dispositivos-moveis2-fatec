@@ -27,15 +27,24 @@ const Header = () => {
         header: {
             width: '100%',
             backgroundColor: colors.background,
+            minHeight: 100,
+            justifyContent: 'center', // Centraliza verticalmente
+            alignItems: 'center', // Centraliza horizontalmente
         },
         div_saudacao_pesquisar: {
-            alignItems: 'center',
-            marginTop: 15,
+            flexDirection: 'row', // Coloca Greeting e ícones na mesma linha
+            alignItems: 'center', // Centraliza verticalmente os itens
+            width: '90%', // Pode ajustar a largura como preferir
+            justifyContent: 'space-between', // Espaça os elementos igualmente
+            marginTop: 60, // Aumente este valor para mais espaço
         },
         icon: {
             color: colors.iconColor,
             fontSize: 24, // Tamanho do ícone
-            marginLeft: 30,
+            marginLeft: 10, // Diminuí o espaço entre o nome e os ícones
+        },
+        greeting: {
+            marginRight: 10, // Ajuste este valor conforme necessário
         },
     });
 
@@ -48,37 +57,26 @@ const Header = () => {
                 end={{ x: 0, y: 1 }} // Fim do degradê (baixo)
             >
                 <View style={styles.div_saudacao_pesquisar}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={{ width: '65%' }}>
-                            <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
-                        </View>
-                        <View style={{ marginLeft: 50, flexDirection: 'row', justifyContent: 'space-between', width: 50 }}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Favoritos')}>
-                                <Image
-                                    source={require('../assets/info/heart.png')}
-                                    style={{ tintColor: colors.iconColor }}
-                                />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
-                                <NotificationsIconWithBadge unreadCount={unreadCount} />
-                            </TouchableOpacity>
-                        </View>
-                        {/*
-                        <TouchableOpacity onPress={toggleTheme}>
-                            {theme === 'light' ? (
-                                <FontAwesome name="moon-o" size={30} style={styles.icon} /> // Ícone da lua
-                            ) : (
-                                <FontAwesome name="sun-o" size={30} style={styles.icon} /> // Ícone do sol
-                            )}
+                    <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                        <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Favoritos')}>
+                            <Image
+                                source={require('../assets/info/heart.png')}
+                                style={{ tintColor: colors.iconColor }}
+                            />
                         </TouchableOpacity>
-                        */}
+                        <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
+                            <NotificationsIconWithBadge unreadCount={unreadCount} />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </LinearGradient>
         </View>
     );
 };
+
 
 export default Header;
 
