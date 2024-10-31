@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
 import HeaderUnlogged from '../components/HeaderUnlogged';
@@ -167,7 +167,7 @@ subTitulo: {
     color: '#A8A8A8', // Um cinza mais claro
     marginTop: 5, // Diminui a distância entre o header e o subtítulo
     textAlign: 'center', // Centraliza o subtítulo
-          marginBottom: 40,
+          marginBottom: 50,
 
 },
     mensagemErro: {
@@ -198,6 +198,8 @@ subTitulo: {
 
   return (
     <Content>
+              <ScrollView>
+
     <View style={styles.container}>
       <HeaderUnlogged />
       <Text style={styles.headerText}>Cadastro</Text>
@@ -247,8 +249,9 @@ subTitulo: {
         message={mensagemModal}
         onClose={handleCloseModal}
       />
-      <MenuUnlogged />
     </View>
+                </ScrollView>
+
     </Content>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { BackHandler, Alert } from 'react-native';
@@ -117,10 +117,15 @@ const Login = () => {
       marginLeft: 20,
       color: colors.textColor,
     },
+      scrollViewContainer: {
+    flexGrow: 1, // Permite que o conteúdo ocupe todo o espaço disponível
+    justifyContent: 'center', // Centraliza o conteúdo verticalmente
+    padding: 20, // Adiciona um pouco de espaço em torno do conteúdo
+  },
     inputContainer: {
       width: "80%",
       podition: 'absolute',
-      marginBottom: 30
+      marginBottom: 25
     },
     label: {
       marginBottom: 5,
@@ -139,10 +144,10 @@ const Login = () => {
     checkboxContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 20
+      marginBottom: 15
     },
     textEsqueceuSenha: {
-      marginBottom: 15,
+      marginBottom: 13,
       fontSize: 14,
       fontWeight: 'bold',
       color: colors.textColor,
@@ -176,6 +181,7 @@ const Login = () => {
       fontSize: 14,
       fontWeight: 'bold',
       color: colors.textColor,
+      marginBottom: 35,
     },
     subTitulo: {
     fontSize: 18,
@@ -183,7 +189,7 @@ const Login = () => {
     color: '#A8A8A8', // Um cinza mais claro
     marginTop: 5, // Diminui a distância entre o header e o subtítulo
     marginLeft: 20,
-          marginBottom: 40,
+          marginBottom: 30,
 
 },
     mensagemErro: {
@@ -214,6 +220,8 @@ const Login = () => {
 
   return (
         <Content>
+            <ScrollView>
+
     <View style={styles.container}>
       <HeaderUnlogged />
       <Text style={styles.headerText}>Bem vindo(a) de volta!</Text>
@@ -274,8 +282,9 @@ const Login = () => {
           <Text style={styles.textCadastrar}>Cadastre-se</Text>
         </TouchableOpacity>
       </View>
-      <MenuUnlogged />
     </View >
+            </ScrollView>
+
         </Content>
   );
 }
