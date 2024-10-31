@@ -7,6 +7,8 @@ import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
 import AlertModal from '../components/AlertModal';
 import dbContext from '../context/dbContext';
+import Content from '../components/Content';
+
 
 const Cadastrar = () => {
   const [nome, setNome] = useState('');
@@ -107,10 +109,9 @@ const Cadastrar = () => {
     headerText: {
       fontSize: 35,
       fontWeight: 'bold',
-      textAlign: 'center',
+      //textAlign: 'center',
       marginTop: 20,
-      marginLeft: 33,
-      marginBottom: 20,
+      marginLeft: 20,
       color: colors.textColor,
     },
     inputContainer: {
@@ -160,6 +161,15 @@ const Cadastrar = () => {
       fontWeight: 'bold',
       color: colors.textColor,
     },
+subTitulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#A8A8A8', // Um cinza mais claro
+    marginTop: 5, // Diminui a distância entre o header e o subtítulo
+    textAlign: 'center', // Centraliza o subtítulo
+          marginBottom: 40,
+
+},
     mensagemErro: {
       position: 'absolute',
       top: -50,
@@ -187,9 +197,11 @@ const Cadastrar = () => {
   };
 
   return (
+    <Content>
     <View style={styles.container}>
       <HeaderUnlogged />
-      <Text style={styles.headerText}>Cadastrar</Text>
+      <Text style={styles.headerText}>Cadastro</Text>
+      <Text style={styles.subTitulo}>Leva apenas um minuto para criar sua conta</Text>
       <View style={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
           <Text style={styles.mensagemErro}>{mensagemErro}</Text>
@@ -237,6 +249,7 @@ const Cadastrar = () => {
       />
       <MenuUnlogged />
     </View>
+    </Content>
   );
 }
 

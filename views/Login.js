@@ -10,6 +10,8 @@ import MenuUnlogged from '../components/MenuUnlogged';
 import { ThemeContext } from '../context/ThemeContext';
 import * as SecureStore from 'expo-secure-store';
 import dbContext from '../context/dbContext';
+import Content from '../components/Content';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -201,6 +203,7 @@ const Login = () => {
   });
 
   return (
+        <Content>
     <View style={styles.container}>
       <HeaderUnlogged />
       <Text style={styles.headerText}>Login</Text>
@@ -262,6 +265,7 @@ const Login = () => {
       </View>
       <MenuUnlogged />
     </View >
+        </Content>
   );
 }
 
