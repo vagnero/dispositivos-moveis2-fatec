@@ -298,12 +298,13 @@ const Home = () => {
           <TouchableOpacity >
             <Image source={require('../assets/info/search.png')} style={styles.image_pesquisar} />
           </TouchableOpacity>
-          <TextInput
-            placeholder="Pesquise por items..."
-            placeholderTextColor={colors.search}
-            value={searchText}
-            onChangeText={handleSearch}
-          />
+<TextInput
+  placeholder="Pesquise por itens..."
+  placeholderTextColor={colors.search}
+  value={searchText}
+  onChangeText={handleSearch}
+  style={{ color: colors.search }} // Altere para a propriedade correta
+/>
         </View>
         <View style={styles.div_categorias_opcoes}>
           <ScrollView
