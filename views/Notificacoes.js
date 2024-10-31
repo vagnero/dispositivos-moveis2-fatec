@@ -210,6 +210,7 @@ const Notificacoes = () => {
         container: {
             flex: 1,
             padding: 10,
+            marginTop: 45,
         },
         rowBack: {
             alignItems: 'center',
@@ -228,6 +229,7 @@ const Notificacoes = () => {
             borderRadius: 8,
             backgroundColor: '#fff',
             elevation: 2,
+            marginTop: 10,
         },
         unread: {
             backgroundColor: colors.itemCardBackground, // Mais escura para lidas

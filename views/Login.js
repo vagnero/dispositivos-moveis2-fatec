@@ -109,12 +109,12 @@ const Login = () => {
       height: '100%',
       backgroundColor: colors.background,
     },
-    headerText: {
+   headerText: {
       fontSize: 35,
       fontWeight: 'bold',
-      marginTop: 30,
-      textAlign: 'center',
-      marginBottom: 40,
+      //textAlign: 'center',
+      marginTop: 20,
+      marginLeft: 20,
       color: colors.textColor,
     },
     inputContainer: {
@@ -168,7 +168,8 @@ const Login = () => {
     text: {
       fontSize: 14,
       fontWeight: 'bold',
-      color: '#5B5B5E',
+          color: '#A8A8A8', // Um cinza mais claro
+
       marginRight: 5
     },
     textCadastrar: {
@@ -176,6 +177,15 @@ const Login = () => {
       fontWeight: 'bold',
       color: colors.textColor,
     },
+    subTitulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#A8A8A8', // Um cinza mais claro
+    marginTop: 5, // Diminui a distância entre o header e o subtítulo
+    marginLeft: 20,
+          marginBottom: 40,
+
+},
     mensagemErro: {
       position: 'absolute',
       top: 160,
@@ -206,7 +216,8 @@ const Login = () => {
         <Content>
     <View style={styles.container}>
       <HeaderUnlogged />
-      <Text style={styles.headerText}>Login</Text>
+      <Text style={styles.headerText}>Bem vindo(a) de volta!</Text>
+      <Text style={styles.subTitulo}>Você fez falta!</Text>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <View style={styles.inputContainer}>
           {mensagemErro !== '' && ( // Renderiza a mensagem de erro apenas se houver uma mensagem
@@ -260,7 +271,7 @@ const Login = () => {
 
         <TouchableOpacity onPress={() => navigation.navigate('Cadastrar')} style={styles.buttonLogin}>
           <Text style={styles.text}>Não tem uma conta?</Text>
-          <Text style={styles.textCadastrar}>Cadastrar</Text>
+          <Text style={styles.textCadastrar}>Cadastre-se</Text>
         </TouchableOpacity>
       </View>
       <MenuUnlogged />

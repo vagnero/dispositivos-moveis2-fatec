@@ -143,7 +143,8 @@ const Sobre = () => {
       flex: 1,
     },
     div_image: {
-      alignItems: 'center'
+      alignItems: 'center',
+      marginTop: 90,
     },
     image_item: {
       width: 250,
