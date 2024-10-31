@@ -12,13 +12,20 @@ import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 
 const User = () => {
-  const { colors } = useContext(ThemeContext);
+  const { theme, toggleTheme, colors } = useContext(ThemeContext);
   const { currentUser, setCurrentUser, cartItems, setCartItems } = useUser();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalProfileVisible, setModalProfileVisible] = useState(false);
   const [nickname, setNickname] = useState('');
   const [profileImage, setProfileImage] = useState('');
+
+// Defina o ícone condicionalmente antes de usá-lo no JSX
+const themeIcon = theme === 'light' ? (
+  <FontAwesome name="moon-o" size={20} />
+) : (
+  <FontAwesome name="sun-o" size={20}/>
+);
 
   const handleLogout = async () => {
     try {
@@ -108,6 +115,7 @@ const User = () => {
   const styles = {
     container: {
       flex: 1,
+      marginTop: 25,
     },
     div_perfil: {
       width: '100%',
@@ -134,7 +142,7 @@ const User = () => {
     },
     div_conteudo_pref: {
       width: '100%',
-      height: '60%',
+      height: '70%',
       backgroundColor: colors.itemCardBackground,
       borderRadius: 25,
       position: 'absolute',
@@ -142,6 +150,7 @@ const User = () => {
       left: 0,
       right: 0,
       zIndex: 1,
+      marginBottom: 35
     },
     modalContainer: {
       flex: 1,
@@ -197,6 +206,11 @@ const User = () => {
       color: '#2D0C57',
       marginLeft: 20,
     },
+          icon: {
+            color: colors.iconColor,
+            fontSize: 24, // Tamanho do ícone
+            marginLeft: 30,
+        },
   };
 
   return (
@@ -269,6 +283,12 @@ const User = () => {
             text="Configurações"
             view="Home"
           /> */}
+   <PrefItem
+  iconSource={themeIcon}
+  text="Tema"
+  onPressThemeToggle={toggleTheme}
+  theme={theme}
+/>
           <TouchableOpacity onPress={handleLogout}>
             <View style={{
               width: '87%', flexDirection: 'row', marginLeft: 20, alignItems: 'center',
