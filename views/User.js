@@ -22,9 +22,9 @@ const User = () => {
 
 // Defina o ícone condicionalmente antes de usá-lo no JSX
 const themeIcon = theme === 'light' ? (
-  <FontAwesome name="moon-o" size={20} />
+  <FontAwesome name="moon-o" size={20} color="white" />
 ) : (
-  <FontAwesome name="sun-o" size={20}/>
+  <FontAwesome name="sun-o" size={20} color="white" />
 );
 
   const handleLogout = async () => {
@@ -139,11 +139,12 @@ const themeIcon = theme === 'light' ? (
     image: {
       width: 20,
       height: 20,
+      color: 'white',
     },
     div_conteudo_pref: {
       width: '100%',
       height: '70%',
-      backgroundColor: colors.itemCardBackground,
+      backgroundColor: '#1E1E1E', // Cinza escuro
       borderRadius: 25,
       position: 'absolute',
       bottom: 0,
@@ -203,7 +204,7 @@ const themeIcon = theme === 'light' ? (
     },
     text_pref: {
       fontSize: 16,
-      color: '#2D0C57',
+      color: 'white',
       marginLeft: 20,
     },
           icon: {
@@ -235,7 +236,7 @@ const themeIcon = theme === 'light' ? (
             <Text style={styles.text_nome}>{currentUser?.nick || currentUser?.nome}</Text>
           </View>
           <TouchableOpacity onPress={() => { setModalVisible(true) }} style={{ marginRight: 20 }}>
-            <FontAwesome name="pencil" size={20} color={colors.textColor} />
+            <FontAwesome name="pencil" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -246,35 +247,35 @@ const themeIcon = theme === 'light' ? (
               width: '87%', flexDirection: 'row', marginLeft: 20, alignItems: 'center',
               justifyContent: 'space-between', marginTop: 20,
             }}>
-              <View style={{ flexDirection: 'row', }}>
-                <Image source={require('../assets/user/perfil.png')} style={styles.image} />
-                <Text style={styles.text_pref}>Informações pessoais</Text>
-              </View>
+             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  <FontAwesome name="user" size={20} color="white" />
+  <Text style={styles.text_pref}>Informações pessoais</Text>
+</View>
               <Image source={require('../assets/user/SETA.png')} />
             </View>
           </TouchableOpacity>
-          <PrefItem
-            iconSource={<Image source={require('../assets/user/map.png')} style={styles.image} />}
-            text="Endereços"
-            view="ManagerAddress"
-          />
-          <PrefItem
-            iconSource={<Image source={require('../assets/user/cartao.png')} style={styles.image} />}
-            text="Forma de pagamento"
-            view="MethodPayment"
-          />
-          <PrefItem
-            iconSource={<Image source={require('../assets/user/sino.png')} style={styles.image} />}
-            text="Notificações"
-            view="Notificacoes"
-          />
+      <PrefItem
+  iconSource={<FontAwesome name="map" size={20} color="white" />}
+  text="Endereços"
+  view="ManagerAddress"
+/>
+<PrefItem
+  iconSource={<FontAwesome name="credit-card" size={20} color="white" />}
+  text="Forma de pagamento"
+  view="MethodPayment"
+/>
+<PrefItem
+  iconSource={<FontAwesome name="bell" size={20} color="white" />}
+  text="Notificações"
+  view="Notificacoes"
+/>
+<PrefItem2
+  iconSource={<FontAwesome name="star" size={20} color="white" />}
+  text="Ver avaliações"
+  view="Avaliacoes"
+/>
           <PrefItem2
-            iconSource={<Image source={require('../assets/user/grid.png')} style={styles.image} />}
-            text="Ver avaliações"
-            view="Avaliacoes"
-          />
-          <PrefItem2
-            iconSource={<FontAwesome name="history" size={20} color="green" />}
+            iconSource={<FontAwesome name="history" size={20} color="white" />}
             text="Histórico de Compras"
             view="HistoricoCompra"
           />

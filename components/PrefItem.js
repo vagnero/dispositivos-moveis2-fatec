@@ -48,7 +48,7 @@ const styles = {
   },
   text_pref: {
     fontSize: 16,
-    color: '#2D0C57',
+    color: 'white',
     marginLeft: 20,
   },
   icon_v2_pref: {
