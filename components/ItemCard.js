@@ -121,6 +121,7 @@ const ItemCard = ({ item, onPressAddToCart, onToggleFavorite }) => {
     div_image_item: {
       width: 50,
       height: 120,
+      marginRight: 10,
     },
     div_text_item: {
       width: '90%',
@@ -146,16 +147,17 @@ const ItemCard = ({ item, onPressAddToCart, onToggleFavorite }) => {
       marginLeft: 10,
     },
   };
-
-  return (
-    <View style={styles.div_item}>
-      <Text style={styles.div_text_item} onPress={() => navigation.navigate('Sobre', item)}>
-        {item.itemName}
-      </Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Sobre', item)}>
-        <View style={styles.div_image_text_item}>
-          <Image source={item.imageSource} style={styles.div_image_item} />
-          <View>
+return (
+  <View style={styles.div_item}>
+    <Text style={styles.div_text_item} onPress={() => navigation.navigate('Sobre', item)}>
+      {item.itemName}
+    </Text>
+    <TouchableOpacity onPress={() => navigation.navigate('Sobre', item)}>
+      <View style={styles.div_image_text_item}>
+        <Image source={item.imageSource} style={styles.div_image_item} />
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ marginBottom: 5, marginRight: 12, }}>Nota: {item.itemSigns}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity onPress={toggleHeart}>
               <FontAwesome
                 name={isFavorite ? 'heart' : 'heart-o'}
@@ -163,28 +165,26 @@ const ItemCard = ({ item, onPressAddToCart, onToggleFavorite }) => {
                 color="red"
               />
             </TouchableOpacity>
-               <View>
-            <Text>Vendidos: {soldCount}</Text>
-            <Text>Rate: {item.itemSigns}
-              <Image source={require('../assets/info/signs.png')}/>
-            </Text>
-          </View>
+            <Image 
+              source={require('../assets/info/signs.png')}               
+            />
           </View>
         </View>
-      </TouchableOpacity>
-      <View style={styles.div_text_button_item}>
-        <Text style={styles.div_text_preco}>{item.itemPrice}</Text>
-        <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
-          <Image source={require('../assets/carrinho/plus.png')} style={{ marginBottom: 10 }} />
-        </TouchableOpacity>
       </View>
-      <AlertModal
-        visible={modalAlertVisible}
-        message={mensagem}
-        onClose={() => setModalAlertVisible(false)}
-      />
+    </TouchableOpacity>
+    <View style={styles.div_text_button_item}>
+      <Text style={styles.div_text_preco}>{item.itemPrice}</Text>
+      <TouchableOpacity onPress={handleAddToCart} style={styles.addButton}>
+        <Image source={require('../assets/carrinho/plus.png')} style={{ marginBottom: 10 }} />
+      </TouchableOpacity>
     </View>
-  );
-};
+    <AlertModal
+      visible={modalAlertVisible}
+      message={mensagem}
+      onClose={() => setModalAlertVisible(false)}
+    />
+  </View>
+);
+}
 
 export default ItemCard;
