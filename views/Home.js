@@ -323,7 +323,7 @@ const Home = () => {
       borderColor: colors.search,
       borderRadius: 15,
       backgroundColor: 'transparent',
-      marginTop: 60,
+      marginTop: 0,
     },
     image_pesquisar: {
       width: 20,
@@ -336,8 +336,8 @@ const Home = () => {
       flexWrap: 'nowrap',
     },
     button_categorias: {
-      width: 150,
-      height: 40,
+      width: 130,
+      height: 30,
       marginLeft: 10,
       marginBottom: 5,
       borderRadius: 35,

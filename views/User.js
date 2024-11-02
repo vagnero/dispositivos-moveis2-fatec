@@ -115,45 +115,43 @@ const themeIcon = theme === 'light' ? (
   const styles = {
     container: {
       flex: 1,
-      marginTop: 25,
+      marginTop: 50,
     },
-    div_perfil: {
-      width: '100%',
-      height: '25%',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-evenly',
-      marginBottom: 600
-    },
+div_perfil: {
+  width: '100%',
+  height: '25%',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-evenly',
+  marginBottom: 0,
+  flexWrap: 'wrap', // Adicione esta linha
+},
     image_perfil: {
       width: 100,
       height: 100,
       borderRadius: 50,
     },
-    text_nome: {
-      fontSize: 20,
-      maxWidth: 200,
-      fontWeight: 'bold',
-      marginLeft: 10,
-      color: colors.textColor
-    },
+  text_nome: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginLeft: 10,
+  color: colors.textColor,
+  flexShrink: 1, // Permite que o texto encolha para evitar o corte
+},
+
     image: {
       width: 20,
       height: 20,
       color: 'white',
     },
-    div_conteudo_pref: {
-      width: '100%',
-      height: '70%',
-      backgroundColor: '#1E1E1E', // Cinza escuro
-      borderRadius: 25,
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: 1,
-      marginBottom: 35
-    },
+  div_conteudo_pref: {
+  width: '100%',
+  height: '100%', // Altere para 'auto' para permitir que ele se expanda conforme necessário
+  backgroundColor: '#1E1E1E',
+  borderRadius: 25,
+  marginBottom: 35,
+  paddingBottom: 120, // Adicione um padding inferior se necessário
+},
     modalContainer: {
       flex: 1,
       justifyContent: 'center',
@@ -204,10 +202,12 @@ const themeIcon = theme === 'light' ? (
       marginBottom: 10,
     },
     text_pref: {
-      fontSize: 16,
-      color: 'white',
-      marginLeft: 20,
-    },
+  fontSize: 16,
+  color: 'white',
+  marginLeft: 20,
+  textAlign: 'left', // Ou 'center', dependendo de como você deseja o alinhamento
+  flexShrink: 1, // Permite que o texto encolha
+},
           icon: {
             color: colors.iconColor,
             fontSize: 24, // Tamanho do ícone

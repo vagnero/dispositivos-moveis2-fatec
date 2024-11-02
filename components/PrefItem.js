@@ -35,22 +35,23 @@ const PrefItem = ({ iconSource, text, view, onPressThemeToggle, theme }) => {
 };
 
 const styles = {
-  div_button_pref: {
-    width: '100%',
-    height: 50,
-    marginTop: 12,
-    justifyContent: 'center',
-  },
+ div_button_pref: {
+  width: '100%',
+  height: 'auto', // Altere para auto
+  marginTop: 12,
+  justifyContent: 'center',
+},
   button_pref: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   text_pref: {
-    fontSize: 16,
-    color: 'white',
-    marginLeft: 20,
-  },
+  fontSize: 16, // Tamanho da fonte ajustado
+  color: 'white',
+  marginLeft: 20,
+  flexShrink: 1, // Permite que o texto encolha
+},
   icon_v2_pref: {
     width: 6,
     height: 10,

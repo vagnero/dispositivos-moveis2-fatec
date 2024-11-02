@@ -41,7 +41,7 @@ const AlertModal = ({ visible, message, onClose }) => {
             <Text style={styles.alertMessage}>{message}</Text>
 
             <TouchableOpacity style={styles.okButton} onPress={handleClose}>
-              <Text style={styles.buttonText}>OK</Text>
+              <Text style={styles.buttonText}>Ok</Text>
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -71,13 +71,16 @@ const styles = StyleSheet.create({
   },
 okButton: {
   backgroundColor: '#2196F3',
-  paddingVertical: 10, // Ajusta o padding vertical
-  paddingHorizontal: 15, // Ajusta o padding horizontal
+  paddingVertical: 12, // Aumente o padding vertical
+  paddingHorizontal: 20, // Aumente o padding horizontal
   borderRadius: 5,
+      fontSize: 12,
+
 },
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    textAlign: 'center', // Adiciona alinhamento ao centro
   },
 });
 
