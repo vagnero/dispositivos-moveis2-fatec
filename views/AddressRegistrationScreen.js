@@ -107,7 +107,7 @@ const AddressRegistrationScreen = () => {
     const handleCloseModal = () => {
         setMensagem('');
         setModalVisible(false);
-        navigation.navigate('Endereços');
+        navigation.navigate('ManagerAddress');
     };
 
     const styles = StyleSheet.create({
