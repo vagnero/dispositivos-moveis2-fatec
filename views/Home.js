@@ -318,7 +318,7 @@ const Home = () => {
       alignItems: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
-      marginBottom: 30,
+      marginBottom: 15,
       borderWidth: 1,
       borderColor: colors.search,
       borderRadius: 15,

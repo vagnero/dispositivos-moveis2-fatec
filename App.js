@@ -76,31 +76,33 @@ const MainNavigator = ({ isSplashReady }) => {
 };
 
 return (
-  <Stack.Navigator
-    initialRouteName="Home"
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: colors.primary,
-        height: 5,
-      },
-      headerTintColor: 'white',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-      headerShown: true,
-    }}
-  >
-    {isSplashReady ? (
-      <>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: () => (
-              <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
-            )
-          }}
-        />
+      <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerBackground: () => (
+          <LinearGradient
+            colors={['rgb(186, 34, 251)', 'rgb(56, 28, 222)']}
+            style={{ flex: 1 }}
+          />
+        ),
+        headerTintColor: 'white',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        headerShown: true,
+      }}
+    >
+      {isSplashReady ? (
+        <>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerTitle: () => (
+                <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
+              )
+            }}
+          />
         <Stack.Screen 
           name="AddressRegistrationScreen" 
           component={AddressRegistrationScreen} 
