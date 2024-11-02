@@ -222,7 +222,7 @@ const Carrinho = () => {
               <Text style={styles.modalText}>Você precisa estar logado para finalizar o pedido.</Text>
               <View style={styles.modalButtons}>
                 <TouchableOpacity style={styles.modalButton} onPress={handleLogin}>
-                  <Text style={styles.modalButtonText}>Fazer Login</Text>
+                  <Text style={styles.modalButtonText}>Logar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.modalButton} onPress={ () => {setModalVisible(false)}}>
                   <Text style={styles.modalButtonText}>Cancelar</Text>
