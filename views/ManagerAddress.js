@@ -135,7 +135,7 @@ const ManagerAddress = () => {
         textNewAddress: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: '#5B5B5E',
+            color: colors.textColor,
             marginRight: 5
         },
     });
