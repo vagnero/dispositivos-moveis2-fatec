@@ -125,7 +125,7 @@ const Login = () => {
     inputContainer: {
       width: "80%",
       podition: 'absolute',
-      marginBottom: 25
+      marginBottom: 50
     },
     label: {
       marginBottom: 5,
@@ -194,7 +194,7 @@ const Login = () => {
 },
     mensagemErro: {
       position: 'absolute',
-      top: 160,
+      top: 185,
       left: 0,
       right: 0,
       fontSize: 16,
@@ -206,7 +206,7 @@ const Login = () => {
     },
     mensagemSucesso: {
       position: 'absolute',
-      top: 170,
+      top: 195,
       left: 0,
       right: 0,
       fontSize: 16,
@@ -215,7 +215,7 @@ const Login = () => {
       fontWeight: 'bold',
       padding: 20,
       zIndex: 999
-    },
+          },
   });
 
   return (
