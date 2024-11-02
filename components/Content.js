@@ -21,7 +21,7 @@ const Content = ({ children }) => {
         body: {
             flex: 1,
             marginTop: 50, // Altura do header
-            marginBottom: 40, // Altura do menu
+            marginBottom: 20, // Altura do menu
         },
         header: {
             position: 'absolute',
