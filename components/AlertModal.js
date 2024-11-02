@@ -69,11 +69,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-  okButton: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-  },
+okButton: {
+  backgroundColor: '#2196F3',
+  paddingVertical: 10, // Ajusta o padding vertical
+  paddingHorizontal: 15, // Ajusta o padding horizontal
+  borderRadius: 5,
+},
   buttonText: {
     color: '#fff',
     fontSize: 16,
