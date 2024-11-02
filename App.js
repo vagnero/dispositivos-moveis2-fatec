@@ -66,10 +66,11 @@ const MainNavigator = ({ isSplashReady }) => {
 
  const titles = {
   Home: 'Página Inicial',
-  AddressRegistrationScreen: 'Cadastro de Endereço',
+  AddressRegistrationScreen: 'Cadastro de Endereços',
   AvaliacaoFinal: 'Avaliação Final',
   Login: 'Entrar', // Renomeado para "Entrar"
   User: 'Perfil do Usuário',
+  ManagerAddress: 'Endereços',
   // Adicione outros títulos conforme necessário
 };
 
@@ -125,7 +126,7 @@ return (
           component={Login} 
           options={{ title: titles.Login }} // Utiliza o título do objeto
         />
-        <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
+        <Stack.Screen name="ManagerAddress" component={ManagerAddress} options={{ title: titles.ManagerAddress }} />
         <Stack.Screen name="Notificacoes" component={Notificacoes} />
         <Stack.Screen name="MethodPayment" component={MethodPayment} />
         <Stack.Screen name="PixPayment" component={PixPayment} />
