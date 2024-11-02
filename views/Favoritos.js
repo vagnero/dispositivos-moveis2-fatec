@@ -53,7 +53,7 @@ const Favoritos = () => {
       alignItems: 'center',
       position: 'relative',
       textAlign: 'center',
-      margin: 'auto',
+      marginTop: 50,
       justifyContent: 'center',
       flex: 1,
       padding: 10
@@ -86,15 +86,15 @@ const Favoritos = () => {
       textAlign: 'center',
     },
     cards: {
-      width: '60%',
+      width: '70%',
       borderRadius: 10,
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: 'bold',
       marginBottom: 10,
       backgroundColor: colors.itemCardBackground,
     },
     msg: {
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: 'bold',
       marginBottom: 10,
       color: colors.textColor,

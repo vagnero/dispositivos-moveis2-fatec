@@ -166,9 +166,9 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       flexDirection: 'row',
     },
     button_favorite: {
-      width: 70,
-      height: 40,
-      backgroundColor: '#FFFFFF',
+      width: 60,
+      height: 30,
+      backgroundColor: '#6C30EB',
       borderRadius: 10,
       borderWidth: 1,
       borderColor: '#D9D0E3',
@@ -176,10 +176,10 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
       alignItems: 'center'
     },
     button_carrinho: {
-      width: 70,
-      height: 40,
+      width: 60,
+      height: 30,
       backgroundColor: '#6C30EB',
-      marginLeft: '1%',
+      marginLeft: '2%',
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: 'center'
@@ -202,7 +202,7 @@ const Product = ({ item, imageSource, itemName, price, ml, handleAddToCart }) =>
           >
             <FontAwesome
               name={isItemFavorite({ itemName, price, ml, imageSource }) ? 'heart' : 'heart-o'}
-              size={32}
+              size={20}
               color='red'
             />
           </TouchableOpacity>
