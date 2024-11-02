@@ -77,7 +77,7 @@ const MainNavigator = ({ isSplashReady }) => {
 
       {isSplashReady ? (
         <>
-          <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} />
+          <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} options={{ title: 'Cadastro de Endereço' }} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
           <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
           <Stack.Screen name="Boleto" component={Boleto} />
