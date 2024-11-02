@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, Alert, Modal, TextInput, Button } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Alert, Modal, TextInput, Button, ScrollView } from 'react-native';
 import PrefItem from '../components/PrefItem';
 import PrefItem2 from '../components/PrefItem';
 import { useUser } from '../context/UserContext';
@@ -122,7 +122,8 @@ const themeIcon = theme === 'light' ? (
       height: '25%',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-evenly'
+      justifyContent: 'space-evenly',
+      marginBottom: 600
     },
     image_perfil: {
       width: 100,
@@ -216,6 +217,7 @@ const themeIcon = theme === 'light' ? (
 
   return (
     <Content>
+    <ScrollView>
       <View style={styles.container}>
 
         <View style={styles.div_perfil}>
@@ -351,6 +353,7 @@ const themeIcon = theme === 'light' ? (
           </View>
         </View>
       </Modal>
+      </ScrollView>
     </Content>
   );
 };
