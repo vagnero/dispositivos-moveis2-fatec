@@ -79,27 +79,27 @@ const MainNavigator = ({ isSplashReady }) => {
         <>
           <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} options={{ title: 'Cadastro de Endereço' }} />
           <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
-          <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
+          <Stack.Screen name="Avaliações" component={Avaliacoes} />
           <Stack.Screen name="Boleto" component={Boleto} />
           <Stack.Screen name="Branco" component={Branco} />
           <Stack.Screen name="Rose" component={Rose} />
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
           <Stack.Screen name="Categorias" component={Categorias} />
-          <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} />
+          <Stack.Screen name="Confirmar Pagamento" component={ConfirmPayment} />
           <Stack.Screen name="Espumante" component={Espumante} />
           <Stack.Screen name="Favoritos" component={Favoritos} />
-          <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+          <Stack.Screen name="Historico de Compras" component={HistoricoCompra} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
-          <Stack.Screen name="Notificacoes" component={Notificacoes} />
-          <Stack.Screen name="MethodPayment" component={MethodPayment} />
-          <Stack.Screen name="PixPayment" component={PixPayment} />
-          <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+          <Stack.Screen name="Endereços" component={ManagerAddress} />
+          <Stack.Screen name="Notificações" component={Notificacoes} />
+          <Stack.Screen name="Métodos de Pagamento" component={MethodPayment} />
+          <Stack.Screen name="Pix" component={PixPayment} />
+          <Stack.Screen name="Redefinir Senha" component={RedefinirSenha} />
           <Stack.Screen name="Tinto" component={Tinto} />
           <Stack.Screen name="Sobre" component={Sobre} />
-          <Stack.Screen name="User" component={User} />
+          <Stack.Screen name="Usuário" component={User} />
         </>
       ) : (
         <Stack.Screen name="Splash" component={Splash} />
