@@ -163,7 +163,12 @@ const ItemCard = ({ item, onPressAddToCart, onToggleFavorite }) => {
                 color="red"
               />
             </TouchableOpacity>
-            <Text>Rate: {item.itemSigns}</Text>
+               <View>
+            <Text>Vendidos: {soldCount}</Text>
+            <Text>Rate: {item.itemSigns}
+              <Image source={require('../assets/info/signs.png')}/>
+            </Text>
+          </View>
           </View>
         </View>
       </TouchableOpacity>
