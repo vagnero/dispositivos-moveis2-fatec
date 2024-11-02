@@ -163,7 +163,7 @@ const AddressRegistrationScreen = () => {
                 style={{ flex: 1, marginTop: 100 }}
             >
                 <View style={styles.container}>
-                    <Text style={styles.title}>Registrar um endereço</Text>
+                    // <Text style={styles.title}>Registrar um endereço</Text>
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>Nome do Destinatário</Text>
                         <TextInput
