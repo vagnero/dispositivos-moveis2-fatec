@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from './context/ThemeContext';
+import { useUser } from './context/UserContext';
 
 import AddressRegistrationScreen from './views/AddressRegistrationScreen';
 import AvaliacaoFinal from './views/AvaliacaoFinal';
@@ -30,6 +31,7 @@ import User from './views/User';
 import { UserProvider } from './context/UserContext';
 import { ThemeContext } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationContext';
+import Greeting from './components/Greeting';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +48,7 @@ function App() {
   }, []);
 
   return (
-    <UserProvider >
+    <UserProvider>
       <ThemeProvider>
         <NotificationProvider>
           <NavigationContainer>
@@ -59,53 +61,88 @@ function App() {
 }
 
 const MainNavigator = ({ isSplashReady }) => {
-  const { colors } = useContext(ThemeContext); // Aqui você pode usar o useContext
+  const { colors } = useContext(ThemeContext);
+  const { currentUser } = useUser();
 
-  return (
-   <Stack.Navigator initialRouteName="Home"
-  screenOptions={{
-    headerStyle: {
-      backgroundColor: colors.primary, // Cor de fundo da barra
-      height: 5, // Ajuste a altura para o valor desejado
-    },
-    headerTintColor: 'white', // Cor do texto (e ícones) na barra
-    headerTitleStyle: {
-      fontWeight: 'bold', // Estilos adicionais para o título
-    },
-    headerShown: false,
-  }}>
+ const titles = {
+  Home: 'Página Inicial',
+  AddressRegistrationScreen: 'Cadastro de Endereço',
+  AvaliacaoFinal: 'Avaliação Final',
+  Login: 'Entrar', // Renomeado para "Entrar"
+  User: 'Perfil do Usuário',
+  // Adicione outros títulos conforme necessário
+};
 
-      {isSplashReady ? (
-        <>
-          <Stack.Screen name="AddressRegistrationScreen" component={AddressRegistrationScreen} options={{ title: 'Cadastro de Endereço' }} />
-          <Stack.Screen name="AvaliacaoFinal" component={AvaliacaoFinal} />
-          <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
-          <Stack.Screen name="Boleto" component={Boleto} />
-          <Stack.Screen name="Branco" component={Branco} />
-          <Stack.Screen name="Rose" component={Rose} />
-          <Stack.Screen name="Cadastrar" component={Cadastrar} />
-          <Stack.Screen name="Carrinho" component={Carrinho} />
-          <Stack.Screen name="Categorias" component={Categorias} />
-          <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} />
-          <Stack.Screen name="Espumante" component={Espumante} />
-          <Stack.Screen name="Favoritos" component={Favoritos} />
-          <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
-          <Stack.Screen name="Notificacoes" component={Notificacoes} />
-          <Stack.Screen name="MethodPayment" component={MethodPayment} />
-          <Stack.Screen name="PixPayment" component={PixPayment} />
-          <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
-          <Stack.Screen name="Tinto" component={Tinto} />
-          <Stack.Screen name="Sobre" component={Sobre} />
-          <Stack.Screen name="User" component={User} />
-        </>
-      ) : (
-        <Stack.Screen name="Splash" component={Splash} />
-      )}
-    </Stack.Navigator>
-  );
+return (
+  <Stack.Navigator
+    initialRouteName="Home"
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.primary,
+        height: 5,
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      headerShown: true,
+    }}
+  >
+    {isSplashReady ? (
+      <>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerTitle: () => (
+              <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
+            )
+          }}
+        />
+        <Stack.Screen 
+          name="AddressRegistrationScreen" 
+          component={AddressRegistrationScreen} 
+          options={{ title: titles.AddressRegistrationScreen }} 
+        />
+        <Stack.Screen 
+          name="AvaliacaoFinal" 
+          component={AvaliacaoFinal} 
+          options={{ title: titles.AvaliacaoFinal }} 
+        />
+        <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
+        <Stack.Screen name="Boleto" component={Boleto} />
+        <Stack.Screen name="Branco" component={Branco} />
+        <Stack.Screen name="Rose" component={Rose} />
+        <Stack.Screen name="Cadastrar" component={Cadastrar} />
+        <Stack.Screen name="Carrinho" component={Carrinho} />
+        <Stack.Screen name="Categorias" component={Categorias} />
+        <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} />
+        <Stack.Screen name="Espumante" component={Espumante} />
+        <Stack.Screen name="Favoritos" component={Favoritos} />
+        <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+        <Stack.Screen 
+          name="Login" 
+          component={Login} 
+          options={{ title: titles.Login }} // Utiliza o título do objeto
+        />
+        <Stack.Screen name="ManagerAddress" component={ManagerAddress} />
+        <Stack.Screen name="Notificacoes" component={Notificacoes} />
+        <Stack.Screen name="MethodPayment" component={MethodPayment} />
+        <Stack.Screen name="PixPayment" component={PixPayment} />
+        <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+        <Stack.Screen name="Tinto" component={Tinto} />
+        <Stack.Screen name="Sobre" component={Sobre} />
+        <Stack.Screen 
+          name="User" 
+          component={User} 
+          options={{ title: titles.User }} 
+        />
+      </>
+    ) : (
+      <Stack.Screen name="Splash" component={Splash} />
+    )}
+  </Stack.Navigator>
+);
 };
 
 export default App;

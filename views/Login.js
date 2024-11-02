@@ -233,7 +233,7 @@ const handleChangeEmail = (text) => {
             <ScrollView>
 
     <View style={styles.container}>
-      <HeaderUnlogged />
+      {/*<HeaderUnlogged />*/}
       <Text style={styles.headerText}>Bem vindo(a) de volta!</Text>
       <Text style={styles.subTitulo}>Você fez falta!</Text>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>

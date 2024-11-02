@@ -2,10 +2,16 @@ import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
 import Menu from '../components/Menu';
+import { useRoute } from '@react-navigation/native';
+import Greeting from '../components/Greeting';
+
 import Header from '../components/Header';
 
 const Content = ({ children }) => {
     const { colors } = useContext(ThemeContext);
+      const route = useRoute();
+
+
 
     const styles = StyleSheet.create({
         container: {
@@ -36,7 +42,7 @@ const Content = ({ children }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Header />
+                {/*<Header />*/}
             </View>
             <View style={styles.body}>
                 {children}

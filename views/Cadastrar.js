@@ -207,7 +207,7 @@ subTitulo: {
               <ScrollView>
 
     <View style={styles.container}>
-      <HeaderUnlogged />
+      {/*<HeaderUnlogged />*/}
       <Text style={styles.headerText}>Cadastro</Text>
       <Text style={styles.subTitulo}>Leva apenas um minuto para criar sua conta</Text>
       <View style={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
