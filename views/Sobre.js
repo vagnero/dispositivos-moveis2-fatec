@@ -273,15 +273,7 @@ const Sobre = () => {
               <Text style={styles.text_sobre_2}>{itemDescription}</Text>
             </View>
             <View style={styles.div_buttons}>
-              <View style={{ marginRight: 40, marginTop: 10, marginLeft: 20 }}>
-                <TouchableOpacity onPress={() => toggleHeart(route.params)}>
-                  <FontAwesome
-                    name={isItemFavorite(route.params) ? 'heart' : 'heart-o'}
-                    size={32}
-                    color='red'
-                  />
-                </TouchableOpacity>
-              </View>
+             
 
               {/* Adicione um onPress ao botão "ADICIONAR AO CARRINHO" */}
               <TouchableOpacity style={styles.button_carrinho}
