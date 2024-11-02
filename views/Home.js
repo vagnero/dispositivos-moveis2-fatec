@@ -6,8 +6,10 @@ import Content from '../components/Content';
 import MyCarousel from '../components/MyCarousel';
 import ItemCard from '../components/ItemCard';
 import { useUser } from '../context/UserContext';
+import { useRoute } from '@react-navigation/native';
 import Items from '../components/Items';
 import dbContext from '../context/dbContext';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Home = () => {
   const { colors } = useContext(ThemeContext);
@@ -23,6 +25,9 @@ const Home = () => {
   const [isSortedByRating, setIsSortedByRating] = useState(false);
   const [isSortedBySold, setIsSortedBySold] = useState(false);
   const navigation = useNavigation();
+  const [favoriteItems, setFavoriteItems] = useState([]);
+  const route = useRoute();
+ // const { itemName, itemPrice, itemSigns, itemDescription, imageSource } = route.params;
 
   useEffect(() => {
     // Se o texto de pesquisa estiver vazio, mostra todos os items
@@ -117,6 +122,111 @@ const Home = () => {
     setIsSortedBySold(false);
     setIsPressedButton2(false);
     setIsPressedButton3(false);
+  };
+
+    const toggleHeart = async (item) => {
+    if (!currentUser || !currentUser.nome) {
+      setMensagem('Para Favoritar é necessário estar logado')
+      setModalAlertVisible(true);
+      return; // Sai da função se o usuário não estiver definido
+    }
+    
+    let updatedFavorites;    
+
+    if (isItemFavorite(item)) {
+      // Remove dos favoritos
+      updatedFavorites = favoriteItems.filter((favItem) => favItem.itemName !== item.itemName);
+
+      // Remove do dbContext
+      removeFavoriteItem(item.itemName);
+    } else {
+      // Adiciona aos favoritos
+      updatedFavorites = [...favoriteItems, item];
+
+      // Salva no dbContext
+      saveFavoriteItems(updatedFavorites);
+    }
+
+    setFavoriteItems(updatedFavorites); // Atualiza o estado
+  };
+
+  const removeFavoriteItem = (itemName) => {
+    try {
+      // Define o ID único do item
+      const itemId = `${itemName}_${currentUser.nome}`;
+  
+      // Remove o item do dbContext
+      dbContext.removeItem('favoriteItems', itemId);
+  
+      // Atualiza o estado
+      setFavoriteItems((prevFavorites) => 
+        prevFavorites.filter((favItem) => favItem.itemName !== itemName)
+      );
+  
+      console.log(`Item ${itemName} removido dos favoritos.`);
+    } catch (error) {
+      console.error('Erro ao remover item dos favoritos:', error);
+    }
+  };  
+
+  // Verifica se o item já é favorito
+  const isItemFavorite = (item) => {
+    return favoriteItems.some((favItem) => favItem.itemName === item.itemName);
+  };
+
+  const saveFavoriteItems = (items) => {
+    if (!currentUser || !currentUser.nome) {
+      return; // Sai da função se o usuário não estiver definido
+    }
+  
+    try {
+      items.forEach((item) => {
+        const favoriteItem = {
+          itemName: item.itemName, // Apenas o itemName é salvo
+          id: `${item.itemName}_${currentUser.nome}`, // Usando itemName e nome do usuário como chave
+        };
+  
+        // Adiciona o item ao dbContext
+        dbContext.addItem('favoriteItems', favoriteItem);
+      });
+  
+      // Atualiza o estado com todos os itens favoritos (apenas com itemName)
+      setFavoriteItems((prevFavorites) => [
+        ...prevFavorites,
+        ...items.map((item) => ({
+          itemName: item.itemName,
+          id: `${item.itemName}_${currentUser.nome}`,
+        })),
+      ]);
+  
+      console.log('Itens favoritos salvos.');
+    } catch (error) {
+      console.error('Erro ao salvar itens favoritos:', error);
+    }
+  };      
+
+
+  useEffect(() => {
+    loadFavoriteItems();
+  }, []);
+
+  const loadFavoriteItems = () => {
+    const allFavoriteItems = dbContext.getAll('favoriteItems');
+    const userFavorites = allFavoriteItems.filter((item) => 
+      item.id.endsWith(`_${currentUser.nome}`)
+    );
+    setFavoriteItems(userFavorites.map((item) => item.itemName));
+  };
+
+  // Alternar favoritos para o item
+  const toggleFavorite = (itemName) => {
+    if (favoriteItems.includes(itemName)) {
+      setFavoriteItems(favorites => favorites.filter(fav => fav !== itemName));
+      dbContext.removeItem('favoriteItems', `${itemName}_${currentUser.nome}`);
+    } else {
+      setFavoriteItems([...favoriteItems, itemName]);
+      dbContext.addItem('favoriteItems', { id: `${itemName}_${currentUser.nome}`, itemName });
+    }
   };
 
   // Ordena por rating
@@ -284,7 +394,7 @@ const Home = () => {
       color: 'white',
       padding: 10,
       borderRadius: 10,
-      backgroundColor: 'rgba(0, 128, 0, 0.8)',
+      backgroundColor: '#008000',
       fontWeight: 'bold',
       textAlign: 'center',
     },
@@ -318,7 +428,7 @@ const Home = () => {
                 styles.button_categorias,
                 isPressedButton3 && styles.buttonPressed,
               ]}>
-              <View style={styles.div_categorias_image_text}>
+             <View style={styles.div_categorias_image_text}>
                 <Text style={[styles.text_categorias_v2, isPressedButton3 && styles.textButtonPressed]}>Mais Vendidos</Text>
               </View>
             </TouchableOpacity>
