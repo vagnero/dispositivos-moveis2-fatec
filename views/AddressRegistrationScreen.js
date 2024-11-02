@@ -160,7 +160,7 @@ const AddressRegistrationScreen = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 20 }}
-                style={{ flex: 1, marginBottom: 50 }}
+                style={{ flex: 1, marginTop: 100 }}
             >
                 <View style={styles.container}>
                     <Text style={styles.title}>Registrar um endereço</Text>
