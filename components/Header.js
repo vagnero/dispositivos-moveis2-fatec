@@ -25,6 +25,9 @@ const titles = {
     'Método de Pagamento': 'Pagamento',
     Login: ' ', // Título vazio para Login
     Cadastrar: ' ',
+    User: 'Perfil do Usuário',
+    ManagerAddress: 'Endereço',
+    AddressRegistrationScreen: 'Cadastro de Endereço'
 };
 
     const currentTitle = titles[route.name] || route.name;
