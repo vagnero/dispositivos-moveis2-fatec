@@ -50,6 +50,11 @@ const Login = () => {
       return;
     }
 
+    const handleChangeEmail = (text) => {
+  // Atualiza o estado do email diretamente com o texto inserido
+  setEmail(text);
+};
+
     const devUser = {
       nome: 'Dev',
       email: 'dev',
@@ -103,6 +108,11 @@ const Login = () => {
     }, [])
   );
 
+  
+const handleChangeEmail = (text) => {
+  // Atualiza o estado do email diretamente com o texto inserido
+  setEmail(text);
+};
   const styles = StyleSheet.create({
     container: {
       width: '100%',
@@ -233,11 +243,11 @@ const Login = () => {
           )}
 
           <Text style={styles.label}>E-mail</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => setEmail(text.toLowerCase())}
-            value={email}
-          />
+  <TextInput
+    style={styles.textInput}
+    onChangeText={handleChangeEmail} // Use a função atualizada
+    value={email} // O valor deve ser o estado atual
+  />
         </View>
 
         <View style={styles.inputContainer}>

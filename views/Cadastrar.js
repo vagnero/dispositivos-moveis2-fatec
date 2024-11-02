@@ -30,13 +30,19 @@ const Cadastrar = () => {
       .replace(/(à|á|â|ã|ä|å|æ|ç|è|é|ê|ë|ì|í|î|ï|ñ|ò|ó|ô|õ|ö|ø|ù|ú|û|ü|ý|ÿ)\w/g, (match) => match.toLowerCase());
   };
 
-  const handleChangeNome = (nome) => {
-    // Permite letras (incluindo acentuadas), números e espaços
-    if (/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]*$/.test(nome)) {
-      const formattedNome = formatValue(nome);
-      setNome(formattedNome); // Atualiza o estado nome
-    }
-  };
+const handleChangeNome = (nome) => {
+  // Permite letras (incluindo acentuadas), números e espaços
+  if (/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9\s]*$/.test(nome)) {
+    setNome(nome); // Atualiza o estado nome diretamente
+  }
+};
+
+const handleChangeEmail = (text) => {
+  // Atualiza o estado do email diretamente com o texto inserido
+  setEmail(text);
+};
+
+
 
   const handleRegister = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar email    
@@ -219,14 +225,14 @@ subTitulo: {
             onChangeText={handleChangeNome}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>E-mail</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => setEmail(text.toLowerCase())}
-            value={email}
-          />
-        </View>
+     <View style={styles.inputContainer}>
+  <Text style={styles.label}>E-mail</Text>
+  <TextInput
+    style={styles.textInput}
+    onChangeText={handleChangeEmail} // Use a função atualizada
+    value={email} // O valor deve ser o estado atual
+  />
+</View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Senha</Text>
           <TextInput
