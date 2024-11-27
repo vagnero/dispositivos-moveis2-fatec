@@ -8,26 +8,24 @@ import dbContext from '../context/dbContext';
 
 const Splash = () => {
   const { colors } = useContext(ThemeContext);
-  const { findUser, setCurrentUser } = useUser(); // Remova registerUser do destructuring
+  const { findUser, setCurrentUser } = useUser();
 
   useEffect(() => {
     const initializeUser = async () => {
       const devUser = {
         nome: 'Dev',
-        email: 'dev', // E-mail deve ser válido
-        senha: '', // A senha deve ser definida
-        nick: '', // Nickname ou outro campo que você queira
+        email: 'dev',
+        senha: '',
+        nick: '',
       };
 
-      // Verifica se o usuário já está registrado
       const existingUser = await findUser(devUser.email, devUser.senha);
       if (!existingUser) {
-        // Se o usuário não existir, adiciona ao contexto
         dbContext.addItem('users', devUser);
         console.log('Usuário registrado:', devUser);
       } else {
         console.log('Usuário já existe:', existingUser);
-      }      
+      }
     };
     initializeUser();
   }, [findUser]);
@@ -38,7 +36,7 @@ const Splash = () => {
       const storedSenha = await SecureStore.getItemAsync('userPassword');
       
       if (storedEmail && storedSenha) {
-        const user = await findUser(storedEmail, storedSenha); // Supondo que você tenha uma função para buscar o usuário pelo email
+        const user = await findUser(storedEmail, storedSenha);
         if (user) {
           setCurrentUser(user);
         } else {
@@ -66,13 +64,22 @@ const Splash = () => {
     },
     text: {
       fontSize: 24,
-      marginBottom: 20,
+      marginBottom: 10,
       color: colors.primary,
+      textAlign: 'center',
     },
     logo: {
       width: 200,
       height: 250,
-      marginBottom: 50,
+      marginBottom: 20,
+    },
+    subText: {
+      fontSize: 20,  // Tamanho maior
+      color: '#fff',  // Cor branca
+      textAlign: 'center',
+      fontWeight: 'bold',  // Negrito
+      paddingHorizontal: 20,  // Adicionando espaçamento horizontal
+      marginTop: 10,  // Ajustando o espaçamento entre o texto e a logo
     },
   });
 
@@ -80,9 +87,10 @@ const Splash = () => {
     <View style={styles.container}>
       <Text style={styles.text}>Os Melhores Vinhos!</Text>
       <Image
-        source={require('../assets/splash/IlustracaoSplash.png')} // Coloque a imagem de splash aqui
+        source={require('../assets/splash/IlustracaoSplash.png')}
         style={styles.logo}
       />
+      <Text style={styles.subText}>Os melhores momentos se tornam inesquecíveis quando acompanhados por um bom vinho.</Text>
       <LoadingBar />
     </View>
   );
