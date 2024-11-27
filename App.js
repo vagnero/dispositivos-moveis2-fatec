@@ -72,6 +72,7 @@ const MainNavigator = ({ isSplashReady }) => {
   Login: 'Entrar', // Renomeado para "Entrar"
   User: 'Perfil do Usuário',
   ManagerAddress: 'Endereços',
+  ConfirmPayment: 'Método de Pagamento',
   // Adicione outros títulos conforme necessário
 };
 
@@ -120,10 +121,11 @@ return (
         <Stack.Screen name="Cadastrar" component={Cadastrar} />
         <Stack.Screen name="Carrinho" component={Carrinho} />
         <Stack.Screen name="Categorias" component={Categorias} />
-        <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} />
+        <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} options={{ title: titles.ConfirmPayment }} />
         <Stack.Screen name="Espumante" component={Espumante} />
         <Stack.Screen name="Favoritos" component={Favoritos} />
         <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+
         <Stack.Screen 
           name="Login" 
           component={Login} 
@@ -134,6 +136,7 @@ return (
         <Stack.Screen name="MethodPayment" component={MethodPayment} />
         <Stack.Screen name="PixPayment" component={PixPayment} />
         <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+
         <Stack.Screen name="Tinto" component={Tinto} />
         <Stack.Screen name="Sobre" component={Sobre} />
         <Stack.Screen 
