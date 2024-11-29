@@ -234,23 +234,14 @@ const User = () => {
   };
 
   return (
-    <Content>
+<Content>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.div_perfil}>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '80%',
-                height: '25%',
-                alignItems: 'center',
-              }}>
+            <View style={{ flexDirection: 'row', width: '80%', height: '25%', alignItems: 'center' }}>
               <TouchableOpacity onPress={handleImagePicker}>
                 {profileImage !== '' ? (
-                  <Image
-                    style={styles.image_perfil}
-                    source={{ uri: profileImage }}
-                  />
+                  <Image style={styles.image_perfil} source={{ uri: profileImage }} />
                 ) : (
                   <Image
                     style={styles.image_perfil}
@@ -258,24 +249,18 @@ const User = () => {
                   />
                 )}
               </TouchableOpacity>
-              <Text style={styles.text_nome}>
-                {currentUser?.nick || currentUser?.nome}
-              </Text>
+              <Text style={styles.text_nome}>{currentUser?.nick || currentUser?.nome}</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(true);
-              }}
-              style={{ marginRight: 20 }}>
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={{ marginRight: 20 }}>
               <FontAwesome name="pencil" size={20} color="white" />
             </TouchableOpacity>
           </View>
 
           <View style={styles.div_conteudo_pref}>
+            {/* Navegar para InfPessoais */}
             <TouchableOpacity
-              onPress={() => {
-                setModalProfileVisible(true);
-              }}>
+              onPress={() => navigation.navigate('InfPessoais')}
+            >
               <View
                 style={{
                   width: '87%',
@@ -284,7 +269,8 @@ const User = () => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   marginTop: 20,
-                }}>
+                }}
+              >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <FontAwesome name="user" size={20} color="white" />
                   <Text style={styles.text_pref}>Informações pessoais</Text>
@@ -292,6 +278,7 @@ const User = () => {
                 <Image source={require('../assets/user/SETA.png')} />
               </View>
             </TouchableOpacity>
+
             <PrefItem
               iconSource={<FontAwesome name="map" size={20} color="white" />}
               text="Endereços"
