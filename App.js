@@ -35,6 +35,8 @@ import { UserProvider } from './context/UserContext';
 import { ThemeContext } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationContext';
 import Greeting from './components/Greeting';
+import InfPessoais from './views/InfPessoais'
+
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +76,7 @@ const MainNavigator = ({ isSplashReady }) => {
     Login: 'Entrar', // Renomeado para "Entrar"
     User: 'Perfil do Usuário',
     ManagerAddress: 'Endereços',
+    InfPessoais: 'Informações Pessoais',
     // Adicione outros títulos conforme necessário
   };
 
@@ -127,6 +130,8 @@ const MainNavigator = ({ isSplashReady }) => {
           <Stack.Screen name="Espumante" component={Espumante} />
           <Stack.Screen name="Favoritos" component={Favoritos} />
           <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+          <Stack.Screen name="InfPessoais" component={InfPessoais} options={{ title: titles.InfPessoais }} />
+          
           <Stack.Screen
             name="Login"
             component={Login}
