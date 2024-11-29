@@ -5,6 +5,8 @@ import { ThemeProvider } from './context/ThemeContext';
 import { useUser } from './context/UserContext';
 import { LinearGradient } from 'expo-linear-gradient'; // Importe o LinearGradient
 
+import Faq from './views/Faq';
+import Terms from './views/Terms';
 import AddressRegistrationScreen from './views/AddressRegistrationScreen';
 import AvaliacaoFinal from './views/AvaliacaoFinal';
 import Avaliacoes from './views/Avaliacoes';
@@ -43,7 +45,7 @@ function App() {
     // Simula um delay para exibir a tela de splash
     const timer = setTimeout(() => {
       setSplashReady(true);
-    }, 2000); // Tempo de splash 
+    }, 2000); // Tempo de splash
 
     return () => clearTimeout(timer);
   }, []);
@@ -65,19 +67,18 @@ const MainNavigator = ({ isSplashReady }) => {
   const { colors } = useContext(ThemeContext);
   const { currentUser } = useUser();
 
- const titles = {
-  Home: 'Página Inicial',
-  AddressRegistrationScreen: 'Cadastro de Endereços',
-  AvaliacaoFinal: 'Avaliação Final',
-  Login: 'Entrar', // Renomeado para "Entrar"
-  User: 'Perfil do Usuário',
-  ManagerAddress: 'Endereços',
-  ConfirmPayment: 'Método de Pagamento',
-  // Adicione outros títulos conforme necessário
-};
+  const titles = {
+    Home: 'Página Inicial',
+    AddressRegistrationScreen: 'Cadastro de Endereços',
+    AvaliacaoFinal: 'Avaliação Final',
+    Login: 'Entrar', // Renomeado para "Entrar"
+    User: 'Perfil do Usuário',
+    ManagerAddress: 'Endereços',
+    // Adicione outros títulos conforme necessário
+  };
 
-return (
-      <Stack.Navigator
+  return (
+    <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerBackground: () => (
@@ -91,8 +92,7 @@ return (
           fontWeight: 'bold',
         },
         headerShown: true,
-      }}
-    >
+      }}>
       {isSplashReady ? (
         <>
           <Stack.Screen
@@ -100,56 +100,72 @@ return (
             component={Home}
             options={{
               headerTitle: () => (
-                <Greeting name={currentUser ? (currentUser.nick || currentUser.nome) : ""} />
-              )
+                <Greeting
+                  name={currentUser ? currentUser.nick || currentUser.nome : ''}
+                />
+              ),
             }}
           />
-        <Stack.Screen 
-          name="AddressRegistrationScreen" 
-          component={AddressRegistrationScreen} 
-          options={{ title: titles.AddressRegistrationScreen }} 
-        />
-        <Stack.Screen 
-          name="AvaliacaoFinal" 
-          component={AvaliacaoFinal} 
-          options={{ title: titles.AvaliacaoFinal }} 
-        />
-        <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
-        <Stack.Screen name="Boleto" component={Boleto} />
-        <Stack.Screen name="Branco" component={Branco} />
-        <Stack.Screen name="Rose" component={Rose} />
-        <Stack.Screen name="Cadastrar" component={Cadastrar} />
-        <Stack.Screen name="Carrinho" component={Carrinho} />
-        <Stack.Screen name="Categorias" component={Categorias} />
-        <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} options={{ title: titles.ConfirmPayment }} />
-        <Stack.Screen name="Espumante" component={Espumante} />
-        <Stack.Screen name="Favoritos" component={Favoritos} />
-        <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+          <Stack.Screen
+            name="AddressRegistrationScreen"
+            component={AddressRegistrationScreen}
+            options={{ title: titles.AddressRegistrationScreen }}
+          />
+          <Stack.Screen
+            name="AvaliacaoFinal"
+            component={AvaliacaoFinal}
+            options={{ title: titles.AvaliacaoFinal }}
+          />
+          <Stack.Screen name="Avaliacoes" component={Avaliacoes} />
+          <Stack.Screen name="Boleto" component={Boleto} />
+          <Stack.Screen name="Branco" component={Branco} />
+          <Stack.Screen name="Rose" component={Rose} />
+          <Stack.Screen name="Cadastrar" component={Cadastrar} />
+          <Stack.Screen name="Carrinho" component={Carrinho} />
+          <Stack.Screen name="Categorias" component={Categorias} />
+          <Stack.Screen name="ConfirmPayment" component={ConfirmPayment} />
+          <Stack.Screen name="Espumante" component={Espumante} />
+          <Stack.Screen name="Favoritos" component={Favoritos} />
+          <Stack.Screen name="HistoricoCompra" component={HistoricoCompra} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ title: titles.Login }} // Utiliza o título do objeto
+          />
+          <Stack.Screen
+            name="Terms"
+            component={Terms}
+            options={{ title: 'Termos e Condições' }}
+          />
 
-        <Stack.Screen 
-          name="Login" 
-          component={Login} 
-          options={{ title: titles.Login }} // Utiliza o título do objeto
-        />
-        <Stack.Screen name="ManagerAddress" component={ManagerAddress} options={{ title: titles.ManagerAddress }} />
-        <Stack.Screen name="Notificacoes" component={Notificacoes} />
-        <Stack.Screen name="MethodPayment" component={MethodPayment} />
-        <Stack.Screen name="PixPayment" component={PixPayment} />
-        <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+          <Stack.Screen
+            name="Faq"
+            component={Faq}
+            options={{ title: 'FAQ' }}
+          />
 
-        <Stack.Screen name="Tinto" component={Tinto} />
-        <Stack.Screen name="Sobre" component={Sobre} />
-        <Stack.Screen 
-          name="User" 
-          component={User} 
-          options={{ title: titles.User }} 
-        />
-      </>
-    ) : (
-      <Stack.Screen name="Splash" component={Splash} />
-    )}
-  </Stack.Navigator>
-);
+          <Stack.Screen
+            name="ManagerAddress"
+            component={ManagerAddress}
+            options={{ title: titles.ManagerAddress }}
+          />
+          <Stack.Screen name="Notificacoes" component={Notificacoes} />
+          <Stack.Screen name="MethodPayment" component={MethodPayment} />
+          <Stack.Screen name="PixPayment" component={PixPayment} />
+          <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
+          <Stack.Screen name="Tinto" component={Tinto} />
+          <Stack.Screen name="Sobre" component={Sobre} />
+          <Stack.Screen
+            name="User"
+            component={User}
+            options={{ title: titles.User }}
+          />
+        </>
+      ) : (
+        <Stack.Screen name="Splash" component={Splash} />
+      )}
+    </Stack.Navigator>
+  );
 };
 
 export default App;
