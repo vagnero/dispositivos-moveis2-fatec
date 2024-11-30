@@ -16,7 +16,7 @@ export const NotificationProvider = ({ children }) => {
       id: 2,
       type: 'promotion',
       title: 'Promoção Relâmpago!',
-      message: 'Aproveite 50% de desconto em todos os produtos da categoria eletrônicos por 24 horas!',
+      message: 'Aproveite 50% de desconto em todos os produtos da categoria Vinho Branco por 24 horas!',
       date: '2023-11-22',
       read: false
     },
@@ -24,7 +24,7 @@ export const NotificationProvider = ({ children }) => {
       id: 3,
       type: 'newProduct',
       title: 'Novo Produto Disponível!',
-      message: 'O novo smartphone X20 acaba de chegar! Adquira já o seu.',
+      message: 'O novo Chardonnay acaba de chegar! Adquira já o seu.',
       image: 'https://suaempresa.com/produtos/x20.jpg',
       date: '2023-11-21',
       read: false
@@ -58,7 +58,7 @@ export const NotificationProvider = ({ children }) => {
       id: 7,
       type: 'support',
       title: 'Sua dúvida foi respondida',
-      message: 'Enviamos uma resposta para sua pergunta sobre o produto Y. Verifique sua caixa de entrada.',
+      message: 'Enviamos uma resposta para sua pergunta sobre o produto. Verifique sua caixa de entrada.',
       date: '2023-11-17',
       read: true
     },
@@ -66,7 +66,7 @@ export const NotificationProvider = ({ children }) => {
       id: 8,
       type: 'event',
       title: 'Evento Especial',
-      message: 'Participe do nosso evento online no dia 25/11! Inscreva-se agora.',
+      message: 'Participe do nosso evento online no dia 25/12! Inscreva-se agora.',
       link: 'https://suaempresa.com/evento',
       date: '2023-11-16',
       read: true
